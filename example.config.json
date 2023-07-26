@@ -1,0 +1,80 @@
+{
+  "TOKEN": "",
+  "CLIENT_ID": "",
+  "GUILD_ID": "",
+  "Database": {
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "",
+    "database": ""
+  },
+  "messages": {
+    "unknown_command": "Comando desconocido",
+    "command_error": "Hubo un error al ejecutar este comando",
+    "cooldown": "Por favor espera antes de ejecutar el comando {0} de nuevo, podrás hacerlo en {1}"
+  },
+  "commands": {
+      "claim": {
+          "enabled": true,
+          "cooldown": 10,
+          "name": "claim",
+          "description": "Reclama una cuenta del stock disponible",
+          "requires_permission": true,
+          "permission_name": "Reclamar cuentas"
+      },
+      "perm": {
+          "enabled": true,
+          "cooldown": 600,
+          "name": "perm",
+          "description": "Edita los permisos del bot",
+          
+          "subcommands": {
+              "add": {
+                  "name": "add",
+                  "description": "Añade permiso al id mencionado",
+                  "args": {
+                    "perm": {
+                      "name": "perm",
+                      "description": "El permiso que quieres añadir al id mencionado"
+                    },
+                    "id": {
+                      "name": "id",
+                       "description": "El id de rol/usuario al que quieres eliminar el permiso"
+                    }
+                  },
+                  "requires_permission": true,
+                  "permission_name": "Añadir permisos"
+                  
+              },
+              "remove": {
+                  "name": "remove",
+                  "description": "Elminina permiso al id mencionado",
+                  "args": {
+                      "perm": {
+                        "name": "perm",
+                        "description": "El permiso que quieres eliminar del id mencionado"
+                      },
+                      "id": {
+                        "name": "id",
+                        "description": "El id de rol/usuario al que quieres eliminar el permiso"
+                      }
+                    },
+                  "requires_permission": true,
+                  "permission_name": "Eliminar permisos"
+              },
+              "list": {
+                  "name": "list",
+                  "description": "Lista los permisos de un usuario/rol",
+                  "requires_permission": true,
+                  "permission_name": "Ver permisos",
+                  "args": {
+                    "id": {
+                      "name": "id",
+                      "description": "El id de rol/usuario para listar sus permisos"
+                    } 
+                  }
+              }
+          }
+      }
+  }
+}

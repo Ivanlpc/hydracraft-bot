@@ -1,0 +1,6 @@
+{
+    "watch": ["."],
+    "ext": ".js, .json",
+    "ignore": [],
+    "exec": "rm -fr ./logs && node index"
+}
