@@ -28,6 +28,7 @@
     "nodemon": "^1.14.9"
   },
   "dependencies": {
+    "@rodrigogs/mysql-events": "github:HUMBERapp/mysql-events",
     "discord.js": "^14.11.0",
     "mysql2": "^3.5.0"
   }

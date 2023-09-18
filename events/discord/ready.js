@@ -1,7 +1,7 @@
 const { Events } = require('discord.js')
-const Logger = require('../util/Logger')
-const CommandManager = require('../CommandManager')
-const COLOR = require('../util/ConsoleColor')
+const Logger = require('../../util/Logger')
+const CommandManager = require('../../CommandManager')
+const COLOR = require('../../util/ConsoleColor')
 
 module.exports = {
   name: Events.ClientReady,

@@ -2,11 +2,18 @@
   "TOKEN": "",
   "CLIENT_ID": "",
   "GUILD_ID": "",
+  "TEBEX_TOKEN": "",
+  "TRANSACTION_AVATAR_URL": "https://mc-heads.net/avatar/",
+  "WEBHOOKS": {
+    "ACTION": "",
+    "UNBAN": "",
+    "RANK": ""
+  },
   "Database": {
     "host": "127.0.0.1",
     "user": "root",
     "password": "",
-    "database": ""
+    "jPremiumDatabase": "jpremium"
   },
   "messages": {
     "unknown_command": "Comando desconocido",
@@ -14,77 +21,121 @@
     "cooldown": "Por favor espera antes de ejecutar el comando {0} de nuevo, podrás hacerlo en {1}"
   },
   "commands": {
-    "account": {
+      "claim": {
+          "enabled": true,
+          "cooldown": 300,
+          "name": "claim",
+          "description": "Reclama una cuenta del stock disponible"
+      },
+      "stock": {
         "enabled": true,
-        "cooldown": 30,
-        "name": "cuenta",
-        "description": "Gestiona tu cuenta de minecraft vinculada a discord",
-        "subcommands": {
-            "link": {
-                "name": "vincular",
-                "description": "Vincula tu cuenta de minecraft a tu actual cuenta de discord",
-                "args": {
-                    "code": {
-                        "name": "codigo",
-                        "description": "El código que te aparezca al ejecutar el comando /vincular en el servidor de minecraft"
-                    }
-                }
-            }
-        }
+        "cooldown": 300,
+        "name": "stock",
+        "description": "Comprueba el stock de cuentas disponible"
     },
-    "perm": {
-        "enabled": true,
-        "cooldown": 600,
-        "name": "perm",
-        "description": "Edita los permisos del bot",
-        
-        "subcommands": {
-            "add": {
-                "name": "add",
-                "description": "Añade permiso al id mencionado",
-                "args": {
-                  "perm": {
-                    "name": "perm",
-                    "description": "El permiso que quieres añadir al id mencionado"
-                  },
-                  "id": {
-                    "name": "id",
-                     "description": "El id de rol/usuario al que quieres eliminar el permiso"
-                  }
-                },
-                "requires_permission": true,
-                "permission_name": "Añadir permisos"
-                
-            },
-            "remove": {
-                "name": "remove",
-                "description": "Elminina permiso al id mencionado",
-                "args": {
+      "perm": {
+          "enabled": true,
+          "name": "perm",
+          "description": "Edita los permisos del bot",
+          
+          "subcommands": {
+              "add": {
+                  "name": "add",
+                  "description": "Añade permiso al id mencionado",
+                  "args": {
                     "perm": {
                       "name": "perm",
-                      "description": "El permiso que quieres eliminar del id mencionado"
+                      "description": "El permiso que quieres añadir al id mencionado"
                     },
                     "id": {
                       "name": "id",
-                      "description": "El id de rol/usuario al que quieres eliminar el permiso"
+                       "description": "El id de rol/usuario al que quieres eliminar el permiso"
                     }
                   },
-                "requires_permission": true,
-                "permission_name": "Eliminar permisos"
-            },
-            "list": {
-                "name": "list",
-                "description": "Lista los permisos de un usuario/rol",
-                "requires_permission": true,
-                "permission_name": "Ver permisos",
-                "args": {
+                  "requires_permission": true,
+                  "permission_name": "Añadir permisos"
+                  
+              },
+              "remove": {
+                  "name": "remove",
+                  "description": "Elminina permiso al id mencionado",
+                  "args": {
+                      "perm": {
+                        "name": "perm",
+                        "description": "El permiso que quieres eliminar del id mencionado"
+                      },
+                      "id": {
+                        "name": "id",
+                        "description": "El id de rol/usuario al que quieres eliminar el permiso"
+                      }
+                    },
+                  "requires_permission": true,
+                  "permission_name": "Eliminar permisos"
+              },
+              "list": {
+                  "name": "list",
+                  "description": "Lista los permisos de un usuario/rol",
+                  "requires_permission": true,
+                  "permission_name": "Ver permisos",
+                  "args": {
+                    "id": {
+                      "name": "id",
+                      "description": "El id de rol/usuario para listar sus permisos"
+                    } 
+                  }
+              }
+          }
+      },
+      "license": {
+        "enabled": true,
+        "name": "license",
+        "cooldown": 30,
+        "description": "Gestiona las licencias del bot",
+        "subcommands": {
+          "add": {
+              "name": "add",
+              "description": "Crea una licencia para el usuario mencionado",
+              "args": {
+                "time": {
+                  "name": "time",
+                  "description": "Duración de la licencia"
+                },
+                "id": {
+                  "name": "id",
+                   "description": "El id de rol/usuario al que quieres otorgar la licencia"
+                }
+              },
+              "requires_permission": true,
+              "permission_name": "Añadir licencia"
+              
+          },
+          "remove": {
+              "name": "remove",
+              "description": "Elminina la licencia del usuario mencionado",
+              "args": {
                   "id": {
                     "name": "id",
-                    "description": "El id de rol/usuario para listar sus permisos"
-                  } 
-                }
-            }
+                    "description": "El id de rol/usuario al que quieres eliminar la licencia"
+                  }
+                },
+              "requires_permission": true,
+              "permission_name": "Eliminar licencia"
+          },
+          "list": {
+              "name": "list",
+              "description": "Lista las licencias activas",
+              "requires_permission": true,
+              "permission_name": "Ver licencias"
+              
+          },
+          "reload": {
+            "name": "reload",
+            "description": "Recarga las licencias activas",
+            "requires_permission": true,
+            "permission_name": "Recargar lista de licencias"
+            
         }
-    }
-}
+      }
+      }
+  }
 }

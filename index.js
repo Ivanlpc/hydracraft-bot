@@ -5,7 +5,7 @@ const { TOKEN } = require('./config.json')
 const COLOR = require('./util/ConsoleColor')
 
 const commandFiles = fs.readdirSync('./commands')
-const eventsFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'))
+const eventsFiles = fs.readdirSync('./events/discord').filter(file => file.endsWith('.js'))
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 client.commands = new Map()
 client.commands_json = []
