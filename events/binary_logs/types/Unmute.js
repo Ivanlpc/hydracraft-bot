@@ -1,6 +1,6 @@
 const { WebhookClient } = require('discord.js')
 const { TebexAPI } = require('../../../API/TebexAPI')
-const { Embeds } = require('../../../API/Util/Embeds')
+const Embeds = require('../../../Embeds')
 const Logger = require('../../../util/Logger')
 const { validatePayments, filterPayments } = require('../util/CheckPayments')
 

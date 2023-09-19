@@ -8,7 +8,7 @@ const webhook = new WebhookClient({
 })
 
 const MySQLTrigger = {
-  name: 'DELETEACTION',
+  name: 'ACTION',
   expression: '*.luckperms_actions',
   statement: STATEMENTS.DELETE,
   onEvent: (event) => {
