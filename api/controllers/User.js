@@ -13,4 +13,18 @@ const getNameByUUID = async (uuid) => {
   }
 }
 
-module.exports = getNameByUUID
+const checkPermission = async (id, permissionId, guildId) => {
+  if (id === null) return false
+  try {
+    const getPermissions = await execute(QUERIES.GetPermissions, [id, permissionId, guildId])
+    return getPermissions.length > 0
+  } catch (err) {
+    Logger.error(err)
+    return false
+  }
+}
+
+module.exports = {
+  getNameByUUID,
+  checkPermission
+}

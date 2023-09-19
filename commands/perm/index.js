@@ -90,7 +90,12 @@ module.exports = {
   async execute (interaction) {
     if (interaction.options.getSubcommand() === command.subcommands.add.name) {
       if (interaction.user.id !== interaction.guild.ownerId) {
-        // checkPerms
+        try {
+          // TODO checkPermission
+        } catch (err) {
+          Logger.error(err)
+          return
+        }
       }
       try {
         await subcommands.execute(interaction.options.getSubcommand())
