@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js')
 const Logger = require('./util/Logger')
 const { TOKEN } = require('./config.json')
 const COLOR = require('./util/ConsoleColor')
-
+const SQLEvents = require('./events/binary_logs/index')
 const commandFiles = fs.readdirSync('./commands')
 const eventsFiles = fs.readdirSync('./events/discord').filter(file => file.endsWith('.js'))
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
@@ -11,10 +11,12 @@ client.commands = new Map()
 client.commands_json = []
 client.activeLicenses = []
 client.cooldowns = new Collection()
+
 Logger.init()
+SQLEvents().then('Logging SQL events').catch(err => console.log(err))
 
 for (const file of eventsFiles) {
-  const event = require(`./events/${file}`)
+  const event = require(`./events/discord/${file}`)
   Logger.info(`${COLOR.CYAN}[EVENT]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.MAGENTA}${event.name}`)
   if (event.once) {
     client.once(event.name, event.execute)
