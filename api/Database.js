@@ -1,11 +1,10 @@
 const mysql = require('mysql2')
 const Logger = require('../util/Logger')
-const { DATABASE } = require('../config.json')
 
 const pool = mysql.createPool({
-  host: DATABASE.host,
-  user: DATABASE.user,
-  password: DATABASE.password
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD
 })
 
 pool.getConnection((err, conn) => {

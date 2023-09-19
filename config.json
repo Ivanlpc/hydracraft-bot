@@ -1,43 +1,19 @@
 {
-  "TOKEN": "",
-  "CLIENT_ID": "",
-  "GUILD_ID": "",
-  "TEBEX_TOKEN": "",
+  "TEBEX_URL": "https://plugin.tebex.io",
   "TRANSACTION_AVATAR_URL": "https://mc-heads.net/avatar/",
-  "WEBHOOKS": {
-    "ACTION": "",
-    "UNBAN": "",
-    "RANK": ""
-  },
-  "Database": {
-    "host": "127.0.0.1",
-    "user": "root",
-    "password": "",
-    "jPremiumDatabase": "jpremium"
-  },
+  "JPREMIUM_DATABASE_NAME": "jPremium",
   "messages": {
     "unknown_command": "Comando desconocido",
     "command_error": "Hubo un error al ejecutar este comando",
     "cooldown": "Por favor espera antes de ejecutar el comando {0} de nuevo, podrás hacerlo en {1}"
   },
   "commands": {
-      "claim": {
-          "enabled": true,
-          "cooldown": 300,
-          "name": "claim",
-          "description": "Reclama una cuenta del stock disponible"
-      },
-      "stock": {
-        "enabled": true,
-        "cooldown": 300,
-        "name": "stock",
-        "description": "Comprueba el stock de cuentas disponible"
-    },
       "perm": {
           "enabled": true,
           "name": "perm",
           "description": "Edita los permisos del bot",
-          
+          "requires_permission": true,
+          "permission_name": "Gestionar permisos (/perm add|remove)",
           "subcommands": {
               "add": {
                   "name": "add",
@@ -51,10 +27,7 @@
                       "name": "id",
                        "description": "El id de rol/usuario al que quieres eliminar el permiso"
                     }
-                  },
-                  "requires_permission": true,
-                  "permission_name": "Añadir permisos"
-                  
+                  }                
               },
               "remove": {
                   "name": "remove",
@@ -68,26 +41,32 @@
                         "name": "id",
                         "description": "El id de rol/usuario al que quieres eliminar el permiso"
                       }
-                    },
-                  "requires_permission": true,
-                  "permission_name": "Eliminar permisos"
+                    }
               },
-              "list": {
-                  "name": "list",
+              "list_id": {
+                  "name": "list_id",
                   "description": "Lista los permisos de un usuario/rol",
-                  "requires_permission": true,
-                  "permission_name": "Ver permisos",
                   "args": {
                     "id": {
                       "name": "id",
                       "description": "El id de rol/usuario para listar sus permisos"
                     } 
                   }
-              }
+              },
+              "list_group": {
+                "name": "list_group",
+                "description": "Lista todos los ids con ese permiso",
+                "args": {
+                  "id": {
+                    "name": "perm",
+                    "description": "Selecciona el permiso"
+                  } 
+                }
+            }
           }
       },
       "license": {
-        "enabled": true,
+        "enabled": false,
         "name": "license",
         "cooldown": 30,
         "description": "Gestiona las licencias del bot",

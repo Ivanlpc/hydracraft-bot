@@ -8,7 +8,7 @@ const Logger = require('../../../util/Logger')
 
 const config = require('../../../config.json')
 const blacklistFile = require('../../../blacklist.json')
-const webhook = new WebhookClient({ url: config.WEBHOOKS.RANK })
+const webhook = new WebhookClient({ url: process.env.WEBHOOK_RANK })
 
 const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 
@@ -37,9 +37,9 @@ const MySQLTrigger = {
       } else {
         let userPayments = []
         try {
-          userPayments = await TebexAPI.getUserPayments(config.TEBEX_TOKEN, row.before.uuid)
+          userPayments = await TebexAPI.getUserPayments(process.env.TEBEX_TOKEN, row.before.uuid)
           const todayPaymentsID = filterPayments(userPayments.payments)
-          const promises = todayPaymentsID.map(id => TebexAPI.getPaymentFromId(config.TEBEX_TOKEN, id))
+          const promises = todayPaymentsID.map(id => TebexAPI.getPaymentFromId(process.env.TEBEX_TOKEN, id))
           let todayPaymentsData = []
           todayPaymentsData = await Promise.all([promises])
           const valid = validatePayments(todayPaymentsData, perm.toUpperCase())

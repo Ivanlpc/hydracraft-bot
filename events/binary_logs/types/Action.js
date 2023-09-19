@@ -1,10 +1,9 @@
 const { WebhookClient } = require('discord.js')
 const { Embeds } = require('../../../Embeds')
-const config = require('../../../config.json')
 const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 
 const webhook = new WebhookClient({
-  url: config.WEBHOOKS.ACTION
+  url: process.env.WEBHOOK_ACTION
 })
 
 const MySQLTrigger = {

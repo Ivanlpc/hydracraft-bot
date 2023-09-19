@@ -30,6 +30,7 @@
   "dependencies": {
     "@rodrigogs/mysql-events": "github:Ivanlpc/mysql-events",
     "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
     "mysql2": "^3.6.1"
   }
 }

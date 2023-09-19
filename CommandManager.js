@@ -1,5 +1,7 @@
 const { REST, Routes } = require('discord.js')
-const { CLIENT_ID, GUILD_ID, TOKEN } = require('./config.json')
+const TOKEN = process.env.TOKEN
+const CLIENT_ID = process.env.CLIENT_ID
+const GUILD_ID = process.env.GUILD_ID
 const Logger = require('./util/Logger')
 const COLOR = require('./util/ConsoleColor')
 const rest = new REST().setToken(TOKEN)

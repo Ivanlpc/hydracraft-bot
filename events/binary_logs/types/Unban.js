@@ -6,7 +6,7 @@ const { validatePayments, filterPayments } = require('../util/CheckPayments')
 
 const config = require('../../../config.json')
 
-const webhook = new WebhookClient({ url: config.WEBHOOKS.UNBAN })
+const webhook = new WebhookClient({ url: process.env.WEBHOOK_UNBAN })
 
 const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 

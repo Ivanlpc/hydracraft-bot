@@ -1,7 +1,8 @@
 const fs = require('fs')
 const { Client, GatewayIntentBits, Collection } = require('discord.js')
 const Logger = require('./util/Logger')
-const { TOKEN } = require('./config.json')
+require('dotenv').config()
+const TOKEN = process.env.TOKEN
 const COLOR = require('./util/ConsoleColor')
 const SQLEvents = require('./events/binary_logs/index')
 const commandFiles = fs.readdirSync('./commands')
