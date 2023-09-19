@@ -1,4 +1,4 @@
-const Logger = require('./Util/Logger')
+const Logger = require('./Logger')
 
 /**
  *
