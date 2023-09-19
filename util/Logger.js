@@ -33,11 +33,20 @@ class Logger {
     })
   }
 
-  static error (...msg) {
+  static error (msg) {
     console.error(COLOR.RED, msg, COLOR.RESET)
     // eslint-disable-next-line no-control-regex
     const regex = /\u001b\[[0-4]?[0-9]m/g
     msg = msg.replaceAll(regex, '')
+    if (!fs.existsSync('./logs')) fs.mkdirSync('./logs')
+    const message = `\n[${new Date().toLocaleString()}] [ERROR]: ${msg}`
+    fs.appendFileSync('./logs/latest.txt', message, (e) => {
+      if (e) console.log(e)
+    })
+  }
+
+  static fatal (msg) {
+    console.error(COLOR.RED, msg, COLOR.RESET)
     if (!fs.existsSync('./logs')) fs.mkdirSync('./logs')
     const message = `\n[${new Date().toLocaleString()}] [ERROR]: ${msg}`
     fs.appendFileSync('./logs/latest.txt', message, (e) => {
