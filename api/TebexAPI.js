@@ -1,6 +1,6 @@
 const request = require('../util/Requests')
 
-const config = require('../../../config.json')
+const config = require('../config.json')
 
 /**
  * Build Headers to make a request
@@ -13,7 +13,7 @@ const buildHeaders = (token) => {
   return header
 }
 
-export const TebexAPI = {
+const TebexAPI = {
 
   /**
      * Get a payment with the ID provided
@@ -145,3 +145,5 @@ export const TebexAPI = {
     return payment.packages
   }
 }
+
+module.exports = TebexAPI

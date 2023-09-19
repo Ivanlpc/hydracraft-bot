@@ -5,7 +5,8 @@ const Logger = require('../../util/Logger')
 const getNameByUUID = async (uuid) => {
   if (uuid === null) return ''
   try {
-    return await execute(QUERIES.GetLastNickname, [uuid])
+    const query = await execute(QUERIES.GetLastNickname, [uuid])
+    return query[0].lastNickname
   } catch (err) {
     Logger.error(err)
     return ''
