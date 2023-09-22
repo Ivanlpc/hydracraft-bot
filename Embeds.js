@@ -117,6 +117,20 @@ const embeds = {
       })
     }
     return embed
+  },
+  perm_list_id: (id, perms) => {
+    return new EmbedBuilder()
+      .setTitle('LISTA DE PERMISOS')
+      .setDescription(`ID: <@!${id}>\n` +
+      'Permisos:' +
+      '```' + perms + '```')
+      .setColor('Blue')
+  },
+  perm_group_list: (node, ids) => {
+    return new EmbedBuilder()
+      .setTitle('LISTA DE IDs')
+      .setColor('Blue')
+      .setDescription(ids)
   }
 }
 

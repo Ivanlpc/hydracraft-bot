@@ -5,7 +5,14 @@
   "messages": {
     "unknown_command": "Comando desconocido",
     "command_error": "Hubo un error al ejecutar este comando",
-    "cooldown": "Por favor espera antes de ejecutar el comando {0} de nuevo, podrás hacerlo en {1}"
+    "cooldown": "Por favor espera antes de ejecutar el comando {0} de nuevo, podrás hacerlo en {1}",
+    "no_permission": "No tienes permiso para ejecutar este comando",
+    "permission_exists": "El id <@!%id%> ya tenía ese permiso",
+    "permission_added": "El ID <@!%id%> ahora tiene el permiso para ejecutar el comando",
+    "permission_not_exists": "EL ID <@!%id%> no tiene ese permiso",
+    "permission_removed": "El ID <@!%id%> ya no tiene ese permiso",
+    "permission_list_empty": "El ID <@!%id%> no tiene ningún permiso",
+    "permission_node_empty": "No se ha encontrado ningún ID con el permiso %perm%"
   },
   "commands": {
       "perm": {
@@ -57,7 +64,7 @@
                 "name": "list_group",
                 "description": "Lista todos los ids con ese permiso",
                 "args": {
-                  "id": {
+                  "perm": {
                     "name": "perm",
                     "description": "Selecciona el permiso"
                   } 
