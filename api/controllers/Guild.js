@@ -1,0 +1,8 @@
+const Guild = {
+  newGuild: () => {
+
+  },
+  leaveGuild: () => {
+
+  }
+}

@@ -1,5 +1,6 @@
 const mysql = require('mysql2')
 const Logger = require('../util/Logger')
+const name = require('../package.json').name
 
 const pool = mysql.createPool({
   host: process.env.DATABASE_HOST,
@@ -15,8 +16,24 @@ pool.getConnection((err, conn) => {
     if (conn) conn.release()
   }
 })
+const createTables = () => {
+  this.execute(`CREATE TABLE IF NOT EXISTS '${name}.guilds' (
+    'id' varchar(255) NOT NULL,
+    'joined_at' datetime NOT NULL DEFAULT current_timestamp(),
+    'name' varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+    PRIMARY KEY(id)`, [])
+  this.execute(`CREATE TABLE '${name}.permissions' (
+    'guildId' varchar(255) NOT NULL,
+    'id' varchar(255) NOT NULL,
+    'permission_node' VARCHAR(255) NOT NULL),
+    PRIMARY KEY(guildId, id, permission_node),
+    INDEX guilds_ind (guildId),
+    FOREIGN KEY (guildId)
+        REFERENCES guilds(id)
+        ON DELETE CASCADE`)
+}
 
-const execute = (query, params) => {
+const execute = (query, params = []) => {
   try {
     if (!pool) throw new Error('Pool was not created. Ensure pool is created when running the app')
     return new Promise((resolve, reject) => {
@@ -32,5 +49,6 @@ const execute = (query, params) => {
 
 module.exports = {
   execute,
+  createTables,
   pool
 }
