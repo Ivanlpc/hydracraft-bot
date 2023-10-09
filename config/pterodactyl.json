@@ -1,0 +1,10 @@
+{
+    "PTERO_URL": "",
+    "rank_command": "lp user %user% parent add %rank%",
+    "servers": {
+        "Survival": "",
+        "Oneblock": "",
+        "PrisonOP": ""
+
+    }
+}

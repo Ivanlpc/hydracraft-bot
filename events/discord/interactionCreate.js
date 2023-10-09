@@ -1,6 +1,6 @@
 const { Events } = require('discord.js')
 const Logger = require('../../util/Logger')
-const { messages } = require('../../config.json')
+const { messages } = require('../../config/messages.json')
 
 module.exports = {
   name: Events.InteractionCreate,

@@ -1,13 +1,13 @@
 const { WebhookClient } = require('discord.js')
 const { getNameByUUID } = require('../../../api/controllers/User')
 const EMBEDS = require('../../../Embeds')
-const { TebexAPI } = require('../../../API/TebexAPI')
+const { TebexAPI } = require('../../../api/TebexAPI')
 const { validatePayments, filterPayments } = require('../util/CheckPayments')
 
 const Logger = require('../../../util/Logger')
 
-const config = require('../../../config.json')
-const blacklistFile = require('../../../blacklist.json')
+const config = require('../../../config/config.json')
+const blacklistFile = require('../../../config/blacklist.json')
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_RANK })
 
 const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS

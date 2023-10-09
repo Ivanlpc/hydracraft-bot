@@ -1,7 +1,7 @@
 const { removePermission } = require('../../../api/controllers/User')
 const Logger = require('../../../util/Logger')
 const command = require('../../../config/config.json').commands.perm.subcommands.remove
-const messages = require('../../../config/messages.json')
+const messages = require('../../../config/messages.json').messages
 module.exports = {
   name: command.name,
   async execute (interaction) {

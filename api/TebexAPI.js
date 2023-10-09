@@ -1,6 +1,6 @@
 const request = require('../util/Requests')
 
-const config = require('../config.json')
+const config = require('../config/config.json')
 
 /**
  * Build Headers to make a request

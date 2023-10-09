@@ -1,7 +1,7 @@
 const { getNodeIds } = require('../../../api/controllers/User')
 const Logger = require('../../../util/Logger')
-const listCommnand = require('../../../config.json').commands.perm.subcommands.list_group
-const messages = require('../../../config.json').messages
+const listCommnand = require('../../../config/config.json').commands.perm.subcommands.list_group
+const messages = require('../../../config/messages.json')
 const embeds = require('../../../Embeds')
 
 module.exports = {

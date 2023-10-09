@@ -1,7 +1,7 @@
 const { addPermission } = require('../../../api/controllers/User')
 const Logger = require('../../../util/Logger')
-const command = require('../../../config.json').commands.perm.subcommands.add
-const messages = require('../../../config.json').messages
+const command = require('../../../config/config.json').commands.perm.subcommands.add
+const messages = require('../../../config/messages.json')
 module.exports = {
   name: command.name,
   async execute (interaction) {

@@ -1,19 +1,9 @@
 {
   "TEBEX_URL": "https://plugin.tebex.io",
+  "PTERO_URL_CLIENT": "https://panel.hydracraft.es/api/client",
   "TRANSACTION_AVATAR_URL": "https://mc-heads.net/avatar/",
   "JPREMIUM_DATABASE_NAME": "jPremium",
-  "messages": {
-    "unknown_command": "Comando desconocido",
-    "command_error": "Hubo un error al ejecutar este comando",
-    "cooldown": "Por favor espera antes de ejecutar el comando {0} de nuevo, podrás hacerlo en {1}",
-    "no_permission": "No tienes permiso para ejecutar este comando",
-    "permission_exists": "El id <@!%id%> ya tenía ese permiso",
-    "permission_added": "El ID <@!%id%> ahora tiene el permiso para ejecutar el comando",
-    "permission_not_exists": "EL ID <@!%id%> no tiene ese permiso",
-    "permission_removed": "El ID <@!%id%> ya no tiene ese permiso",
-    "permission_list_empty": "El ID <@!%id%> no tiene ningún permiso",
-    "permission_node_empty": "No se ha encontrado ningún ID con el permiso %perm%"
-  },
+  
   "commands": {
       "perm": {
           "enabled": true,
@@ -71,6 +61,65 @@
                 }
             }
           }
+      },
+      "rank": {
+        "enabled": true,
+        "name": "rank",
+        "cooldown": 30,
+        "description": "Gestiona los rangos de minecraft",
+        "requires_permission": true,
+        "permission_name": "Gestionar rangos (/rank add|remove)",
+        "subcommands": {
+          "add": {
+            "name": "add",
+            "description": "Añade un rango a un usuario",
+            "args": {
+              "nick": {
+                "name": "nick",
+                "description": "Nick de MC del usuario"
+              }, 
+              "rank": {
+                "name": "rank",
+                "description": "Rango que quieres añadir"
+              }
+            }
+          },
+          "remove": {
+            "name": "remove",
+            "description": "Elimina un rango de un usuario",
+            "args": {
+              "nick": {
+                "name": "nick",
+                "description": "Nick de MC del usuario"
+              }, 
+              "rank": {
+                "name": "rank",
+                "description": "Rango que quieres eliminar"
+              }
+            }
+          },
+          "list_user": {
+            "name": "list_user",
+            "description": "Lista de usuarios que tiene un rango",
+            "args": {
+              
+              "rank": {
+                "name": "rank",
+                "description": "Rango que quieres listar"
+              }
+            }
+          },
+          "list_rank": {
+            "name": "list_rank",
+            "description": "Lista de rangos que tiene un usuario",
+            "args": {
+              "nick": {
+                "name": "nick",
+                "description": "Usuario que quieres listar"
+              }
+            }
+          }
+        }
       },
       "license": {
         "enabled": false,

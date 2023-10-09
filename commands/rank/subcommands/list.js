@@ -1,7 +1,7 @@
 const { getIDPermissions } = require('../../../api/controllers/User')
 const Logger = require('../../../util/Logger')
 const listCommnand = require('../../../config/config.json').commands.perm.subcommands.list_id
-const messages = require('../../../config/messages.json')
+const messages = require('../../../config/messages.json').messages
 const commands = require('../../../config/config.json').commands
 const embeds = require('../../../Embeds')
 module.exports = {

@@ -1,10 +1,10 @@
 const { WebhookClient } = require('discord.js')
-const { TebexAPI } = require('../../../API/TebexAPI')
+const { TebexAPI } = require('../../../api/TebexAPI')
 const Embeds = require('../../../Embeds')
 const Logger = require('../../../util/Logger')
 const { validatePayments, filterPayments } = require('../util/CheckPayments')
 
-const config = require('../../../config.json')
+const config = require('../../../config/config.json')
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_UNBAN })
 
