@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js')
-const allCommands = require('../../config.json').commands
 const command = require('../../config.json').commands.account
 
 module.exports = {
@@ -20,9 +19,5 @@ module.exports = {
     if (interaction.options.getSubcommand() === command.subcommands.link.name) {
       //TODO
     }
-    interaction.reply({
-      content: 'Hello!',
-      ephemeral: true
-    })
   }
 }

@@ -131,6 +131,18 @@ const embeds = {
       .setTitle('LISTA DE IDs')
       .setColor('Blue')
       .setDescription(ids)
+  },
+  linkAccount: (discordId, nickname) => {
+    return new EmbedBuilder()
+      .setTitle('CUENTA VINCULADA')
+      .setThumbnail(config.TRANSACTION_AVATAR_URL + nickname)
+      .addFields({
+        name: 'Discord:',
+        value: `<@!${discordId}>`
+      }, {
+        name: 'Minecraft:',
+        value: nickname
+      })
   }
 }
 

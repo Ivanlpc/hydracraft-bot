@@ -1,6 +1,7 @@
 const { execute } = require('../Database')
 const QUERIES = require('../Queries')
 const Logger = require('../../util/Logger')
+const messages = require('../../config/messages.json')
 
 const getNameByUUID = async (uuid) => {
   if (uuid === null) return ''
@@ -77,6 +78,19 @@ const getNodeIds = async (guildId, permissionNode) => {
   }
 }
 
+const linkAccount = async (discordId, code) => {
+  try {
+    const query = await execute(QUERIES.linkAccount, [discordId, code])
+    if (query.affectedRows <= 0) {
+      throw new Error(messages.account_already_linked)
+    }
+    return query[0]
+  } catch (err) {
+    Logger.error(err)
+    throw new Error(messages.command_error)
+  }
+}
+
 module.exports = {
   getNameByUUID,
   checkPermission,
@@ -84,5 +98,6 @@ module.exports = {
   removePermission,
   getAllowedIds,
   getIDPermissions,
-  getNodeIds
+  getNodeIds,
+  linkAccount
 }

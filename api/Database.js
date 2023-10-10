@@ -16,6 +16,7 @@ pool.getConnection((err, conn) => {
     if (conn) conn.release()
   }
 })
+
 const createTables = () => {
   this.execute(`CREATE TABLE IF NOT EXISTS '${name}.guilds' (
     'id' varchar(255) NOT NULL,

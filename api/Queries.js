@@ -10,7 +10,8 @@ const QUERIES = {
   getPermissionsOfId: `SELECT permission_node FROM ${botName}.permissions WHERE guildId = ? AND id = ?`,
   getPermissionsNode: `SELECT id FROM ${botName}.permissions WHERE guildId = ? AND permission_node = ?`,
   newGuild: `INSERT INTO ${botName}.guilds (id, name) VALUES (?, ?)`,
-  leaveGuild: `DELETE FROM ${botName}.guilds WHERE id = ?`
+  leaveGuild: `DELETE FROM ${botName}.guilds WHERE id = ?`,
+  linkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET code = -1, discord = ? WHERE code = ?`
 }
 
 module.exports = QUERIES

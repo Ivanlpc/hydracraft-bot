@@ -8,5 +8,6 @@
     "permission_not_exists": "EL ID <@!%id%> no tiene ese permiso",
     "permission_removed": "El ID <@!%id%> ya no tiene ese permiso",
     "permission_list_empty": "El ID <@!%id%> no tiene ningún permiso",
-    "permission_node_empty": "No se ha encontrado ningún ID con el permiso %perm%"
+    "permission_node_empty": "No se ha encontrado ningún ID con el permiso %perm%",
+    "account_already_linked": "Ese nombre de minecraft ya está vinculado a una cuenta de discord"
 }
