@@ -61,6 +61,17 @@ module.exports = {
           ephemeral: true
         })
       }
+    } else if (interaction.isStringSelectMenu()) {
+      const selectMenu = interaction.client.getSelectMenu(interaction.customId)
+      if (!selectMenu) return
+      try {
+        await selectMenu.execute(interaction.client, interaction)
+      } catch (e) {
+        interaction.reply({
+          content: messages.command_error,
+          ephemeral: true
+        })
+      }
     }
   }
 }

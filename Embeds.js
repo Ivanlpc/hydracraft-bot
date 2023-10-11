@@ -143,6 +143,20 @@ const embeds = {
         name: 'Minecraft:',
         value: nickname
       })
+  },
+  accountInfo: (data) => {
+    return new EmbedBuilder()
+      .setTitle('INFORMACIÓN DE CUENTA')
+      .setThumbnail(config.TRANSACTION_AVATAR_URL + data.lastNickname)
+      .setColor(data.premiumId ? 'Green' : 'Yellow')
+      .addFields(
+        { name: 'Nick', value: '```' + data.lastNickname + '```', inline: true },
+        { name: 'Premium', value: data.premiumId ? '```SI```' : '```NO```', inline: true },
+        { name: 'Fecha de registro', value: '```' + data.firstSeen + '```', inline: true },
+        { name: 'Última IP', value: '```' + data.lastAddress + '```', inline: true },
+        { name: 'Primera IP', value: '```' + data.value.firstAddress + '```', inline: true },
+        { name: 'Modalidad', value: '```' + data.lastServer + '```' }
+      )
   }
 }
 

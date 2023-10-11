@@ -101,6 +101,17 @@ const getAccounts = async (discordId) => {
   }
 }
 
+const getAccountInformation = async (discordId, uniqueId) => {
+  try {
+    const query = await execute(QUERIES.getAccountInformation, [discordId, uniqueId])
+    if (query.length === 0) throw new Error('Error while fetching ' + discordId + ' ' + uniqueId)
+    return query[0]
+  } catch (err) {
+    Logger.error(err)
+    throw new Error(messages.command_error)
+  }
+}
+
 module.exports = {
   getNameByUUID,
   checkPermission,
@@ -110,5 +121,6 @@ module.exports = {
   getIDPermissions,
   getNodeIds,
   linkAccount,
-  getAccounts
+  getAccounts,
+  getAccountInformation
 }

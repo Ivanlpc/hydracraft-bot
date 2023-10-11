@@ -9,7 +9,7 @@ const createSelectMenu = (accounts) => {
     value: elem.uniqueId
   }))
   const select = new StringSelectMenuBuilder()
-    .setCustomId('account_selector')
+    .setCustomId('account_info_selector')
     .setPlaceholder('SELECCIONA CUENTA')
     .addOptions(...options)
 

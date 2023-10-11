@@ -7,10 +7,11 @@ const COLOR = require('./util/ConsoleColor')
 const SQLEvents = require('./events/binary_logs/index')
 const commandFiles = fs.readdirSync('./commands')
 const eventsFiles = fs.readdirSync('./events/discord').filter(file => file.endsWith('.js'))
+const selectMenuFiles = fs.readdirSync('./select_menus')
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 client.commands = new Map()
+client.selectMenus = new Map()
 client.commands_json = []
-client.activeLicenses = []
 client.cooldowns = new Collection()
 
 Logger.init()
@@ -35,6 +36,13 @@ for (const file of commandFiles) {
   client.commands_json.push(command.data.toJSON())
   client.commands.set(command.data.name, command)
   Logger.info(`${COLOR.RED}[CMD]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.BLUE}/${command.data.name}`)
+}
+
+for (const file of selectMenuFiles) {
+  const menu = require(`./select_menus/${file}`)
+  if (!menu.enabled) continue
+  client.selectMenus.set(menu.data.customId, menu)
+  Logger.info(`${COLOR.YELLOW}[MENU]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.BLUE}${menu.customId}`)
 }
 
 client.login(TOKEN)
