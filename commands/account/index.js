@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js')
-const command = require('../../config.json').commands.account
+const command = require('../../config/config.json').commands.account
 
 module.exports = {
   cooldown: command.cooldown || 0,

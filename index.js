@@ -41,8 +41,8 @@ for (const file of commandFiles) {
 for (const file of selectMenuFiles) {
   const menu = require(`./select_menus/${file}`)
   if (!menu.enabled) continue
-  client.selectMenus.set(menu.data.customId, menu)
-  Logger.info(`${COLOR.YELLOW}[MENU]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.BLUE}${menu.customId}`)
+  client.selectMenus.set(menu.customId, menu)
+  Logger.info(`${COLOR.MAGENTA}[MENU]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.BLUE}${menu.customId}`)
 }
 
 client.login(TOKEN)
