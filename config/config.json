@@ -61,7 +61,24 @@
                 }
             }
           }
-      },
+      },"account": {
+        "enabled": true,
+        "name": "account",
+        "description": "Gestiona tu cuenta de minecraft",
+        "requires_permission": false,
+        "subcommands": {
+            "link": {
+                "name": "link",
+                "description": "Vincula tu cuenta de minecraft",
+                "args": {
+                  "code": {
+                    "name": "code",
+                    "description": "Código obtenido al usar /link en minecraft"
+                  }
+                }                
+            }
+        }
+    },
       "rank": {
         "enabled": true,
         "name": "rank",
