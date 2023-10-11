@@ -2,8 +2,8 @@ const { Events } = require('discord.js')
 const Guild = require('../../api/controllers/Guild')
 
 module.exports = {
-  name: Events.GuildDelete,
+  name: Events.GuildCreate,
   async execute (interaction) {
-    Guild.leaveGuild(interaction.guild.id)
+    Guild.newGuild(interaction.guild.id)
   }
 }

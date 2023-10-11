@@ -91,6 +91,16 @@ const linkAccount = async (discordId, code) => {
   }
 }
 
+const getAccounts = async (discordId) => {
+  try {
+    const query = await execute(QUERIES.getAccounts, [discordId])
+    return query
+  } catch (err) {
+    Logger.error(err)
+    throw new Error(messages.command_error)
+  }
+}
+
 module.exports = {
   getNameByUUID,
   checkPermission,
@@ -99,5 +109,6 @@ module.exports = {
   getAllowedIds,
   getIDPermissions,
   getNodeIds,
-  linkAccount
+  linkAccount,
+  getAccounts
 }
