@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const { REST, Routes } = require('discord.js')
 const TOKEN = process.env.TOKEN
 const CLIENT_ID = process.env.CLIENT_ID
@@ -36,6 +38,17 @@ class CommandManager {
       Logger.error(error)
       return false
     }
+  }
+
+  static loadSubcommands (dirname) {
+    const filePath = path.join(dirname, '/subcommands')
+    const subcommandsFiles = fs.readdirSync(filePath)
+    const data = new Map()
+    for (const file of subcommandsFiles) {
+      const subcommand = require(`${filePath}/${file}`)
+      data.set(subcommand.name, subcommand)
+    }
+    return data
   }
 }
 

@@ -1,23 +1,13 @@
-const fs = require('fs')
 const path = require('path')
 const { SlashCommandBuilder } = require('discord.js')
 const Logger = require('../../util/Logger')
-const COLOR = require('../../util/ConsoleColor')
 const ranksConfig = require('../../config/pterodactyl.json').ranks
 const command = require('../../config/config.json').commands.rank
 const { messages } = require('../../config/messages.json')
 const { getAllowedIds } = require('../../api/controllers/User')
+const CommandManager = require('../../CommandManager')
 
-const subcommands = (() => {
-  const subcommandsFiles = fs.readdirSync(path.join(__dirname, 'subcommands'))
-  const data = new Map()
-  for (const file of subcommandsFiles) {
-    const subcommand = require(`./subcommands/${file}`)
-    Logger.info(`${COLOR.YELLOW}[SUB-CMD]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.BLUE}/${command.name} ${subcommand.name}`)
-    data.set(subcommand.name, subcommand)
-  }
-  return data
-})()
+const subcommands = CommandManager.loadSubcommands(path.resolve(__dirname))
 
 const ranks = (() => {
   const ranks = []
