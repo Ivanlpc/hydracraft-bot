@@ -4,7 +4,7 @@ const messages = require('../../config/messages.json')
 
 module.exports = {
   enabled: true,
-  customId: 'account_info_selector',
+  customId: 'account_info',
   execute: async (client, interaction) => {
     const uniqueId = interaction.values[interaction.values.length - 1]
     const discordId = interaction.user.id

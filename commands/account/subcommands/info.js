@@ -1,6 +1,6 @@
 const { StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js')
 const { getAccounts } = require('../../../api/controllers/User')
-const command = require('../../../config.json').commands.account.subcommands.link
+const command = require('../../../config/config.json').commands.account.subcommands.link
 const messages = require('../../../config/messages.json')
 
 const createSelectMenu = (accounts) => {

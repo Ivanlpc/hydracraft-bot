@@ -1,5 +1,5 @@
 const { linkAccount } = require('../../../api/controllers/User')
-const command = require('../../../config.json').commands.account.subcommands.link
+const command = require('../../../config/config.json').commands.account.subcommands.link
 const EMBEDS = require('../../../Embeds')
 
 module.exports = {
