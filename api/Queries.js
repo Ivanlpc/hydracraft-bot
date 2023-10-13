@@ -12,6 +12,7 @@ const QUERIES = {
   newGuild: `INSERT INTO ${botName}.guilds (id, name) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = ?, name = ?`,
   deleteGuild: `DELETE FROM ${botName}.guilds WHERE id = ?`,
   linkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET code = -1, discord = ? WHERE code = ?`,
+  unLinkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET code = NULL, discord = NULL where discord = ? AND uniqueId = ?`,
   getAccounts: `SELECT uniqueId, lastNickname FROM ${jPremiumDatabase}.user_profiles WHERE discord = ?`,
   getAccountInformation: `SELECT uniqueId, lastNickname, lastAddress, lastServer, firstAddress, firstSeen, premiumId FROM ${jPremiumDatabase}.user_profiles WHERE discord = ? AND uniqueId = ?`
 }

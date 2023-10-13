@@ -91,6 +91,18 @@ const linkAccount = async (discordId, code) => {
   }
 }
 
+const unLinkAccount = async (discordId, uniqueId) => {
+  try {
+    const query = await execute(QUERIES.unLinkAccount, [discordId, uniqueId])
+    if (query.affectedRows <= 0) {
+      throw new Error(messages.command_error)
+    }
+  } catch (err) {
+    Logger.error(err)
+    throw new Error(messages.command_error)
+  }
+}
+
 const getAccounts = async (discordId) => {
   try {
     const query = await execute(QUERIES.getAccounts, [discordId])
@@ -122,5 +134,6 @@ module.exports = {
   getNodeIds,
   linkAccount,
   getAccounts,
-  getAccountInformation
+  getAccountInformation,
+  unLinkAccount
 }

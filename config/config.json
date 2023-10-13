@@ -76,7 +76,15 @@
                     "description": "Código obtenido al usar /link en minecraft"
                   }
                 }                
-            }
+            },
+            "unlink": {
+              "name": "unlink",
+              "description": "Desvincula tu cuenta de mineceraft"
+          },
+            "info": {
+              "name": "info",
+              "description": "Ve informacion sobre tus cuentas vinculadas"
+          }
         }
     },
       "rank": {
