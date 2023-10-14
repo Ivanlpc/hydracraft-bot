@@ -23,7 +23,7 @@ const permissions = (() => {
 })()
 
 module.exports = {
-  permissions,
+  permission: command.requires_permission ? command.name : '',
   cooldown: command.cooldown || 0,
   enabled: command.enabled,
   data: new SlashCommandBuilder()

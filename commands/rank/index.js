@@ -22,7 +22,7 @@ const ranks = (() => {
 
 module.exports = {
   cooldown: command.cooldown || 0,
-  permission: command.requires_permission ? command.permission_name : '',
+  permission: command.requires_permission ? command.name : '',
   enabled: command.enabled,
   data: new SlashCommandBuilder()
     .setName(command.name)
