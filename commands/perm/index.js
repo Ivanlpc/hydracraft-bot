@@ -4,7 +4,6 @@ const Logger = require('../../util/Logger')
 const allCommands = require('../../config/config.json').commands
 const command = require('../../config/config.json').commands.perm
 const messages = require('../../config/messages.json')
-const { getAllowedIds } = require('../../api/controllers/User')
 const CommandManager = require('../../CommandManager')
 
 const subcommands = CommandManager.loadSubcommands(path.resolve(__dirname))
@@ -18,16 +17,6 @@ const permissions = (() => {
         name: allCommands[command].permission_name,
         value: command
       })
-    }
-    if (allCommands[command].subcommands !== undefined) {
-      for (const subcommand in allCommands[command].subcommands) {
-        if (allCommands[command].subcommands[subcommand].requires_permission) {
-          permissions.push({
-            name: allCommands[command].subcommands[subcommand].permission_name,
-            value: `${command}.subcommands.${subcommand}`
-          })
-        }
-      }
     }
   }
   return permissions
@@ -81,20 +70,6 @@ module.exports = {
         .setRequired(true))),
   async execute (interaction) {
     try {
-      const roles = await getAllowedIds(interaction.guildId, 'perm')
-      if (roles.length <= 0) {
-        return interaction.reply({
-          content: messages.no_permission,
-          ephemeral: true
-        })
-      }
-      const member = interaction.member
-      if (!member.roles.cache.hasAny(roles) && !roles.includes(member.id) && member.id !== member.guild.ownerId) {
-        return interaction.reply({
-          content: messages.no_permission,
-          ephemeral: true
-        })
-      }
       const subcommand = subcommands.get(interaction.options.getSubcommand())
       if (!subcommand) return
       await subcommand.execute(interaction)

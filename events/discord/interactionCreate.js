@@ -1,5 +1,6 @@
 const { Events } = require('discord.js')
 const Logger = require('../../util/Logger')
+const { getAllowedIds } = require('../../api/controllers/User')
 const { messages } = require('../../config/messages.json')
 
 module.exports = {
@@ -31,6 +32,22 @@ module.exports = {
           }
         }
         cooldownIds.set(interaction.user.id, (now + command.cooldown * 1000))
+      }
+      if (command.permission && command.permission.length > 0) {
+        const roles = await getAllowedIds(interaction.guildId, 'perm')
+        if (roles.length <= 0) {
+          return interaction.reply({
+            content: messages.no_permission,
+            ephemeral: true
+          })
+        }
+        const member = interaction.member
+        if (!member.roles.cache.hasAny(roles) && !roles.includes(member.id) && member.id !== member.guild.ownerId) {
+          return interaction.reply({
+            content: messages.no_permission,
+            ephemeral: true
+          })
+        }
       }
       try {
         await command.execute(interaction)
