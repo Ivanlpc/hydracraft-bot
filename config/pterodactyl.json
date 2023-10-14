@@ -1,6 +1,7 @@
 {
     "PTERO_URL": "",
-    "rank_command": "lp user %user% parent add %rank%",
+    "rank_add_command": "lp user %user% parent add %rank%",
+    "rank_remove_command": "lp user %user% parent remove %rank%",
     "servers": {
         "Survival": "",
         "Oneblock": "",
