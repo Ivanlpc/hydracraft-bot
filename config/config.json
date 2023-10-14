@@ -145,57 +145,6 @@
             }
           }
         }
-      },
-      "license": {
-        "enabled": false,
-        "name": "license",
-        "cooldown": 30,
-        "description": "Gestiona las licencias del bot",
-        "subcommands": {
-          "add": {
-              "name": "add",
-              "description": "Crea una licencia para el usuario mencionado",
-              "args": {
-                "time": {
-                  "name": "time",
-                  "description": "Duración de la licencia"
-                },
-                "id": {
-                  "name": "id",
-                   "description": "El id de rol/usuario al que quieres otorgar la licencia"
-                }
-              },
-              "requires_permission": true,
-              "permission_name": "Añadir licencia"
-              
-          },
-          "remove": {
-              "name": "remove",
-              "description": "Elminina la licencia del usuario mencionado",
-              "args": {
-                  "id": {
-                    "name": "id",
-                    "description": "El id de rol/usuario al que quieres eliminar la licencia"
-                  }
-                },
-              "requires_permission": true,
-              "permission_name": "Eliminar licencia"
-          },
-          "list": {
-              "name": "list",
-              "description": "Lista las licencias activas",
-              "requires_permission": true,
-              "permission_name": "Ver licencias"
-              
-          },
-          "reload": {
-            "name": "reload",
-            "description": "Recarga las licencias activas",
-            "requires_permission": true,
-            "permission_name": "Recargar lista de licencias"
-            
-        }
-      }
       }
   }
 }
