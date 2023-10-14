@@ -1,12 +1,10 @@
 const { addPermission } = require('../../../api/controllers/User')
 const Logger = require('../../../util/Logger')
-const pterodactyl = require('../../../config/pterodactyl.json')
-const command = require('../../../config/config.json').commands.rank.subcommands.add
-const messages = require('../../../config/messages.json').messages
+const command = require('../../../config/config.json').commands.perm.subcommands.add
+const messages = require('../../../config/messages.json')
 module.exports = {
   name: command.name,
   async execute (interaction) {
-    const rank = interaction.options.getString(command.args.rank.name, true).valueOf()
     const nick = interaction.options.getString(command.args.nick.name, true).valueOf()
     try {
       //

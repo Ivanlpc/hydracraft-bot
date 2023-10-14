@@ -145,6 +145,48 @@
             }
           }
         }
+      },
+      "user": {
+        "enabled": true,
+        "name": "user",
+        "cooldown": 30,
+        "description": "Gestiona a un usuario",
+        "requires_permission": true,
+        "permission_name": "Gestionar usuarios (/user link_discord|check|forcecracked|changepassword)",
+        "subcommands": {
+          
+          "forcecracked": {
+            "name": "forcecracked",
+            "description": "Cambia el estado de una cuenta a modo CRACKED",
+            "args": {
+              "nick": {
+                "name": "nick",
+                "description": "Nick de MC del usuario"
+              }
+            }
+          },
+          "changepassword": {
+            "name": "changepassword",
+            "description": "Cambia la contraseña de un usuario por una aleatoria",
+            "args": {
+              
+              "nick": {
+                "name": "nick",
+                "description": "Nick del usuario"
+              }
+            }
+          },
+          "check": {
+            "name": "check",
+            "description": "Gestiona las cuentas vinculadas de un usuario",
+            "args": {
+              "discord": {
+                "name": "discord",
+                "description": "Usuario que quieres gestionar"
+              }
+            }
+          }
+        }
       }
   }
 }
