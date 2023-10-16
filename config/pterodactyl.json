@@ -1,5 +1,6 @@
 {
     "PTERO_URL": "",
+    "PTERO_URL_CLIENT": "https://panel.hydracraft.es/api/client",
     "rank_add_command": "lp user %user% parent add %rank%",
     "rank_remove_command": "lp user %user% parent remove %rank%",
     "servers": {

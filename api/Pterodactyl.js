@@ -10,7 +10,7 @@ const buildHeaders = () => {
 
 const PterodactylAPI = {
   sendCommand: async (server, command) => {
-    const url = `${PTERO_CONFIG.PTERO_URL}/servers/${server}/command`
+    const url = `${PTERO_CONFIG.PTERO_URL_CLIENT}/servers/${server}/command`
     const requestOptions = {
       method: 'POST',
       headers: buildHeaders(),
