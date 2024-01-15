@@ -46,6 +46,8 @@ class CommandManager {
     const data = new Map()
     for (const file of subcommandsFiles) {
       const subcommand = require(`${filePath}/${file}`)
+      if(!subcommand) continue
+      
       data.set(subcommand.name, subcommand)
     }
     return data

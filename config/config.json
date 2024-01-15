@@ -1,8 +1,12 @@
 {
   "TEBEX_URL": "https://plugin.tebex.io",
   "TRANSACTION_AVATAR_URL": "https://mc-heads.net/avatar/",
-  "JPREMIUM_DATABASE_NAME": "jPremium",
-  
+  "jPremiumDatabase": "jPremium",
+  "pins": "pins",
+  "mentions": {
+    "bypassRoles": [],
+    "noMentionRoles": []
+  },
   "commands": {
       "perm": {
           "enabled": true,
@@ -61,7 +65,7 @@
             }
           }
       },"account": {
-        "enabled": true,
+        "enabled": false,
         "name": "account",
         "description": "Gestiona tu cuenta de minecraft",
         "requires_permission": false,
@@ -83,11 +87,26 @@
             "info": {
               "name": "info",
               "description": "Ve informacion sobre tus cuentas vinculadas"
+          }, 
+          "changepassword": {
+            "name": "changepassword",
+            "description": "Cambia la contraseña de tu cuenta de minecraft",
+            "args": {
+              "oldpassword": {
+                "name": "oldpassword",
+                "description": "Contraseña actual de tu cuenta de minecraft"
+              },
+              "newpassword": {
+                "name": "newpassword",
+                "description": "Nueva contraseña de tu cuenta de minecraft"
+              }
+            }
           }
+          
         }
     },
       "rank": {
-        "enabled": true,
+        "enabled": false,
         "name": "rank",
         "cooldown": 30,
         "description": "Gestiona los rangos de minecraft",
@@ -146,14 +165,27 @@
         }
       },
       "user": {
-        "enabled": true,
+        "enabled": false,
         "name": "user",
         "cooldown": 30,
         "description": "Gestiona a un usuario",
         "requires_permission": true,
         "permission_name": "Gestionar usuarios (/user link_discord|check|forcecracked|changepassword)",
         "subcommands": {
-          
+          "link_discord": {
+            "name": "link_discord",
+            "description": "Vincula una cuenta de discord a un usuario",
+            "args": {
+              "nick": {
+                "name": "nick",
+                "description": "Nick de MC del usuario"
+              },
+              "discord": {
+                "name": "discord",
+                "description": "Usuario de discord que quieres vincular"
+              }
+            }
+          },
           "forcecracked": {
             "name": "forcecracked",
             "description": "Cambia el estado de una cuenta a modo CRACKED",

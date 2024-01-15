@@ -1,5 +1,5 @@
 const botName = require('../package.json').name
-const jPremiumDatabase = require('../config/config.json').JPREMIUM_DATABASE_NAME
+const { jPremiumDatabase, pins } = require('../config/config.json')
 
 const QUERIES = {
   getLastNickname: `SELECT lastNickname FROM ${jPremiumDatabase}.user_profiles WHERE premiumId = ? OR uniqueId = ?`,
@@ -11,10 +11,11 @@ const QUERIES = {
   getPermissionsNode: `SELECT id FROM ${botName}.permissions WHERE guildId = ? AND permission_node = ?`,
   newGuild: `INSERT INTO ${botName}.guilds (id, name) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = ?, name = ?`,
   deleteGuild: `DELETE FROM ${botName}.guilds WHERE id = ?`,
-  linkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET code = -1, discord = ? WHERE code = ?`,
-  unLinkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET code = NULL, discord = NULL where discord = ? AND uniqueId = ?`,
+  linkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET discord = ? WHERE uniqueId = (SELECT id FROM ${jPremiumDatabase}.pending_links WHERE code = ?)`,
+  unLinkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET discord = NULL where discord = ? AND uniqueId = ?`,
   getAccounts: `SELECT uniqueId, lastNickname FROM ${jPremiumDatabase}.user_profiles WHERE discord = ?`,
-  getAccountInformation: `SELECT uniqueId, lastNickname, lastAddress, lastServer, firstAddress, firstSeen, premiumId FROM ${jPremiumDatabase}.user_profiles WHERE discord = ? AND uniqueId = ?`
+  getAccountInformation: `SELECT uniqueId, lastNickname, lastAddress, lastServer, firstAddress, firstSeen, premiumId FROM ${jPremiumDatabase}.user_profiles WHERE discord = ? AND uniqueId = ?`,
+  isStaff: `SELECT * FROM ${pins}.PinCodes WHERE uuid = ?`
 }
 
 module.exports = QUERIES

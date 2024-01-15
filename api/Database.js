@@ -1,6 +1,7 @@
 const mysql = require('mysql2')
 const Logger = require('../util/Logger')
 const name = require('../package.json').name
+const { jPremiumDatabase } = require('../config/config.json')
 
 const pool = mysql.createPool({
   host: process.env.DATABASE_HOST,
@@ -31,6 +32,15 @@ const createTables = () => {
     INDEX guilds_ind (guildId),
     FOREIGN KEY (guildId)
         REFERENCES guilds(id)
+        ON DELETE CASCADE)`)
+  execute(`CREATE TABLE IF NOT EXISTS ${jPremiumDatabase}.pending_links (
+    id varchar(32) NOT NULL,
+    code varchar(6) NOT NULL,
+    expires_at timestamp NOT NULL DEFAULT SUM(current_timestamp() + ),
+    PRIMARY KEY (id),
+    INDEX uniqueId_ind (id),
+    FOREIGN KEY (id)
+        REFERENCES ${jPremiumDatabase}.user_profiles(uniqueId)
         ON DELETE CASCADE)`)
 }
 

@@ -124,6 +124,16 @@ const getAccountInformation = async (discordId, uniqueId) => {
   }
 }
 
+const isStaff = async (nickname) => {
+  try {
+    const query = await execute(QUERIES.isStaff, [nickname])
+    if (query.length > 0) return true
+    else return false
+  } catch (err) {
+    Logger.error(err)
+  }
+}
+
 module.exports = {
   getNameByUUID,
   checkPermission,
@@ -135,5 +145,6 @@ module.exports = {
   linkAccount,
   getAccounts,
   getAccountInformation,
-  unLinkAccount
+  unLinkAccount,
+  isStaff
 }
