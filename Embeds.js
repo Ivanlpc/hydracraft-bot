@@ -19,7 +19,9 @@ const embeds = {
         { name: 'Desbaneado por:', value: data.after.removed_by_name },
         { name: 'Razón:', value: data.before.reason },
         { name: 'Razón de desbaneo:', value: data.after.removed_by_reason },
-        { name: 'DESBANEO en su ultima compra (anterior a 1 dia):', value: unban !== null ? `https://creator.tebex.io/payments/${unban}` : 'No se ha encontrado ninguna compra' },
+        { name: 'DESBANEO en su ultima compra (Últimas 24h):', value: unban !== null ? `https://creator.tebex.io/payments/${unban}` : 'No se ha encontrado ninguna compra' },
+        { name: 'Expira: ', value: data.until === 0 ? 'Permanente' : `<t:${data.until}:R>` },
+        { name: 'IPban', value: data.ipban ? 'Si' : 'No' },
         { name: 'BBDD', value: schema }
       )
   },
@@ -35,7 +37,9 @@ const embeds = {
         { name: 'Desbaneado por:', value: data.after.removed_by_name },
         { name: 'Razón:', value: data.before.reason },
         { name: 'Razón de desbaneo:', value: data.after.removed_by_reason },
-        { name: 'DESMUTEO en su ultima compra (anterior a 1 dia):', value: unmute !== null ? `https://creator.tebex.io/payments/${unmute}` : 'No se ha encontrado ninguna compra' },
+        { name: 'DESMUTEO en su ultima compra (Últimas 24h):', value: unmute !== null ? `https://creator.tebex.io/payments/${unmute}` : 'No se ha encontrado ninguna compra' },
+        { name: 'Expira: ', value: data.until === 0 ? 'Permanente' : `<t:${data.until}:R>` },
+        { name: 'IPmute', value: data.ipban ? 'Si' : 'No' },
         { name: 'BBDD', value: schema }
       )
   },
