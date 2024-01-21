@@ -13,8 +13,8 @@ const MySQLTrigger = {
   statement: STATEMENTS.DELETE,
   onEvent: async (event) => {
     for (const row of event.affectedRows) {
-    let userNickname = await getNameByUUID(row.before.uuid) || 'ERROR'
-     await webhook.send({embeds: [Embeds.delete_history_embed(userNickname, row.before, event.schema)]})
+      const userNickname = await getNameByUUID(row.before.uuid) || 'ERROR'
+      await webhook.send({ embeds: [Embeds.delete_history_embed(userNickname, row.before, event.schema)] })
     }
   }
 }

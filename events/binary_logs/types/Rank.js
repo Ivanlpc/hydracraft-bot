@@ -23,8 +23,7 @@ const MySQLTrigger = {
       let isRank = false
       if (rgx.test(row.after.permission)) return
       isRank = row.after.permission.includes('group.')
-     
-      
+
       let nickname
       try {
         nickname = await getNameByUUID(row.after.uuid)
@@ -57,7 +56,7 @@ const MySQLTrigger = {
               uuid: row.after.uuid,
               perm: row.after.permission,
               nick: nickname,
-              temp
+              temp: row.after.expiry
             })]
           })
         }

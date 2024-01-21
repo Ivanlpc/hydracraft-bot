@@ -23,7 +23,7 @@ const MySQLTrigger = {
         nickname = 'ERROR'
       }
       let userPayments = []
-      if(nickname === 'ERROR') {
+      if (nickname === 'ERROR') {
         await webhook.send({ embeds: [Embeds.unban_embed(row, null, nickname, event.schema)] })
         return
       }

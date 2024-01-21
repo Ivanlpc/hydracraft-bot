@@ -4,8 +4,8 @@ const config = require('./config/config.json')
 const embeds = {
   test: () => {
     return new EmbedBuilder()
-    .setTitle('Some Title')
-    .setColor(0x00FFFF)
+      .setTitle('Some Title')
+      .setColor(0x00FFFF)
   },
   unban_embed: (data, unban, name, schema) => {
     return new EmbedBuilder()
@@ -61,7 +61,8 @@ const embeds = {
         { name: 'Activo', value: data.active ? 'Si' : 'No' },
         { name: 'BBDD', value: schema }
       )
-  },delete_action_embed: (data, schema) => {
+  },
+  delete_action_embed: (data, schema) => {
     return new EmbedBuilder()
       .setTitle('SE HAN BORRADO LOGS DE ACCIONES')
       .setDescription('Información')

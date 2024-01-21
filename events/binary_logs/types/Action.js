@@ -6,14 +6,13 @@ const webhook = new WebhookClient({
   url: process.env.WEBHOOK_ACTION
 })
 
-
 const MySQLTrigger = {
   name: 'ACTION',
   expression: '*.luckperms_actions',
   statement: STATEMENTS.DELETE,
   onEvent: async (event) => {
     for (const row of event.affectedRows) {
-     await webhook.send({embeds: [Embeds.delete_action_embed(row.before, event.schema)]})
+      await webhook.send({ embeds: [Embeds.delete_action_embed(row.before, event.schema)] })
     }
   }
 }
