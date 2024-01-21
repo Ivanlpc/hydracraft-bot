@@ -15,11 +15,11 @@ client.commands_json = []
 client.cooldowns = new Collection()
 
 Logger.init()
-SQLEvents().then('Logging SQL events').catch(err => console.log(err))
+SQLEvents().then(() => Logger.info(`${COLOR.GREEN}[SQL]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] MySQL Events started`)).catch(err => Logger.error(err))
 
 for (const file of eventsFiles) {
   const event = require(`./events/discord/${file}`)
-  Logger.info(`${COLOR.CYAN}[EVENT]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.MAGENTA}${event.name}`)
+  Logger.info(`${COLOR.CYAN}[EVENT]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.MAGENTA}${event.name}`)
   if (event.once) {
     client.once(event.name, event.execute)
   } else {
@@ -35,14 +35,14 @@ for (const file of commandFiles) {
   }
   client.commands_json.push(command.data.toJSON())
   client.commands.set(command.data.name, command)
-  Logger.info(`${COLOR.RED}[CMD]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.BLUE}/${command.data.name}`)
+  Logger.info(`${COLOR.RED}[CMD]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}/${command.data.name}`)
 }
 
 for (const file of selectMenuFiles) {
   const menu = require(`./select_menus/${file}`)
   if (!menu.enabled) continue
   client.selectMenus.set(menu.customId, menu)
-  Logger.info(`${COLOR.MAGENTA}[MENU]${COLOR.BLACK}[${COLOR.GREEN}✔${COLOR.BLACK}] Loaded ${COLOR.BLUE}${menu.customId}`)
+  Logger.info(`${COLOR.MAGENTA}[MENU]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}${menu.customId}`)
 }
 
 client.login(TOKEN)

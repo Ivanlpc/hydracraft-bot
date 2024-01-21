@@ -22,7 +22,7 @@ class Logger {
   }
 
   static info (msg) {
-    console.info(COLOR.BLACK, msg, COLOR.RESET)
+    console.info(COLOR.WHITE, msg, COLOR.RESET)
     // eslint-disable-next-line no-control-regex
     const regex = /\u001b\[[0-4]?[0-9]m/g
     msg = msg.replaceAll(regex, '')
