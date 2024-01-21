@@ -9,13 +9,17 @@ const commandFiles = fs.readdirSync('./commands')
 const eventsFiles = fs.readdirSync('./events/discord').filter(file => file.endsWith('.js'))
 const selectMenuFiles = fs.readdirSync('./select_menus')
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
+const binlogconfig = require('./config/binlog.json')
+
 client.commands = new Map()
 client.selectMenus = new Map()
 client.commands_json = []
 client.cooldowns = new Collection()
 
 Logger.init()
-SQLEvents().then(() => Logger.info(`${COLOR.GREEN}[SQL]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] MySQL Events started`)).catch(err => Logger.error(err))
+if (binlogconfig.enabled) {
+  SQLEvents().then(() => Logger.info(`${COLOR.GREEN}[SQL]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] MySQL Events started`)).catch(err => Logger.error(err))
+}
 
 for (const file of eventsFiles) {
   const event = require(`./events/discord/${file}`)
