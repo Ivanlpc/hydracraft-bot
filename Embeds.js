@@ -2,7 +2,11 @@ const { EmbedBuilder } = require('discord.js')
 const config = require('./config/config.json')
 
 const embeds = {
-
+  test: () => {
+    return new EmbedBuilder()
+    .setTitle('Some Title')
+    .setColor(0x00FFFF)
+  },
   unban_embed: (data, unban, name, schema) => {
     return new EmbedBuilder()
       .setTitle('NUEVO DESBANEO')
@@ -15,27 +19,45 @@ const embeds = {
         { name: 'Desbaneado por:', value: data.after.removed_by_name },
         { name: 'Razón:', value: data.before.reason },
         { name: 'Razón de desbaneo:', value: data.after.removed_by_reason },
-        { name: 'DESBANEO en su ultima compra (anterior a 1h):', value: unban.toString() },
-        { name: 'Schema', value: schema }
+        { name: 'DESBANEO en su ultima compra (anterior a 1 dia):', value: unban !== null ? `https://creator.tebex.io/payments/${unban}` : 'No se ha encontrado ninguna compra' },
+        { name: 'BBDD', value: schema }
       )
   },
-  unmute_embed: (data, unban, name, schema) => {
+  unmute_embed: (data, unmute, name, schema) => {
     return new EmbedBuilder()
       .setTitle('NUEVO DESMUTEO')
       .setDescription('Informacion')
-      .setColor(unban ? 'Green' : 'Red')
+      .setColor(unmute ? 'Green' : 'Red')
       .setThumbnail(config.TRANSACTION_AVATAR_URL + name)
       .addFields(
-        { name: 'UUID:', value: data.uuid },
+        { name: 'UUID:', value: data.after.uuid },
         { name: 'Nombre: ', value: name },
-        { name: 'Desmuteado por:', value: data.removed_by_name },
-        { name: 'Razón:', value: data.reason },
-        { name: 'Razón de desbaneo:', value: data.removed_by_reason },
-        { name: 'Ha comprado DESMUTEO en su ultima compra:', value: unban.toString() },
-        { name: 'Schema', value: schema }
+        { name: 'Desbaneado por:', value: data.after.removed_by_name },
+        { name: 'Razón:', value: data.before.reason },
+        { name: 'Razón de desbaneo:', value: data.after.removed_by_reason },
+        { name: 'DESMUTEO en su ultima compra (anterior a 1 dia):', value: unmute !== null ? `https://creator.tebex.io/payments/${unmute}` : 'No se ha encontrado ninguna compra' },
+        { name: 'BBDD', value: schema }
       )
   },
-  delete_action_embed: (data, schema) => {
+  delete_history_embed: (userNickname, data, schema) => {
+    return new EmbedBuilder()
+      .setTitle('BAN ELIMINADO')
+      .setDescription('Información')
+      .setThumbnail(config.TRANSACTION_AVATAR_URL + userNickname)
+      .setColor('Red')
+      .addFields(
+        { name: 'IP:', value: data.ip },
+        { name: 'Baneado por:', value: data.banned_by_name },
+        { name: 'Fecha de la sanción:', value: new Date(Number.parseInt(data.time)).toLocaleDateString() },
+        { name: 'Usuario:', value: userNickname },
+        { name: 'UUID:', value: data.uuid },
+        { name: 'Razón: ', value: data.reason },
+        { name: 'Expira: ', value: data.until === 0 ? 'Permanente' : `<t:${data.until}:R>` },
+        { name: 'IPban', value: data.ipban ? 'Si' : 'No' },
+        { name: 'Activo', value: data.active ? 'Si' : 'No' },
+        { name: 'BBDD', value: schema }
+      )
+  },delete_action_embed: (data, schema) => {
     return new EmbedBuilder()
       .setTitle('SE HAN BORRADO LOGS DE ACCIONES')
       .setDescription('Información')
@@ -47,7 +69,7 @@ const embeds = {
         { name: 'Ejecutado el:', value: new Date(Number.parseInt(data.time) * 1000).toLocaleDateString() },
         { name: 'Usuario sobre el que se ejecutó el comando:', value: data.acted_name },
         { name: 'Acción realizada: ', value: data.action },
-        { name: 'Schema', value: schema }
+        { name: 'BBDD', value: schema }
       )
   },
   new_rank_embed: (uuid, rank, tienda, name, schema, value, temp) => {
@@ -60,10 +82,10 @@ const embeds = {
         { name: 'UUID:', value: uuid },
         { name: 'Nick:', value: name },
         { name: 'Rango: ', value: rank },
-        { name: 'Su última compra (anterior a 1 día) coincide con el rango:', value: tienda.toString() },
+        { name: 'Su última compra (anterior a 1 día) coincide con el rango:', value: tienda !== null ? `https://creator.tebex.io/payments/${tienda}` : 'No se ha encontrado ninguna compra' },
         { name: 'Base de datos', value: schema },
-        { name: 'Valor:', value: value ? 'True' : 'False' },
-        { name: 'Permanente:', value: temp.toString() }
+        { name: 'Valor:', value: value ? 'Permitir' : 'Denegar' },
+        { name: 'Duración:', value: temp === 0 ? 'Permanente' : `<t:${temp}:R>` }
       )
   },
   new_perm_embed: (uuid, rank, name, schema, value, temp) => {
@@ -77,8 +99,8 @@ const embeds = {
         { name: 'Nick:', value: name },
         { name: 'Permiso: ', value: rank },
         { name: 'Base de datos', value: schema },
-        { name: 'Valor:', value: value ? 'True' : 'False' },
-        { name: 'Permanente:', value: temp.toString() }
+        { name: 'Valor:', value: value ? 'Permitir' : 'Denegar' },
+        { name: 'Duración:', value: temp === 0 ? 'Permanente' : `<t:${temp}:R>` }
       )
   },
   delete_ban_embed: (data, name, schema) => {
@@ -95,7 +117,7 @@ const embeds = {
         { name: 'Fecha:', value: new Date(data.time).toLocaleDateString() },
         { name: 'Expira en:', value: data.until !== -1 ? new Date(data.until).toLocaleDateString() : 'Permanente' },
         { name: 'Baneo de ip:', value: data.ipban.toString() },
-        { name: 'Schema', value: schema }
+        { name: 'BBDD', value: schema }
       )
     if (data.removed_by_name !== null) {
       embed.addFields(

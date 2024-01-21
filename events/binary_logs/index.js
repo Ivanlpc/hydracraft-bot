@@ -4,9 +4,16 @@ const Logger = require('../../util/Logger')
 const MySQLEvents = require('@rodrigogs/mysql-events')
 const eventsPath = path.join(__dirname, 'types')
 const eventsFile = fs.readdirSync(eventsPath)
-const { pool } = require('../../api/Database')
+const mysql = require('mysql')
+
 const SQLEvents = async () => {
-  const instance = new MySQLEvents(pool, {
+  const connection = mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD
+  })
+
+  const instance = new MySQLEvents(connection, {
     startAtEnd: true,
     excludedSchemas: {
       mysql: true

@@ -1,7 +1,7 @@
 {
   "TEBEX_URL": "https://plugin.tebex.io",
   "TRANSACTION_AVATAR_URL": "https://mc-heads.net/avatar/",
-  "jPremiumDatabase": "jPremium",
+  "jPremiumDatabase": "jpremium",
   "pins": "pins",
   "mentions": {
     "bypassRoles": [],

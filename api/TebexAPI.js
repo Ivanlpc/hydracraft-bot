@@ -102,8 +102,8 @@ const TebexAPI = {
      * @param user Name of the user you want to get the payments
      * @returns IPayments | IError
      */
-  getUserPaymentsFromUUID: async (token, uuid) => {
-    const url = `${config.TEBEX_URL}/user/${uuid}`
+  getUserPaymentsFromNickname: async (token, nick) => {
+    const url = `${config.TEBEX_URL}/user/${nick}`
     const requestOptions = {
       method: 'GET',
       headers: buildHeaders(token)

@@ -11,11 +11,11 @@ const rest = new REST().setToken(TOKEN)
 class CommandManager {
   static async registerCommands (commands) {
     try {
-      Logger.info('Registering commands...')
+      Logger.info(`${COLOR.WHITE}Registering commands...`)
       const data = await rest.put(
         Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
         { body: commands })
-      Logger.info(`Registered ${COLOR.GREEN}${data.length} ${COLOR.BLACK}commands`)
+      Logger.info(`${COLOR.WHITE}Registered ${COLOR.GREEN}${data.length} ${COLOR.WHITE}commands`)
     } catch (error) {
       Logger.error(error)
     }

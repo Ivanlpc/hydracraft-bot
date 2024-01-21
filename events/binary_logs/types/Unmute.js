@@ -1,40 +1,48 @@
 const { WebhookClient } = require('discord.js')
-const { TebexAPI } = require('../../../api/TebexAPI')
+const TebexAPI = require('../../../api/TebexAPI')
 const Embeds = require('../../../Embeds')
 const Logger = require('../../../util/Logger')
-const { validatePayments, filterPayments } = require('../util/CheckPayments')
-
-const config = require('../../../config/config.json')
+const { validatePayments, filterPayments, getNameByUUID } = require('../../../api/controllers/User')
+const config = require('../../../config/binarylogs.json')
+const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_UNMUTE })
-
-const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 
 const MySQLTrigger = {
   name: 'UNMUTE',
   expression: '*.litebans_mutes',
   statement: STATEMENTS.UPDATE,
-  onEvent: (event) => {
-    event.affectedRows.forEach(async row => {
-      if (row.after.removed_by_reason === '#expired' || row.after.removed_by_reason === null) return
-      let userPayments = []
+  onEvent: async (event) => {
+    for (const row of event.affectedRows) {
+      if (row.after.removed_by_reason === config.expired_reason || row.after.removed_by_reason === null) return
+      let nickname
       try {
-        userPayments = await TebexAPI.getUserPayments(config.TEBEX_TOKEN, row.before.uuid)
+        nickname = await getNameByUUID(row.before.uuid)
+      } catch (err) {
+        Logger.error(err)
+        nickname = 'ERROR'
+      }
+      let userPayments = []
+      if(nickname === 'ERROR') {
+        await webhook.send({ embeds: [Embeds.unmute_embed(row, null, nickname, event.schema)] })
+        return
+      }
+      try {
+        userPayments = await TebexAPI.getUserPaymentsFromNickname(process.env.TEBEX_TOKEN, nickname)
       } catch (e) {
         Logger.error(e)
       }
-      const nickname = userPayments.player.username
       const todayPaymentsID = filterPayments(userPayments.payments)
-      const promises = todayPaymentsID.map(id => TebexAPI.getPaymentFromId(config.TEBEX_TOKEN, id))
+      const promises = todayPaymentsID.map(payment => TebexAPI.getPaymentFromId(process.env.TEBEX_TOKEN, payment.txn_id))
       let todayPaymentsData = []
       try {
-        todayPaymentsData = await Promise.all([promises])
+        todayPaymentsData = await Promise.all(promises)
       } catch (err) {
         Logger.error(err)
       }
-      const valid = validatePayments(todayPaymentsData, 'DESMUTEO')
+      const valid = validatePayments(todayPaymentsData, config.unmute_package)
       await webhook.send({ embeds: [Embeds.unmute_embed(row, valid, nickname, event.schema)] })
-    })
+    }
   }
 }
 

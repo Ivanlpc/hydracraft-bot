@@ -1,5 +1,9 @@
 {
     "words":[
-        
+        "group.[a-z]-*",
+        "kit.*",
+        "(meta.)?examen.*",
+        "jobs.*",
+        "playervaults.(amount|size).[0-9]+"
     ]
 }

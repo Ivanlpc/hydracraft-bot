@@ -2,12 +2,14 @@ const { execute } = require('../Database')
 const QUERIES = require('../Queries')
 const Logger = require('../../util/Logger')
 const messages = require('../../config/messages.json')
+const config = require('../../config/binarylogs.json')
 
 const getNameByUUID = async (uuid) => {
   if (uuid === null) return ''
   try {
-    const query = await execute(QUERIES.getLastNickname, [uuid])
-    return query[0].lastNickname
+    if (uuid.includes('-')) uuid = uuid.replaceAll('-', '')
+    const query = await execute(QUERIES.getLastNickname, [uuid, uuid])
+    return query[0].lastNickname || 'ERROR'
   } catch (err) {
     Logger.error(err)
     return ''
@@ -134,6 +136,26 @@ const isStaff = async (nickname) => {
   }
 }
 
+const validatePayments = (payments, stringValidation) => {
+  if (payments.length === 0) return null
+  else {
+    for (const payment in payments) {
+      for (const product in payments[payment].packages) {
+        if (payments[payment].packages[product].name.toLocaleLowerCase() === stringValidation.toLocaleLowerCase()) return payments[payment].id
+      }
+    }
+    return null
+  }
+}
+
+const filterPayments = (payments) => {
+  if (payments === null) return []
+  else {
+    const today = Date.now()
+    return payments.filter(payment => today - (payment.time * 1000) < config.max_payment_time)
+  }
+}
+
 module.exports = {
   getNameByUUID,
   checkPermission,
@@ -146,5 +168,7 @@ module.exports = {
   getAccounts,
   getAccountInformation,
   unLinkAccount,
-  isStaff
+  isStaff,
+  validatePayments,
+  filterPayments
 }

@@ -1,0 +1,7 @@
+{
+    "max_payment_time": 86400000,
+    "unban_package": "DESBANEO",
+    "unmute_package": "DESMUTEO",
+    "expired_reason": "#expired",
+    "Rankups": []
+}

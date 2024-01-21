@@ -1,4 +1,4 @@
-const mysql = require('mysql2')
+const mysql = require('mysql')
 const Logger = require('../util/Logger')
 const name = require('../package.json').name
 const { jPremiumDatabase } = require('../config/config.json')
