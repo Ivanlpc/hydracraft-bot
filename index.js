@@ -9,7 +9,7 @@ const commandFiles = fs.readdirSync('./commands')
 const eventsFiles = fs.readdirSync('./events/discord').filter(file => file.endsWith('.js'))
 const selectMenuFiles = fs.readdirSync('./select_menus')
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
-const binlogconfig = require('./config/binlog.json')
+const binlogconfig = require('./config/binarylogs.json')
 
 client.commands = new Map()
 client.selectMenus = new Map()
