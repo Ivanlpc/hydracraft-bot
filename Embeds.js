@@ -56,7 +56,8 @@ const embeds = {
         { name: 'Activo', value: data.active ? 'Si' : 'No' },
         { name: 'BBDD', value: schema }
       )
-  },delete_action_embed: (data, schema) => {
+  },
+  delete_action_embed: (data, schema) => {
     return new EmbedBuilder()
       .setTitle('SE HAN BORRADO LOGS DE ACCIONES')
       .setDescription('Información')

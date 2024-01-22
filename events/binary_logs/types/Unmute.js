@@ -45,7 +45,7 @@ const MySQLTrigger = {
       const valid = validatePayments(todayPaymentsData, config.unmute_package)
 
       if (valid) {
-        row.after.removed_by_reason = row.after.removed_by_reason.replaceAll(/(tbx-)[a-zA-Z0-9\-]+/g, 'OCULTA')
+        row.after.removed_by_reason = row.after.removed_by_reason.replaceAll(/(tbx-)[a-zA-Z0-9-]+/g, 'OCULTA')
       }
       await webhook.send({ embeds: [Embeds.unmute_embed(row, valid, nickname, event.schema)] })
       await webhook2.send({ embeds: [Embeds.unmute_embed(row, valid, nickname, event.schema)] })
