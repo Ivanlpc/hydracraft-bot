@@ -12,5 +12,7 @@
     "account_already_linked": "Ese nombre de minecraft ya está vinculado a una cuenta de discord",
     "no_accounts": "No tienes ninguna cuenta vinculada a discord. Para vincularla usa el comando `/link` en el servidor de minecraft",
     "account_unlinked": "La cuenta ha sido desvinculada con éxito",
-    "no_mention_roles": "<@!%id%> no mencione de forma innecesaria a miembros del staff, por favor, espere a que respondan"
+    "no_mention_roles": "<@!%id%> no mencione de forma innecesaria a miembros del staff, por favor, espere a que respondan",
+    "is_staff": "El ID <@!%id%> es o ha pertenecido al staff",
+    "hidden_transaction_id": "OCULTA"
 }

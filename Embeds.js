@@ -2,11 +2,6 @@ const { EmbedBuilder } = require('discord.js')
 const config = require('./config/config.json')
 
 const embeds = {
-  test: () => {
-    return new EmbedBuilder()
-      .setTitle('Some Title')
-      .setColor(0x00FFFF)
-  },
   unban_embed: (data, unban, name, schema) => {
     return new EmbedBuilder()
       .setTitle('NUEVO DESBANEO')
@@ -16,12 +11,12 @@ const embeds = {
       .addFields(
         { name: 'UUID:', value: data.after.uuid },
         { name: 'Nombre: ', value: name },
-        { name: 'Desbaneado por:', value: data.after.removed_by_name },
         { name: 'Razón:', value: data.before.reason },
+        { name: 'Expira: ', value: data.before.until <= 0 ? 'Permanente' : `<t:${Math.round(data.before.until / 1000)}:R>` },
+        { name: 'IPban', value: data.before.ipban ? 'Si' : 'No' },
+        { name: 'Desbaneado por:', value: data.after.removed_by_name },
         { name: 'Razón de desbaneo:', value: data.after.removed_by_reason },
         { name: 'DESBANEO en su ultima compra (Últimas 24h):', value: unban !== null ? `https://creator.tebex.io/payments/${unban}` : 'No se ha encontrado ninguna compra' },
-        { name: 'Expira: ', value: data.until === 0 ? 'Permanente' : `<t:${data.until}:R>` },
-        { name: 'IPban', value: data.ipban ? 'Si' : 'No' },
         { name: 'BBDD', value: schema }
       )
   },
@@ -34,12 +29,12 @@ const embeds = {
       .addFields(
         { name: 'UUID:', value: data.after.uuid },
         { name: 'Nombre: ', value: name },
-        { name: 'Desbaneado por:', value: data.after.removed_by_name },
         { name: 'Razón:', value: data.before.reason },
-        { name: 'Razón de desbaneo:', value: data.after.removed_by_reason },
+        { name: 'Expira: ', value: data.before.until <= 0 ? 'Permanente' : `<t:${Math.round(data.before.until / 1000)}:R>` },
+        { name: 'IPmute', value: data.before.ipban ? 'Si' : 'No' },
+        { name: 'Desbaneado por:', value: data.after.removed_by_name },
+        { name: 'Razón de desmuteo:', value: data.after.removed_by_reason },
         { name: 'DESMUTEO en su ultima compra (Últimas 24h):', value: unmute !== null ? `https://creator.tebex.io/payments/${unmute}` : 'No se ha encontrado ninguna compra' },
-        { name: 'Expira: ', value: data.until === 0 ? 'Permanente' : `<t:${data.until}:R>` },
-        { name: 'IPmute', value: data.ipban ? 'Si' : 'No' },
         { name: 'BBDD', value: schema }
       )
   },
@@ -61,8 +56,7 @@ const embeds = {
         { name: 'Activo', value: data.active ? 'Si' : 'No' },
         { name: 'BBDD', value: schema }
       )
-  },
-  delete_action_embed: (data, schema) => {
+  },delete_action_embed: (data, schema) => {
     return new EmbedBuilder()
       .setTitle('SE HAN BORRADO LOGS DE ACCIONES')
       .setDescription('Información')

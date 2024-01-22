@@ -9,6 +9,12 @@ module.exports = {
     const nick = interaction.options.getString(command.args.nick.name, true).valueOf()
     try {
       const staff = await isStaff(nick)
+      if (staff) {
+        return interaction.reply({
+          content: messages.is_staff,
+          ephemeral: true
+        })
+      }
     } catch (err) {
       Logger.error(err)
       return interaction.reply({

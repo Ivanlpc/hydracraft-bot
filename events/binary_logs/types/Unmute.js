@@ -7,6 +7,7 @@ const config = require('../../../config/binarylogs.json')
 const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_UNMUTE })
+const webhook2 = new WebhookClient({ url: process.env.WEBHOOK_UNMUTE2 })
 
 const MySQLTrigger = {
   name: 'UNMUTE',
@@ -25,6 +26,7 @@ const MySQLTrigger = {
       let userPayments = []
       if (nickname === 'ERROR') {
         await webhook.send({ embeds: [Embeds.unmute_embed(row, null, nickname, event.schema)] })
+        await webhook2.send({ embeds: [Embeds.unmute_embed(row, null, nickname, event.schema)] })
         return
       }
       try {
@@ -41,7 +43,12 @@ const MySQLTrigger = {
         Logger.error(err)
       }
       const valid = validatePayments(todayPaymentsData, config.unmute_package)
+
+      if (valid) {
+        row.after.removed_by_reason = row.after.removed_by_reason.replaceAll(/(tbx-)[a-zA-Z0-9\-]+/g, 'OCULTA')
+      }
       await webhook.send({ embeds: [Embeds.unmute_embed(row, valid, nickname, event.schema)] })
+      await webhook2.send({ embeds: [Embeds.unmute_embed(row, valid, nickname, event.schema)] })
     }
   }
 }
