@@ -13,7 +13,8 @@
           "name": "perm",
           "description": "Edita los permisos del bot",
           "requires_permission": true,
-          "permission_name": "Gestionar permisos (/perm add|remove)",
+          "permission_name": "Gestionar permisos (/perm)",
+          "all_perms": "Todos los comandos",
           "subcommands": {
               "add": {
                   "name": "add",
@@ -44,7 +45,7 @@
                     }
               },
               "list_id": {
-                  "name": "list_id",
+                  "name": "list",
                   "description": "Lista los permisos de un usuario/rol",
                   "args": {
                     "id": {
@@ -54,7 +55,7 @@
                   }
               },
               "list_group": {
-                "name": "list_group",
+                "name": "search",
                 "description": "Lista todos los ids con ese permiso",
                 "args": {
                   "perm": {
@@ -62,7 +63,17 @@
                     "description": "Selecciona el permiso"
                   } 
                 }
-            }
+            },
+            "clear": {
+              "name": "clear",
+              "description": "Limpia todos los permisos de un ID",
+              "args": {
+                "id": {
+                  "name": "id",
+                  "description": "El id de rol/usuario para limpiar permisos"
+                } 
+              }
+          }
           }
       },"account": {
         "enabled": false,
@@ -111,7 +122,7 @@
         "cooldown": 30,
         "description": "Gestiona los rangos de minecraft",
         "requires_permission": true,
-        "permission_name": "Gestionar rangos (/rank add|remove)",
+        "permission_name": "Gestionar rangos (/rank)",
         "subcommands": {
           "add": {
             "name": "add",
@@ -165,12 +176,12 @@
         }
       },
       "user": {
-        "enabled": false,
+        "enabled": true,
         "name": "user",
         "cooldown": 30,
         "description": "Gestiona a un usuario",
         "requires_permission": true,
-        "permission_name": "Gestionar usuarios (/user link_discord|check|forcecracked|changepassword)",
+        "permission_name": "Gestionar usuarios (/user)",
         "subcommands": {
           "link_discord": {
             "name": "link_discord",
@@ -199,6 +210,7 @@
           "changepassword": {
             "name": "changepassword",
             "description": "Cambia la contraseña de un usuario por una aleatoria",
+            "password_length": 8,
             "args": {
               
               "nick": {

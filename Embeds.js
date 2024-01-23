@@ -179,6 +179,17 @@ const embeds = {
         { name: 'Primera IP', value: '```' + data.value.firstAddress + '```', inline: true },
         { name: 'Modalidad', value: '```' + data.lastServer + '```' }
       )
+  },
+  password_embed: (nick, password) => {
+    return new EmbedBuilder()
+      .setTitle('CONTRASEÑA TEMPORAL')
+      .setDescription('Por favor, cámbiala lo antes posible con el comando\n' +
+      '`/changepassword ' + password + ' <contraseña>`')
+      .setColor('Blue')
+      .addFields(
+        { name: 'Nick:', value: '```' + nick + '```' },
+        { name: 'Contraseña:', value: '```' + password + '```' }
+      )
   }
 }
 

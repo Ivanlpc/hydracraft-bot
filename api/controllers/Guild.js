@@ -5,7 +5,7 @@ const QUERIES = require('../Queries')
 const Guild = {
   newGuild: async (guildData) => {
     try {
-      const query = await execute(QUERIES.newGuild, [guildData.id, guildData.name, guildData.id, guildData.name])
+      const query = await execute(QUERIES.newGuild, [guildData.id, guildData.name, guildData.name])
       if (query.affectedRows > 0) Logger.info(`NEW GUILD ${guildData.id} ${guildData.name}`)
     } catch (err) {
       Logger.error(err)
