@@ -2,7 +2,7 @@ const fs = require('fs')
 const { createGzip } = require('node:zlib')
 const COLOR = require('./ConsoleColor')
 
-class Logger {
+class ConsoleLogger {
   static init () {
     if (!fs.existsSync('./logs')) fs.mkdirSync('./logs')
     if (fs.existsSync('./logs/latest.txt')) {
@@ -45,11 +45,19 @@ class Logger {
   static fatal (msg) {
     console.error(COLOR.RED, msg, COLOR.RESET)
     if (!fs.existsSync('./logs')) fs.mkdirSync('./logs')
-    const message = `\n[${new Date().toLocaleString()}] [ERROR]: ${msg}`
+    const message = `\n[${new Date().toLocaleString()}] [FATAL]: ${msg}`
     fs.appendFileSync('./logs/latest.txt', message, (e) => {
       if (e) console.log(e)
     })
   }
+
+  static command (interaction) {
+    try {
+      this.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued server command /${interaction.commandName} ${interaction.options.getSubcommand()}`)
+    } catch (error) {
+      this.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued server command /${interaction.commandName}`)
+    }
+  }
 }
 
-module.exports = Logger
+module.exports = ConsoleLogger
