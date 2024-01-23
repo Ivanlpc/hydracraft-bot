@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js')
 const { removePermission } = require('../../../api/controllers/User')
-const command = require('../../../config/config.json').commands.perm.subcommands.remove
 const messages = require('../../../config/messages.json')
+const command = require('../../../config/config.json').commands.perm.subcommands.remove
 
 module.exports = {
   name: command.name,

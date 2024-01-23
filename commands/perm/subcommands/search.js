@@ -1,8 +1,8 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js')
 const { getNodeIds } = require('../../../api/controllers/User')
-const command = require('../../../config/config.json').commands.perm.subcommands.list_group
-const messages = require('../../../config/messages.json')
 const embeds = require('../../../Embeds')
+const messages = require('../../../config/messages.json')
+const command = require('../../../config/config.json').commands.perm.subcommands.list_group
 
 module.exports = {
   name: command.name,

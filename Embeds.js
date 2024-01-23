@@ -190,6 +190,12 @@ const embeds = {
         { name: 'Nick:', value: '```' + nick + '```' },
         { name: 'Contraseña:', value: '```' + password + '```' }
       )
+  },
+  fixpremium_confirmation_embed: (nick) => {
+    return new EmbedBuilder()
+      .setTitle('CONFIRMACIÓN')
+      .setDescription('¡Cuidado! esta acción borrará todo el progreso de `' + nick + '`! \n¿Estás seguro?')
+      .setColor('Blue')
   }
 }
 

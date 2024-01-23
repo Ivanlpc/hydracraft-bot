@@ -1,4 +1,4 @@
-const request = require('../util/Requests')
+const request = require('./Requests')
 
 const config = require('../config/config.json')
 

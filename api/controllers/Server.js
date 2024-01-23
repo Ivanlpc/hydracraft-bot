@@ -2,7 +2,7 @@ const QUERIES = require('../Queries')
 const request = require('../Requests')
 const { fetchOne } = require('../Database')
 const API_URL = require('../../config/pterodactyl.json').API_URl
-const Logger = require('../../util/Logger')
+const ConsoleLogger = require('../../util/ConsoleLogger')
 
 const getToken = async () => {
   const query = await fetchOne(QUERIES.getToken, [])
@@ -30,7 +30,7 @@ const Server = {
 
     const response = await request(API_URL, data)
     if (!response.status) {
-      Logger.error(response)
+      ConsoleLogger.error(response)
       throw new Error('Error while sending Bungeecord command ' + response.message)
     }
   }

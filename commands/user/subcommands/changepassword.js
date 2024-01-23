@@ -1,17 +1,17 @@
-const command = require('../../../config/config.json').commands.user.subcommands.changepassword
-const messages = require('../../../config/messages.json')
+const { SlashCommandSubcommandBuilder } = require('discord.js')
 const { isStaff, getUserData, hasPassword, createPassword, updatePassword } = require('../../../api/controllers/User')
 const Embeds = require('../../../Embeds')
-const { SlashCommandSubcommandBuilder } = require('discord.js')
+const messages = require('../../../config/messages.json')
+const command = require('../../../config/config.json').commands.user.subcommands.changepassword
 
 module.exports = {
   name: command.name,
   data: new SlashCommandSubcommandBuilder()
-    .setName(command.subcommands.changepassword.name)
-    .setDescription(command.subcommands.changepassword.description)
+    .setName(command.name)
+    .setDescription(command.description)
     .addStringOption(option => option
-      .setName(command.subcommands.changepassword.args.nick.name)
-      .setDescription(command.subcommands.changepassword.args.nick.description)
+      .setName(command.args.nick.name)
+      .setDescription(command.args.nick.description)
       .setRequired(true)),
   async execute (interaction) {
     const nick = interaction.options.getString(command.args.nick.name, true).valueOf()

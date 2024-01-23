@@ -3,11 +3,20 @@
   "TRANSACTION_AVATAR_URL": "https://mc-heads.net/avatar/",
   "jPremiumDatabase": "jpremium",
   "pins": "pins",
+  "allowed_guilds": [696494354545770548, 833078161112825916, 777311586545041438],
   "mentions": {
     "bypassRoles": [],
     "noMentionRoles": []
   },
   "commands": {
+    "logs": {
+      "enabled": true,
+      "name": "logs",
+      "cooldown": 30,
+      "description": "Obtén los logs del bot",
+      "requires_permission": true,
+      "permission_name": "Ver logs (/logs)"
+    },
       "perm": {
           "enabled": true,
           "name": "perm",
@@ -76,65 +85,6 @@
           }
           }
       },
-      "rank": {
-        "enabled": false,
-        "name": "rank",
-        "cooldown": 30,
-        "description": "Gestiona los rangos de minecraft",
-        "requires_permission": true,
-        "permission_name": "Gestionar rangos (/rank)",
-        "subcommands": {
-          "add": {
-            "name": "add",
-            "description": "Añade un rango a un usuario",
-            "args": {
-              "nick": {
-                "name": "nick",
-                "description": "Nick de MC del usuario"
-              }, 
-              "rank": {
-                "name": "rank",
-                "description": "Rango que quieres añadir"
-              }
-            }
-          },
-          "remove": {
-            "name": "remove",
-            "description": "Elimina un rango de un usuario",
-            "args": {
-              "nick": {
-                "name": "nick",
-                "description": "Nick de MC del usuario"
-              }, 
-              "rank": {
-                "name": "rank",
-                "description": "Rango que quieres eliminar"
-              }
-            }
-          },
-          "list_user": {
-            "name": "list_user",
-            "description": "Lista de usuarios que tiene un rango",
-            "args": {
-              
-              "rank": {
-                "name": "rank",
-                "description": "Rango que quieres listar"
-              }
-            }
-          },
-          "list_rank": {
-            "name": "list_rank",
-            "description": "Lista de rangos que tiene un usuario",
-            "args": {
-              "nick": {
-                "name": "nick",
-                "description": "Usuario que quieres listar"
-              }
-            }
-          }
-        }
-      },
       "user": {
         "enabled": true,
         "name": "user",
@@ -152,6 +102,17 @@
               "nick": {
                 "name": "nick",
                 "description": "Nick del usuario"
+              }
+            }
+          },
+          "fixpremium": {
+            "name": "fixpremium",
+            "description": "Cambia la cuenta de un usuario a su nuevo nick premium",
+            "args": {
+              
+              "nick": {
+                "name": "nick",
+                "description": "Nuevo nick del usuario"
               }
             }
           }

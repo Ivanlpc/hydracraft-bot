@@ -1,6 +1,6 @@
 const { fetchOne, fetchAll, execute } = require('../Database')
 const QUERIES = require('../Queries')
-const Logger = require('../../util/Logger')
+const ConsoleLogger = require('../../util/ConsoleLogger')
 const binaryLogsConfig = require('../../config/binarylogs.json')
 const passwordLength = require('../../config/config.json').commands.user.subcommands.changepassword.password_length
 const Server = require('./Server')
@@ -13,7 +13,7 @@ const getNameByUUID = async (uuid) => {
     const query = await fetchOne(QUERIES.getLastNickname, [uuid, uuid])
     return query.lastNickname || 'ERROR'
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     return ''
   }
 }
@@ -23,7 +23,7 @@ const addPermission = async (id, permissionId, guildData) => {
     const query = await execute(QUERIES.addPermission, [guildData.id, id, permissionId])
     return query > 0
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
     throw new Error('There was an error while trying to add the permission')
   }
@@ -34,7 +34,7 @@ const removePermission = async (id, permissionId, guildData) => {
     const query = await execute(QUERIES.removePermission, [guildData.id, id, permissionId])
     return query > 0
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
     throw new Error('There was an error while trying to remove the permission')
   }
@@ -45,7 +45,7 @@ const clearPermissions = async (id, guildData) => {
     const query = await execute(QUERIES.clearPermissions, [guildData.id, id])
     return query > 0
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
     throw new Error('There was an error while trying to clear permissions')
   }
@@ -57,7 +57,7 @@ const getAllowedIds = async (guildId, permissionId) => {
     ids = await fetchAll(QUERIES.getAllowedIds, [guildId, permissionId])
     return ids.map(elem => elem.id)
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     throw new Error('There was an error while trying to fetch the IDs ' + guildId + ' ' + permissionId)
   }
 }
@@ -68,7 +68,7 @@ const getIDPermissions = async (id, guildData) => {
     permissions = await fetchAll(QUERIES.getPermissionsOfId, [guildData.id, id])
     return permissions.map(elem => elem.permission_node)
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
     throw new Error('There was an error while trying to fetch the IDs ' + guildData.id + ' ' + id)
   }
@@ -80,7 +80,7 @@ const getNodeIds = async (permissionNode, guildData) => {
     ids = await fetchAll(QUERIES.getPermissionsNode, [guildData.id, permissionNode])
     return ids
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
     throw new Error('There was an error while trying to fetch the IDs ' + guildData.id + ' ' + permissionNode)
   }
@@ -92,7 +92,7 @@ const isStaff = async (nickname) => {
     if (query !== null) return true
     else return false
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
   }
 }
 
@@ -141,7 +141,7 @@ const createPassword = async (nickname) => {
     await Server.sendBungeecordCommand(`forcecreatepassword ${nickname} ${password}`)
     return password
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     return null
   }
 }
@@ -152,8 +152,22 @@ const updatePassword = async (nickname) => {
     await Server.sendBungeecordCommand(`forcechangepassword ${nickname} ${password}`)
     return password
   } catch (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     return null
+  }
+}
+
+const isPremium = (userData) => {
+  return userData.premiumId !== null
+}
+
+const fixpremium = async (nickname) => {
+  try {
+    await Server.sendBungeecordCommand(`forcePurgeUserProfile ${nickname}`)
+    return true
+  } catch (err) {
+    ConsoleLogger.error(err)
+    return false
   }
 }
 
@@ -171,5 +185,7 @@ module.exports = {
   getUserData,
   hasPassword,
   createPassword,
-  updatePassword
+  updatePassword,
+  isPremium,
+  fixpremium
 }

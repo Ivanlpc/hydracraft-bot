@@ -1,7 +1,7 @@
 const { WebhookClient } = require('discord.js')
 const Embeds = require('../../../Embeds')
-const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 const { getNameByUUID } = require('../../../api/controllers/User')
+const STATEMENTS = require('@rodrigogs/mysql-events').STATEMENTS
 
 const webhook = new WebhookClient({
   url: process.env.WEBHOOK_HISTORY

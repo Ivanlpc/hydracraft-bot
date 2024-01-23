@@ -4,25 +4,25 @@ const { REST, Routes } = require('discord.js')
 const TOKEN = process.env.TOKEN
 const CLIENT_ID = process.env.CLIENT_ID
 const GUILD_ID = process.env.GUILD_ID
-const Logger = require('./util/Logger')
+const ConsoleLogger = require('./util/ConsoleLogger')
 const COLOR = require('./util/ConsoleColor')
 const rest = new REST().setToken(TOKEN)
 
 class CommandManager {
   static async registerCommands (commands) {
     try {
-      Logger.info(`${COLOR.WHITE}Registering commands...`)
+      ConsoleLogger.info(`${COLOR.WHITE}Registering commands...`)
       const data = await rest.put(
         Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
         { body: commands })
-      Logger.info(`${COLOR.WHITE}Registered ${COLOR.GREEN}${data.length} ${COLOR.WHITE}commands`)
+      ConsoleLogger.info(`${COLOR.WHITE}Registered ${COLOR.GREEN}${data.length} ${COLOR.WHITE}commands`)
     } catch (error) {
-      Logger.error(error)
+      ConsoleLogger.error(error)
     }
   }
 
   static async reloadCommand (client, fileName, commandName) {
-    Logger.info(`Reloading ${commandName} command`)
+    ConsoleLogger.info(`Reloading ${commandName} command`)
     delete require.cache[require.resolve(`./commands/${fileName}`)]
     try {
       client.commands.delete(fileName)
@@ -35,7 +35,7 @@ class CommandManager {
       this.registerCommands(client.commands_json)
       return true
     } catch (error) {
-      Logger.error(error)
+      ConsoleLogger.error(error)
       return false
     }
   }

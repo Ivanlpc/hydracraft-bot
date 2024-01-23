@@ -1,4 +1,4 @@
-const Logger = require('../util/Logger')
+const ConsoleLogger = require('../util/ConsoleLogger')
 
 /**
  *
@@ -15,7 +15,7 @@ const Requests = (input, init) => {
         .catch(err => reject(err))
     })
   } catch (error) {
-    Logger.error('[request][Error]: ', error)
+    ConsoleLogger.error('[request][Error]: ', error)
     throw new Error('failed to request API')
   }
 }

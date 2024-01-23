@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { Client, GatewayIntentBits, Collection } = require('discord.js')
-const Logger = require('./util/Logger')
+const ConsoleLogger = require('./util/ConsoleLogger')
 require('dotenv').config()
 const TOKEN = process.env.TOKEN
 const COLOR = require('./util/ConsoleColor')
@@ -16,14 +16,14 @@ client.selectMenus = new Map()
 client.commands_json = []
 client.cooldowns = new Collection()
 
-Logger.init()
+ConsoleLogger.init()
 if (binlogconfig.enabled) {
-  SQLEvents().then(() => Logger.info(`${COLOR.GREEN}[SQL]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] MySQL Events started`)).catch(err => Logger.error(err))
+  SQLEvents().then(() => ConsoleLogger.info(`${COLOR.GREEN}[SQL]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] MySQL Events started`)).catch(err => ConsoleLogger.error(err))
 }
 
 for (const file of eventsFiles) {
   const event = require(`./events/discord/${file}`)
-  Logger.info(`${COLOR.CYAN}[EVENT]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.MAGENTA}${event.name}`)
+  ConsoleLogger.info(`${COLOR.CYAN}[EVENT]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.MAGENTA}${event.name}`)
   if (event.once) {
     client.once(event.name, event.execute)
   } else {
@@ -39,14 +39,14 @@ for (const file of commandFiles) {
   }
   client.commands_json.push(command.data.toJSON())
   client.commands.set(command.data.name, command)
-  Logger.info(`${COLOR.RED}[CMD]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}/${command.data.name}`)
+  ConsoleLogger.info(`${COLOR.RED}[CMD]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}/${command.data.name}`)
 }
 
 for (const file of selectMenuFiles) {
   const menu = require(`./select_menus/${file}`)
   if (!menu.enabled) continue
   client.selectMenus.set(menu.customId, menu)
-  Logger.info(`${COLOR.MAGENTA}[MENU]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}${menu.customId}`)
+  ConsoleLogger.info(`${COLOR.MAGENTA}[MENU]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}${menu.customId}`)
 }
 
 client.login(TOKEN)

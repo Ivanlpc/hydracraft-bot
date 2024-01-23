@@ -1,9 +1,10 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js')
 const { getIDPermissions } = require('../../../api/controllers/User')
-const command = require('../../../config/config.json').commands.perm.subcommands.list_id
+const embeds = require('../../../Embeds')
 const messages = require('../../../config/messages.json')
 const commands = require('../../../config/config.json').commands
-const embeds = require('../../../Embeds')
+const command = require('../../../config/config.json').commands.perm.subcommands.list_id
+
 module.exports = {
   name: command.name,
   build: () => new SlashCommandSubcommandBuilder()

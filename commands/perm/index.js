@@ -1,10 +1,10 @@
-const { SlashCommandBuilder } = require('discord.js')
 const path = require('path')
-const Logger = require('../../util/Logger')
+const { SlashCommandBuilder } = require('discord.js')
+const ConsoleLogger = require('../../util/ConsoleLogger')
+const CommandManager = require('../../CommandManager')
+const messages = require('../../config/messages.json')
 const allCommands = require('../../config/config.json').commands
 const command = require('../../config/config.json').commands.perm
-const messages = require('../../config/messages.json')
-const CommandManager = require('../../CommandManager')
 
 const permissionList = (() => {
   const permissions = []
@@ -46,8 +46,8 @@ module.exports = {
       if (!subcommand) return
       await subcommand.execute(interaction)
     } catch (err) {
-      Logger.error(`Error executing /${command.name} ${interaction.options.getSubcommand()}`)
-      Logger.error(err)
+      ConsoleLogger.error(`Error executing /${command.name} ${interaction.options.getSubcommand()}`)
+      ConsoleLogger.error(err)
       return interaction.reply({
         content: messages.command_error,
         ephemeral: true

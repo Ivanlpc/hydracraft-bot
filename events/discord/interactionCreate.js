@@ -1,8 +1,7 @@
 const { Events } = require('discord.js')
-const Logger = require('../../util/Logger')
+const ConsoleLogger = require('../../util/ConsoleLogger')
 const { getAllowedIds } = require('../../api/controllers/User')
 const messages = require('../../config/messages.json')
-const COLOR = require('../../util/ConsoleColor')
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -12,7 +11,7 @@ module.exports = {
       const command = interaction.client.commands.get(interaction.commandName)
 
       if (!command) {
-        Logger.error(`No command matching ${interaction.commandName} was found.`)
+        ConsoleLogger.error(`No command matching ${interaction.commandName} was found.`)
         return interaction.reply({
           content: messages.unknown_command,
           ephemeral: true
@@ -36,29 +35,28 @@ module.exports = {
       }
       if (command.permission && command.permission.length > 0) {
         const member = interaction.member
-        if (member.id !== member.guild.ownerId) {
-          let roles = []
-          roles = await getAllowedIds(interaction.guildId, command.data.name)
-          if (roles.length <= 0) {
-            return interaction.reply({
-              content: messages.no_permission,
-              ephemeral: true
-            })
-          }
-          if (!member.roles.cache.hasAny(roles) && !roles.includes(member.id)) {
-            return interaction.reply({
-              content: messages.no_permission,
-              ephemeral: true
-            })
-          }
+        let roles = []
+        roles = await getAllowedIds(interaction.guildId, command.data.name)
+        if (roles.length <= 0) {
+          return interaction.reply({
+            content: messages.no_permission,
+            ephemeral: true
+          })
+        }
+        if (!member.roles.cache.hasAny(roles) && !roles.includes(member.id)) {
+          return interaction.reply({
+            content: messages.no_permission,
+            ephemeral: true
+          })
         }
       }
+
       try {
-        Logger.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued server command /${interaction.commandName} ${interaction.options.getSubcommand()}`)
+        ConsoleLogger.command(interaction)
         await command.execute(interaction)
       } catch (error) {
-        Logger.error(`Error executing ${interaction.commandName}`)
-        Logger.error(error)
+        ConsoleLogger.error(`Error executing ${interaction.commandName}`)
+        ConsoleLogger.error(error)
         return interaction.reply({
           content: messages.command_error,
           ephemeral: true
@@ -67,7 +65,7 @@ module.exports = {
     } else if (interaction.isAutocomplete()) {
       const command = interaction.client.commands.get(interaction.commandName)
       if (!command) {
-        Logger.error(`No command matching ${interaction.commandName} was found.`)
+        ConsoleLogger.error(`No command matching ${interaction.commandName} was found.`)
         return interaction.reply({
           content: messages.unknown_command,
           ephemeral: true
@@ -76,8 +74,8 @@ module.exports = {
       try {
         await command.autocomplete(interaction)
       } catch (error) {
-        Logger.error(`Error executing ${interaction.commandName}`)
-        Logger.error(error)
+        ConsoleLogger.error(`Error executing ${interaction.commandName}`)
+        ConsoleLogger.error(error)
         return interaction.reply({
           content: messages.command_error,
           ephemeral: true

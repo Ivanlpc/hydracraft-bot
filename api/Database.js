@@ -1,5 +1,5 @@
 const mysql = require('mysql')
-const Logger = require('../util/Logger')
+const ConsoleLogger = require('../util/ConsoleLogger')
 const name = require('../package.json').name
 
 const pool = mysql.createPool({
@@ -10,12 +10,20 @@ const pool = mysql.createPool({
 
 pool.getConnection((err, conn) => {
   if (err) {
-    Logger.error(err)
+    ConsoleLogger.error(err)
     process.exit(1)
   } else {
     if (conn) conn.release()
   }
 })
+
+const getConnection = () => {
+  return mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD
+  })
+}
 
 const createTables = () => {
   pool.query(`CREATE TABLE IF NOT EXISTS ${name}.guilds (
@@ -49,7 +57,7 @@ const fetchOne = (query, params = []) => {
       })
     })
   } catch (error) {
-    Logger.error(error)
+    ConsoleLogger.error(error)
   }
 }
 
@@ -68,7 +76,7 @@ const fetchAll = (query, params = []) => {
       })
     })
   } catch (error) {
-    Logger.error(error)
+    ConsoleLogger.error(error)
   }
 }
 
@@ -88,7 +96,7 @@ const execute = (query, params = []) => {
       })
     })
   } catch (error) {
-    Logger.error(error)
+    ConsoleLogger.error(error)
   }
 }
 
@@ -97,5 +105,5 @@ module.exports = {
   fetchAll,
   execute,
   createTables,
-  pool
+  getConnection
 }
