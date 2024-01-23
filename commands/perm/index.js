@@ -6,9 +6,7 @@ const command = require('../../config/config.json').commands.perm
 const messages = require('../../config/messages.json')
 const CommandManager = require('../../CommandManager')
 
-const subcommands = CommandManager.loadSubcommands(path.resolve(__dirname))
-
-const permissions = (() => {
+const permissionList = (() => {
   const permissions = []
   for (const command in allCommands) {
     if (!allCommands[command].enabled) continue
@@ -19,55 +17,29 @@ const permissions = (() => {
       })
     }
   }
+  permissions.push({
+    name: command.all_perms,
+    value: 'all'
+  })
   return permissions
 })()
+
+const data = new SlashCommandBuilder()
+  .setName(command.name)
+  .setDescription(command.description)
+
+const subcommands = CommandManager.loadSubcommands(path.resolve(__dirname))
+
+for (const subcommand of subcommands.values()) {
+  data.addSubcommand(subcommand.build(permissionList))
+}
 
 module.exports = {
   permission: command.requires_permission ? command.name : '',
   cooldown: command.cooldown || 0,
   enabled: command.enabled,
-  data: new SlashCommandBuilder()
-    .setName(command.name)
-    .setDescription(command.description)
-    .addSubcommand(cmd => cmd
-      .setName(command.subcommands.add.name)
-      .setDescription(command.subcommands.add.description)
-      .addStringOption(option => option
-        .setName(command.subcommands.add.args.perm.name)
-        .setDescription(command.subcommands.add.args.perm.description)
-        .addChoices(...permissions)
-        .setRequired(true))
-      .addMentionableOption(option => option
-        .setName(command.subcommands.add.args.id.name)
-        .setDescription(command.subcommands.add.args.id.description)
-        .setRequired(true)))
-    .addSubcommand(cmd => cmd
-      .setName(command.subcommands.remove.name)
-      .setDescription(command.subcommands.remove.description)
-      .addStringOption(option => option
-        .setName(command.subcommands.remove.args.perm.name)
-        .setDescription(command.subcommands.remove.args.perm.description)
-        .addChoices(...permissions)
-        .setRequired(true))
-      .addMentionableOption(option => option
-        .setName(command.subcommands.remove.args.id.name)
-        .setDescription(command.subcommands.remove.args.id.description)
-        .setRequired(true)))
-    .addSubcommand(cmd => cmd
-      .setName(command.subcommands.list_id.name)
-      .setDescription(command.subcommands.list_id.description)
-      .addMentionableOption(option => option
-        .setName(command.subcommands.list_id.args.id.name)
-        .setDescription(command.subcommands.list_id.args.id.description)
-        .setRequired(true)))
-    .addSubcommand(cmd => cmd
-      .setName(command.subcommands.list_group.name)
-      .setDescription(command.subcommands.list_group.description)
-      .addStringOption(option => option
-        .setName(command.subcommands.list_group.args.perm.name)
-        .setDescription(command.subcommands.list_group.args.perm.description)
-        .addChoices(...permissions)
-        .setRequired(true))),
+  data,
+
   async execute (interaction) {
     try {
       const subcommand = subcommands.get(interaction.options.getSubcommand())

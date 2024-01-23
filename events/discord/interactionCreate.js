@@ -2,6 +2,7 @@ const { Events } = require('discord.js')
 const Logger = require('../../util/Logger')
 const { getAllowedIds } = require('../../api/controllers/User')
 const messages = require('../../config/messages.json')
+const COLOR = require('../../util/ConsoleColor')
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -26,7 +27,7 @@ module.exports = {
           if (now < expirationTime) {
             const expiredTimestamp = Math.round(expirationTime / 1000)
             return interaction.reply({
-              content: messages.cooldown.replace('{0}', command.data.name).replace('{1}', `<t:${expiredTimestamp}:R>`),
+              content: messages.cooldown.replace('%cmd%', command.data.name).replace('%time%', `<t:${expiredTimestamp}:R>`),
               ephemeral: true
             })
           }
@@ -34,22 +35,26 @@ module.exports = {
         cooldownIds.set(interaction.user.id, (now + command.cooldown * 1000))
       }
       if (command.permission && command.permission.length > 0) {
-        const roles = await getAllowedIds(interaction.guildId, 'perm')
-        if (roles.length <= 0) {
-          return interaction.reply({
-            content: messages.no_permission,
-            ephemeral: true
-          })
-        }
         const member = interaction.member
-        if (!member.roles.cache.hasAny(roles) && !roles.includes(member.id) && member.id !== member.guild.ownerId) {
-          return interaction.reply({
-            content: messages.no_permission,
-            ephemeral: true
-          })
+        if (member.id !== member.guild.ownerId) {
+          let roles = []
+          roles = await getAllowedIds(interaction.guildId, command.data.name)
+          if (roles.length <= 0) {
+            return interaction.reply({
+              content: messages.no_permission,
+              ephemeral: true
+            })
+          }
+          if (!member.roles.cache.hasAny(roles) && !roles.includes(member.id)) {
+            return interaction.reply({
+              content: messages.no_permission,
+              ephemeral: true
+            })
+          }
         }
       }
       try {
+        Logger.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued server command /${interaction.commandName} ${interaction.options.getSubcommand()}`)
         await command.execute(interaction)
       } catch (error) {
         Logger.error(`Error executing ${interaction.commandName}`)
