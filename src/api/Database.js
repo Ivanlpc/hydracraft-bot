@@ -1,6 +1,6 @@
 const mysql = require('mysql')
 const ConsoleLogger = require('../util/ConsoleLogger')
-const name = require('../package.json').name
+const name = require('../../package.json').name
 
 const pool = mysql.createPool({
   host: process.env.DATABASE_HOST,

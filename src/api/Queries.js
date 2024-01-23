@@ -1,5 +1,5 @@
-const botName = require('../package.json').name
-const { jPremiumDatabase, pins } = require('../config/config.json')
+const botName = require('../../package.json').name
+const { jPremiumDatabase, pins } = require('../../config/config.json')
 
 const QUERIES = {
   getLastNickname: `SELECT lastNickname FROM ${jPremiumDatabase}.user_profiles WHERE premiumId = ? OR uniqueId = ?`,

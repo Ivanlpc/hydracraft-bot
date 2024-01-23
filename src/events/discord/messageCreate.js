@@ -1,6 +1,6 @@
 const { Events } = require('discord.js')
-const { bypassRoles, noMentionRoles } = require('../../config/config.json').mentions
-const msg = require('../../config/messages.json').no_mention_roles
+const { bypassRoles, noMentionRoles } = require('../../../config/config.json').mentions
+const msg = require('../../../config/messages.json').no_mention_roles
 
 module.exports = {
   name: Events.MessageCreate,

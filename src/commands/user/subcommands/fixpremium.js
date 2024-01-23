@@ -1,8 +1,8 @@
 const { SlashCommandSubcommandBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js')
 const { isStaff, getUserData, isPremium, fixpremium } = require('../../../api/controllers/User')
 const Embeds = require('../../../Embeds')
-const messages = require('../../../config/messages.json')
-const command = require('../../../config/config.json').commands.user.subcommands.fixpremium
+const messages = require('../../../../config/messages.json')
+const command = require('../../../../config/config.json').commands.user.subcommands.fixpremium
 
 const button = new ButtonBuilder()
   .setCustomId('yes')

@@ -1,8 +1,8 @@
 const { Events } = require('discord.js')
-const Guild = require('../../api/controllers/Guild')
-const ConsoleLogger = require('../../util/ConsoleLogger')
-const COLOR = require('../../util/ConsoleColor')
-const allowedGuilds = require('../../config/config.json').allowed_guilds
+const Guild = require('../../../api/controllers/Guild')
+const ConsoleLogger = require('../../../util/ConsoleLogger')
+const COLOR = require('../../../util/ConsoleColor')
+const allowedGuilds = require('../../../config/config.json').allowed_guilds
 
 module.exports = {
   name: Events.GuildCreate,

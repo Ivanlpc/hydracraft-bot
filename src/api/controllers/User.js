@@ -1,8 +1,8 @@
 const { fetchOne, fetchAll, execute } = require('../Database')
 const QUERIES = require('../Queries')
 const ConsoleLogger = require('../../util/ConsoleLogger')
-const binaryLogsConfig = require('../../config/binarylogs.json')
-const passwordLength = require('../../config/config.json').commands.user.subcommands.changepassword.password_length
+const binaryLogsConfig = require('../../../config/binarylogs.json')
+const passwordLength = require('../../../config/config.json').commands.user.subcommands.changepassword.password_length
 const Server = require('./Server')
 const Guild = require('./Guild')
 

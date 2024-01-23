@@ -1,6 +1,6 @@
 const path = require('path')
 const { SlashCommandBuilder } = require('discord.js')
-const command = require('../../config/config.json').commands.logs
+const command = require('../../../config/config.json').commands.logs
 
 module.exports = {
   permission: command.requires_permission ? command.name : '',

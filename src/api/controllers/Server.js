@@ -1,7 +1,7 @@
 const QUERIES = require('../Queries')
 const request = require('../Requests')
 const { fetchOne } = require('../Database')
-const API_URL = require('../../config/pterodactyl.json').API_URl
+const API_URL = require('../../../config/pterodactyl.json').API_URl
 const ConsoleLogger = require('../../util/ConsoleLogger')
 
 const getToken = async () => {

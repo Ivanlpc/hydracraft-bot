@@ -1,7 +1,7 @@
 const { Events } = require('discord.js')
-const ConsoleLogger = require('../../util/ConsoleLogger')
-const { getAllowedIds } = require('../../api/controllers/User')
-const messages = require('../../config/messages.json')
+const ConsoleLogger = require('../../../util/ConsoleLogger')
+const { getAllowedIds } = require('../../../api/controllers/User')
+const messages = require('../../../config/messages.json')
 
 module.exports = {
   name: Events.InteractionCreate,
