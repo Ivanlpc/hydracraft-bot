@@ -1,4 +1,5 @@
 const { Events } = require('discord.js')
+const { performance } = require('perf_hooks')
 const ConsoleLogger = require('../../util/ConsoleLogger')
 const { getAllowedIds } = require('../../api/controllers/User')
 const messages = require('../../config/messages.json')
@@ -52,14 +53,18 @@ module.exports = {
       }
 
       try {
-        ConsoleLogger.command(interaction)
+        const startTime = performance.now()
         await command.execute(interaction)
+        const endTime = performance.now()
+        ConsoleLogger.command(interaction, Math.round(endTime - startTime))
       } catch (error) {
         ConsoleLogger.error(`Error executing ${interaction.commandName}`)
         ConsoleLogger.error(error)
-        return interaction.reply({
-          content: messages.command_error,
-          ephemeral: true
+        interaction.fetchReply().then(reply => reply).catch(() => {
+          interaction.reply({
+            content: messages.command_error,
+            ephemeral: true
+          })
         })
       }
     } else if (interaction.isAutocomplete()) {
