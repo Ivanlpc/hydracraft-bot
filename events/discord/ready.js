@@ -10,6 +10,6 @@ module.exports = {
   execute (client) {
     CommandManager.registerCommands(client.commands_json)
     createTables()
-    ConsoleLogger.info(`${COLOR.WHITE}Ready! Logged in as ${client.user.tag}`)
+    ConsoleLogger.info(`${COLOR.CYAN}[EVENT] ${COLOR.WHITE}Ready! Logged in as ${client.user.tag}`)
   }
 }

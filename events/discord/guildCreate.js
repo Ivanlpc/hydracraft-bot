@@ -12,6 +12,6 @@ module.exports = {
       return
     }
     Guild.newGuild(guild)
-    ConsoleLogger.info(`NEW GUILD ${guild.id} ${guild.name}`)
+    ConsoleLogger.info(`${COLOR.CYAN}[EVENT] ${COLOR.WHITE}NEW GUILD ${guild.id} ${guild.name}`)
   }
 }
