@@ -8,7 +8,7 @@ const SQLEvents = require('./events/binary_logs/index')
 const commandFiles = fs.readdirSync('./commands')
 const eventsFiles = fs.readdirSync('./events/discord').filter(file => file.endsWith('.js'))
 const selectMenuFiles = fs.readdirSync('./select_menus')
-const client = new Client({ intents: [GatewayIntentBits.Guilds] })
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] })
 const binlogconfig = require('./config/binarylogs.json')
 
 client.commands = new Map()
