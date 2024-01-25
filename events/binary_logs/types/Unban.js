@@ -1,7 +1,7 @@
 const { WebhookClient } = require('discord.js')
 const TebexAPI = require('../../../api/TebexAPI')
 const Embeds = require('../../../Embeds')
-const Logger = require('../../../util/Logger')
+const ConsoleLogger = require('../../../util/ConsoleLogger')
 const { validatePayments, filterPayments, getNameByUUID } = require('../../../api/controllers/User')
 const config = require('../../../config/binarylogs.json')
 const messages = require('../../../config/messages.json')
@@ -21,7 +21,7 @@ const MySQLTrigger = {
       try {
         nickname = await getNameByUUID(row.before.uuid)
       } catch (err) {
-        Logger.error(err)
+        ConsoleLogger.error(err)
         nickname = 'ERROR'
       }
       let userPayments = []
@@ -33,7 +33,7 @@ const MySQLTrigger = {
       try {
         userPayments = await TebexAPI.getUserPaymentsFromNickname(process.env.TEBEX_TOKEN, nickname)
       } catch (e) {
-        Logger.error(e)
+        ConsoleLogger.error(e)
       }
       const todayPaymentsID = filterPayments(userPayments.payments)
       const promises = todayPaymentsID.map(payment => TebexAPI.getPaymentFromId(process.env.TEBEX_TOKEN, payment.txn_id))
@@ -41,7 +41,7 @@ const MySQLTrigger = {
       try {
         todayPaymentsData = await Promise.all(promises)
       } catch (err) {
-        Logger.error(err)
+        ConsoleLogger.error(err)
       }
       const valid = validatePayments(todayPaymentsData, config.unban_package)
       if (valid) {

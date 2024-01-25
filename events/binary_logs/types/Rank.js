@@ -3,7 +3,7 @@ const { getNameByUUID, validatePayments, filterPayments } = require('../../../ap
 const Embeds = require('../../../Embeds')
 const TebexAPI = require('../../../api/TebexAPI')
 
-const Logger = require('../../../util/Logger')
+const ConsoleLogger = require('../../../util/ConsoleLogger')
 
 const blacklistFile = require('../../../config/blacklist.json')
 const webhookRank = new WebhookClient({ url: process.env.WEBHOOK_RANK })
@@ -28,7 +28,7 @@ const MySQLTrigger = {
       try {
         nickname = await getNameByUUID(row.after.uuid)
       } catch (err) {
-        Logger.error(err)
+        ConsoleLogger.error(err)
         nickname = 'ERROR'
       }
       if (!isRank) {
@@ -50,7 +50,7 @@ const MySQLTrigger = {
           }
           await webhookRank.send({ embeds: [Embeds.new_rank_embed(row.after.uuid, row.after.permission.replaceAll('group.', ''), valid, nickname, event.schema, row.after.value, row.after.expiry)] })
         } catch (err) {
-          Logger.error(err)
+          ConsoleLogger.error(err)
           await webhookPerm.send({
             embeds: [Embeds.error_embed({
               uuid: row.after.uuid,
