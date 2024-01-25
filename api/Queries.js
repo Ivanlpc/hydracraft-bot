@@ -1,5 +1,5 @@
 const botName = require('../package.json').name
-const { jPremiumDatabase, pins } = require('../config/config.json')
+const { jPremiumDatabase, pins, luckperms, bans } = require('../config/config.json')
 
 const QUERIES = {
   getLastNickname: `SELECT lastNickname FROM ${jPremiumDatabase}.user_profiles WHERE premiumId = ? OR uniqueId = ?`,
@@ -17,7 +17,41 @@ const QUERIES = {
   getAccountInformation: `SELECT uniqueId, lastNickname, lastAddress, lastServer, firstAddress, firstSeen, premiumId FROM ${jPremiumDatabase}.user_profiles WHERE discord = ? AND uniqueId = ?`,
   isStaff: `SELECT * FROM ${pins}.PinCodes WHERE uuid = ?`,
   getUserData: `SELECT * FROM ${jPremiumDatabase}.user_profiles WHERE lastNickname = ?`,
-  getToken: `SELECT token FROM ${botName}.tokens`
+  getToken: `SELECT token FROM ${botName}.tokens`,
+  getStaffUuidName: `SELECT DISTINCT perm.uuid as uuid, pl.username as username FROM ${luckperms}.luckperms_user_permissions perm JOIN ${luckperms}.luckperms_players pl ON (perm.uuid = pl.uuid) WHERE perm.permission IN (?)`,
+  getStatsOfNickname: `SELECT 'bans', COUNT(*) from ${bans}.litebans_bans WHERE banned_by_name = ?
+  UNION ALL
+  SELECT 'kicks', COUNT(*) from ${bans}.litebans_mutes WHERE banned_by_name = ?
+  UNION ALL
+  SELECT 'warns', COUNT(*) from ${bans}.litebans_kicks WHERE banned_by_name = ?
+  UNION ALL
+  SELECT 'mutes', COUNT(*) from ${bans}.litebans_warnings WHERE banned_by_name = ?`,
+  getStatsSinceNickname: `SELECT 'bans', COUNT(*) from ${bans}.litebans_bans WHERE banned_by_name = ? AND time > ?
+  UNION ALL
+  SELECT 'kicks', COUNT(*) from ${bans}.litebans_mutes WHERE banned_by_name = ? AND time > ?
+  UNION ALL
+  SELECT 'warns', COUNT(*) from ${bans}.litebans_kicks WHERE banned_by_name = ? AND time > ?
+  UNION ALL
+  SELECT 'mutes', COUNT(*) from ${bans}.litebans_warnings WHERE banned_by_name = ? AND time > ?`,
+  getStatsSinceAll: `SELECT * FROM (SELECT banned_by_name, 'bans', COUNT(*) from ${bans}.litebans_bans WHERE time > ? GROUP BY banned_by_name
+  UNION ALL
+  SELECT banned_by_name, 'kicks', COUNT(*) from ${bans}.litebans_mutes WHERE time > ? GROUP BY banned_by_name
+  UNION ALL
+  SELECT banned_by_name, 'warns', COUNT(*) from ${bans}.litebans_kicks WHERE time > ? GROUP BY banned_by_name
+  UNION ALL
+  SELECT banned_by_name, 'mutes', COUNT(*) from ${bans}.litebans_warnings WHERE time > ? GROUP BY banned_by_name) as X ORDER BY banned_by_name`,
+  getMonthStatsUuid: `SELECT DATE_FORMAT(FROM_UNIXTIME(FLOOR(time / 1000)), '%m/%y') AS month, COUNT(*) AS banCount
+  FROM ${bans}.litebans_bans  
+  WHERE banned_by_uuid = ?
+  GROUP BY month
+  ORDER BY MIN(FROM_UNIXTIME(FLOOR(time / 1000))) DESC;`,
+  getTopStaffsSince: `SELECT banned_by_uuid as uuid, SUM(numero) as total FROM (SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_bans WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  UNION ALL
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_mutes WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  UNION ALL
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_kicks WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  UNION ALL
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`
 }
 
 module.exports = QUERIES
