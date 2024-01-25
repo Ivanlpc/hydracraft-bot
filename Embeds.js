@@ -180,6 +180,17 @@ const embeds = {
         { name: 'Modalidad', value: '```' + data.lastServer + '```' }
       )
   },
+  log_password_embed: (author, nick, password) => {
+    return new EmbedBuilder()
+      .setTitle('Nuevo cambio de contraseña')
+      .setDescription('Realizado por: ' + author.user.tag + '\n TAG: ' + '<@!' + author.user.id + '>')
+      .setThumbnail(author.user.avatarURL())
+      .setColor('Blue')
+      .addFields(
+        { name: 'Nick:', value: '```' + nick + '```' },
+        { name: 'Contraseña:', value: '```' + password + '```' }
+      )
+  },
   password_embed: (nick, password) => {
     return new EmbedBuilder()
       .setTitle('CONTRASEÑA TEMPORAL')
@@ -196,6 +207,30 @@ const embeds = {
       .setTitle('CONFIRMACIÓN')
       .setDescription('¡Cuidado! esta acción borrará todo el progreso de `' + nick + '`! \n¿Estás seguro?')
       .setColor('Blue')
+  },
+  log_fixpremium_embed: (author, nick) => {
+    return new EmbedBuilder()
+      .setTitle('Nuevo Fixpremium')
+      .setDescription('Realizado por: ' + author.user.tag + '\n TAG: ' + '<@!' + author.user.id + '>')
+      .setThumbnail(author.user.avatarURL())
+      .setColor('Blue')
+      .addFields(
+        { name: 'Nick:', value: '```' + nick + '```' }
+      )
+  },
+  userProfile: (data) => {
+    return new EmbedBuilder()
+      .setTitle('INFORMACIÓN DE CUENTA')
+      .setThumbnail(config.TRANSACTION_AVATAR_URL + data.lastNickname)
+      .setColor(data.premiumId !== null ? 'Green' : 'Yellow')
+      .addFields(
+        { name: 'Fecha de registro', value: '```' + data.firstSeen !== null ? new Date(data.firstSeen).toLocaleDateString() : 'No disponible' + '```', inline: true },
+        { name: 'Última vez que se conectó', value: '```' + data.lastSeen !== null ? new Date(data.lastSeen).toLocaleDateString() : 'No disponible' + '```', inline: true },
+        { name: 'Nick', value: '```' + data.lastNickname + '```' },
+        { name: 'Premium', value: data.premiumId !== null ? '```SI```' : '```NO```' },
+        { name: 'Última IP', value: '```' + (data.lastAddress !== null ? data.lastAddress : 'No disponible') + '```' },
+        { name: 'Primera IP', value: '```' + (data.firstAddress !== null ? data.firstAddress : 'No disponible') + '```' }
+      )
   }
 }
 

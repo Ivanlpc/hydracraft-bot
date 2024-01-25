@@ -15,11 +15,14 @@
     "account_unlinked": "La cuenta ha sido desvinculada con éxito",
     "no_mention_roles": "<@!%id%> no mencione de forma innecesaria a miembros del staff, por favor, espere a que respondan",
     "is_staff": "Error: No se puede ejecutar esta acción con el nick %nick% porque es o ha pertenecido al staff",
+    "is_not_staff": "Error: No se puede ejecutar esta acción con el nick %nick% porque no es staff actualmente",
     "hidden_transaction_id": "OCULTA",
     "user_not_found": "No se ha encontrado ningún usuario con ese nombre",
-    "user_already_premium": "El usuario %nick% es premium, recuerda que su nuevo nick debe estar en modo NO PREMIUM",
+    "user_already_premium": "El usuario %nick% es premium, solo puedes ejecutar este comando en cuentas NO PREMIUM",
     "command_cancelled": "Comando cancelado",
     "command_timeout": "Ha pasado demasiado tiempo, el comando ha sido cancelado",
     "fixpremium_success": "Se ha actualizado el nick de la cuenta premium %nick%",
-    "fixpremium_error": "Hubo un error al ejecutar el comando con %nick%"
+    "fixpremium_error": "Hubo un error al ejecutar el comando con %nick%",
+    "no_images": "No se han encontrado imágenes",
+    "invalid_date": "La fecha %date% no está en un formato válido. Ejemplo: 06/11/2020 (dd/mm/yyyy)"
 }
