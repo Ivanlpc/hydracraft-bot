@@ -1,8 +1,11 @@
-const { SlashCommandSubcommandBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js')
+const { SlashCommandSubcommandBuilder, ActionRowBuilder, ButtonBuilder, WebhookClient } = require('discord.js')
+const DiscordLogger = require('../../../util/DiscordLogger')
 const { isStaff, getUserData, isPremium, fixpremium } = require('../../../api/controllers/User')
 const Embeds = require('../../../Embeds')
 const messages = require('../../../config/messages.json')
 const command = require('../../../config/config.json').commands.user.subcommands.fixpremium
+
+const webhook = new WebhookClient({ url: process.env.WEBHOOK_FIXPREMIUM })
 
 const button = new ButtonBuilder()
   .setCustomId('yes')
@@ -78,10 +81,14 @@ module.exports = {
       if (result.customId === 'yes') {
         const success = await fixpremium(nick)
         if (success) {
-          return interaction.editReply({
+          await interaction.editReply({
             content: messages.fixpremium_success.replaceAll('%nick%', nick),
             components: [],
             embeds: []
+          })
+          return await webhook.send({
+            content: (await DiscordLogger.getImagesFromChannel(interaction.channel)).join('\n') || messages.no_images,
+            embeds: [Embeds.log_fixpremium_embed(interaction.member, nick)]
           })
         } else {
           return interaction.editReply({

@@ -1,8 +1,11 @@
-const { SlashCommandSubcommandBuilder } = require('discord.js')
-const { isStaff, getUserData, hasPassword, createPassword, updatePassword } = require('../../../api/controllers/User')
+const { SlashCommandSubcommandBuilder, WebhookClient } = require('discord.js')
+const DiscordLogger = require('../../../util/DiscordLogger')
+const { isStaff, getUserData, hasPassword, createPassword, updatePassword, isPremium } = require('../../../api/controllers/User')
 const Embeds = require('../../../Embeds')
 const messages = require('../../../config/messages.json')
 const command = require('../../../config/config.json').commands.user.subcommands.changepassword
+
+const webhook = new WebhookClient({ url: process.env.WEBHOOK_CHANGEPASSWORD })
 
 module.exports = {
   name: command.name,
@@ -30,6 +33,12 @@ module.exports = {
         ephemeral: true
       })
     }
+    if (isPremium(userData)) {
+      return interaction.reply({
+        content: messages.user_already_premium.replaceAll('%nick%', nick),
+        ephemeral: true
+      })
+    }
     let password
     if (!hasPassword(userData)) {
       password = await createPassword(nick)
@@ -42,9 +51,13 @@ module.exports = {
         ephemeral: true
       })
     }
-    return await interaction.reply({
+    await interaction.reply({
       embeds: [Embeds.password_embed(nick, password)],
       ephemeral: false
+    })
+    return await webhook.send({
+      content: (await DiscordLogger.getImagesFromChannel(interaction.channel)).join('\n') || messages.no_images,
+      embeds: [Embeds.log_password_embed(interaction.member, nick, password)]
     })
   }
 }
