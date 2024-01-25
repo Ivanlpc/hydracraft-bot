@@ -51,11 +51,11 @@ class ConsoleLogger {
     })
   }
 
-  static command (interaction) {
+  static command (interaction, ms) {
     try {
-      this.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued server command /${interaction.commandName} ${interaction.options.getSubcommand()}`)
+      this.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued bot command /${interaction.commandName} ${interaction.options.getSubcommand()} in ${ms}ms`)
     } catch (error) {
-      this.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued server command /${interaction.commandName}`)
+      this.info(`${COLOR.RED}[CMD] ${COLOR.WHITE}${interaction.user.tag} issued bot command /${interaction.commandName} in ${ms}ms`)
     }
   }
 }
