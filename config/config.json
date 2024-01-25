@@ -2,13 +2,40 @@
   "TEBEX_URL": "https://plugin.tebex.io",
   "TRANSACTION_AVATAR_URL": "https://mc-heads.net/avatar/",
   "jPremiumDatabase": "jpremium",
+  "luckperms": "luckperms",
   "pins": "pins",
-  "allowed_guilds": [696494354545770548, 833078161112825916, 777311586545041438],
+  "bans": "bans",
+  "chart_folder": "./charts",
+  "max_messages": 100,
+  "ranks": ["creador", "admin", "developer", "manager", "srmod", "moderador", "helper"],
+  "allowed_guilds": [
+    "833078161112825916"
+  ],
   "mentions": {
     "bypassRoles": [],
     "noMentionRoles": []
   },
   "commands": {
+    "staff": {
+      "enabled": true,
+      "name": "staff",
+      "cooldown": 30,
+      "requires_permission": true,
+      "permission_name": "Ver estadísticas de staff (/staff)",
+      "description": "Comandos de staff",
+      "subcommands": {
+        "stats": {
+          "name": "stats",
+          "description": "Muestra las estadísticas de un staff",
+          "args": {
+            "since": {
+              "name": "since",
+              "description": "Inicio (dd/mm/yyyy)"
+            }
+          }
+        }
+      }
+    },
     "logs": {
       "enabled": true,
       "name": "logs",
@@ -17,106 +44,114 @@
       "requires_permission": true,
       "permission_name": "Ver logs (/logs)"
     },
-      "perm": {
-          "enabled": true,
-          "name": "perm",
-          "description": "Edita los permisos del bot",
-          "requires_permission": true,
-          "permission_name": "Gestionar permisos (/perm)",
-          "all_perms": "Todos los comandos",
-          "subcommands": {
-              "add": {
-                  "name": "add",
-                  "description": "Añade permiso al id mencionado",
-                  "args": {
-                    "perm": {
-                      "name": "perm",
-                      "description": "El permiso que quieres añadir al id mencionado"
-                    },
-                    "id": {
-                      "name": "id",
-                       "description": "El id de rol/usuario al que quieres eliminar el permiso"
-                    }
-                  }                
-              },
-              "remove": {
-                  "name": "remove",
-                  "description": "Elminina permiso al id mencionado",
-                  "args": {
-                      "perm": {
-                        "name": "perm",
-                        "description": "El permiso que quieres eliminar del id mencionado"
-                      },
-                      "id": {
-                        "name": "id",
-                        "description": "El id de rol/usuario al que quieres eliminar el permiso"
-                      }
-                    }
-              },
-              "list_id": {
-                  "name": "list",
-                  "description": "Lista los permisos de un usuario/rol",
-                  "args": {
-                    "id": {
-                      "name": "id",
-                      "description": "El id de rol/usuario para listar sus permisos"
-                    } 
-                  }
-              },
-              "list_group": {
-                "name": "search",
-                "description": "Lista todos los ids con ese permiso",
-                "args": {
-                  "perm": {
-                    "name": "perm",
-                    "description": "Selecciona el permiso"
-                  } 
-                }
+    "perm": {
+      "enabled": true,
+      "name": "perm",
+      "description": "Edita los permisos del bot",
+      "requires_permission": true,
+      "permission_name": "Gestionar permisos (/perm)",
+      "all_perms": "Todos los comandos",
+      "subcommands": {
+        "add": {
+          "name": "add",
+          "description": "Añade permiso al id mencionado",
+          "args": {
+            "perm": {
+              "name": "perm",
+              "description": "El permiso que quieres añadir al id mencionado"
             },
-            "clear": {
-              "name": "clear",
-              "description": "Limpia todos los permisos de un ID",
-              "args": {
-                "id": {
-                  "name": "id",
-                  "description": "El id de rol/usuario para limpiar permisos"
-                } 
-              }
-          }
-          }
-      },
-      "user": {
-        "enabled": true,
-        "name": "user",
-        "cooldown": 30,
-        "description": "Gestiona a un usuario",
-        "requires_permission": true,
-        "permission_name": "Gestionar usuarios (/user)",
-        "subcommands": {
-          "changepassword": {
-            "name": "changepassword",
-            "description": "Cambia la contraseña de un usuario por una aleatoria",
-            "password_length": 6,
-            "args": {
-              
-              "nick": {
-                "name": "nick",
-                "description": "Nick del usuario"
-              }
+            "id": {
+              "name": "id",
+              "description": "El id de rol/usuario al que quieres eliminar el permiso"
             }
-          },
-          "fixpremium": {
-            "name": "fixpremium",
-            "description": "Cambia la cuenta de un usuario a su nuevo nick premium",
-            "args": {
-              
-              "nick": {
-                "name": "nick",
-                "description": "Nuevo nick del usuario"
-              }
+          }
+        },
+        "remove": {
+          "name": "remove",
+          "description": "Elminina permiso al id mencionado",
+          "args": {
+            "perm": {
+              "name": "perm",
+              "description": "El permiso que quieres eliminar del id mencionado"
+            },
+            "id": {
+              "name": "id",
+              "description": "El id de rol/usuario al que quieres eliminar el permiso"
+            }
+          }
+        },
+        "list_id": {
+          "name": "list",
+          "description": "Lista los permisos de un usuario/rol",
+          "args": {
+            "id": {
+              "name": "id",
+              "description": "El id de rol/usuario para listar sus permisos"
+            }
+          }
+        },
+        "list_group": {
+          "name": "search",
+          "description": "Lista todos los ids con ese permiso",
+          "args": {
+            "perm": {
+              "name": "perm",
+              "description": "Selecciona el permiso"
+            }
+          }
+        },
+        "clear": {
+          "name": "clear",
+          "description": "Limpia todos los permisos de un ID",
+          "args": {
+            "id": {
+              "name": "id",
+              "description": "El id de rol/usuario para limpiar permisos"
             }
           }
         }
       }
+    },
+    "user": {
+      "enabled": true,
+      "name": "user",
+      "cooldown": 30,
+      "description": "Gestiona a un usuario",
+      "requires_permission": true,
+      "permission_name": "Gestionar usuarios (/user)",
+      "subcommands": {
+        "changepassword": {
+          "name": "changepassword",
+          "description": "Cambia la contraseña de un usuario por una aleatoria",
+          "password_length": 6,
+          "args": {
+            "nick": {
+              "name": "nick",
+              "description": "Nick del usuario"
+            }
+          }
+        },
+        "fixpremium": {
+          "name": "fixpremium",
+          "description": "Cambia la cuenta de un usuario a su nuevo nick premium",
+          "args": {
+            "nick": {
+              "name": "nick",
+              "description": "Nuevo nick del usuario"
+            }
+          }
+        },
+        "viewprofile": {
+          "name": "viewprofile",
+          "description": "Muestra el perfil de un usuario",
+          "args": {
+            "nick": {
+              "name": "nick",
+              "description": "Nick del usuario"
+            }
+          }
+        }
+      }
+    }
   }
 }
