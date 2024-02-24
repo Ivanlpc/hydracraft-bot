@@ -2,6 +2,7 @@ const { SlashCommandSubcommandBuilder } = require('discord.js')
 const { isStaff, getUserData } = require('../../../api/controllers/User')
 const Embeds = require('../../../Embeds')
 const messages = require('../../../config/messages.json')
+const DateUtil = require('../../../util/Date')
 const command = require('../../../config/config.json').commands.user.subcommands.viewprofile
 
 module.exports = {
@@ -28,6 +29,12 @@ module.exports = {
         content: messages.user_not_found,
         ephemeral: true
       })
+    }
+    if (userData.firstSeen !== null) {
+      userData.firstSeen = DateUtil.convertDate(userData.firstSeen)
+    }
+    if (userData.lastSeen !== null) {
+      userData.lastSeen = DateUtil.convertDate(userData.firstSeen)
     }
     return await interaction.reply({
       embeds: [Embeds.userProfile(userData)],
