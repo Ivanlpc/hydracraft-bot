@@ -2,20 +2,49 @@ const mysql = require('mysql')
 const ConsoleLogger = require('../util/ConsoleLogger')
 const name = require('../package.json').name
 
-const pool = mysql.createPool({
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD
-})
+let pool
+const maxReconnectAttempts = 5
+let reconnectAttempts = 0
+const reconnectInterval = 5000
 
-pool.getConnection((err, conn) => {
-  if (err) {
+const createPool = () => {
+  pool = mysql.createPool({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD
+  })
+
+  pool.on('connection', (connection) => {
+    ConsoleLogger.info('Database connection established')
+    reconnectAttempts = 0
+  })
+
+  pool.on('error', (err) => {
     ConsoleLogger.error(err)
-    process.exit(1)
+    ConsoleLogger.error('Database connection was closed. Reconnecting...')
+    reconnect()
+  })
+  pool.getConnection((err, conn) => {
+    if (err) {
+      ConsoleLogger.error(err)
+      process.exit(1)
+    } else {
+      if (conn) conn.release()
+    }
+  })
+}
+
+const reconnect = () => {
+  if (reconnectAttempts < maxReconnectAttempts) {
+    reconnectAttempts++
+    setTimeout(() => {
+      createPool()
+    }, reconnectInterval)
   } else {
-    if (conn) conn.release()
+    ConsoleLogger.error('Max reconnect attempts reached. Exiting...')
+    process.exit(1)
   }
-})
+}
 
 const getConnection = () => {
   return mysql.createConnection({
@@ -99,6 +128,8 @@ const execute = (query, params = []) => {
     ConsoleLogger.error(error)
   }
 }
+
+createPool()
 
 module.exports = {
   fetchOne,
