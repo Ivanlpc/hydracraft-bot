@@ -1,6 +1,7 @@
 const request = require('./Requests')
 
 const config = require('../config/config.json')
+const ConsoleLogger = require('../util/ConsoleLogger')
 
 /**
  * Build Headers to make a request
@@ -143,6 +144,23 @@ const TebexAPI = {
     const payment = await TebexAPI.getPaymentFromId(token, payments.payments[0].txn_id)
     if (Array.isArray(payment)) return null
     return payment.packages
+  },
+  updatePaymentNickname: async (token, id, username) => {
+    const url = `${config.TEBEX_URL}/payments/${id}`
+    const body = new URLSearchParams()
+    body.append('username', username)
+    const requestOptions = {
+      method: 'PUT',
+      headers: buildHeaders(token),
+      body
+    }
+    try {
+      await request(url, requestOptions)
+      return true
+    } catch (err) {
+      ConsoleLogger.error(err)
+      return false
+    }
   }
 }
 

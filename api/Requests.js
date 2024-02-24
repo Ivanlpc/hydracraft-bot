@@ -10,7 +10,18 @@ const Requests = (input, init) => {
   try {
     return new Promise((resolve, reject) => {
       fetch(input, init)
-        .then(res => res.json())
+        .then(res => {
+          if (res.status >= 200 && res.status < 300) {
+            const contentType = res.headers.get('content-type')
+            if (contentType && contentType.includes('application/json')) {
+              return res.json()
+            } else {
+              return null
+            }
+          } else {
+            reject(new Error(`Request failed with status ${res.status}`))
+          }
+        })
         .then(result => resolve(result))
         .catch(err => reject(err))
     })
