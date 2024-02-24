@@ -1,28 +1,123 @@
 const fs = require('fs')
 const ChartJsImage = require('chartjs-to-image')
-const path = require('../../config/config.json').chart_folder
+const chartsConfig = require('../../config/config.json').charts
 
-const createTopStaffsSinceChart = async (stats) => {
+const createTopStaffsSinceChart = async (usernames, counts, since, until, unbans) => {
+  const label = (until)
+    ? chartsConfig.types.staffTopSince.label.replace('%date%', since + ' - ' + until)
+    : chartsConfig.types.staffTopSince.label.replace('%date%', since)
+  const unbansLabel = (until)
+    ? chartsConfig.types.staffTopSince.unbansLabel.replace('%date%', since + ' - ' + until)
+    : chartsConfig.types.staffTopSince.unbansLabel.replace('%date%', since)
   const chart = new ChartJsImage()
   chart.setConfig({
-    type: 'bar',
+    type: chartsConfig.types.staffTopSince.type,
     data: {
-      labels: stats.map(x => x.username),
+      labels: usernames,
       datasets: [{
-        label: 'Número de sanciones',
-        data: stats.map(x => x.count),
-        backgroundColor: '#8BC1F7',
-        borderColor: '#519DE9',
-        borderWidth: 1
+        label,
+        data: counts,
+        backgroundColor: chartsConfig.barColor,
+        borderColor: chartsConfig.borderColor,
+        borderWidth: chartsConfig.borderWidth
+      },
+      (unbans.length > 0)
+        ? {
+            label: unbansLabel,
+            data: unbans,
+            backgroundColor: chartsConfig.barColorUnbans,
+            borderColor: chartsConfig.borderColor,
+            borderWidth: chartsConfig.borderWidth
+          }
+        : undefined]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          color: chartsConfig.datalabelsColor,
+          anchor: 'end',
+          align: 'top',
+          formatter: value => value
+        }
+      }
+    }
+  })
+  chart.setBackgroundColor(chartsConfig.backgroundColor)
+  chart.setHeight(chartsConfig.types.staffTopSince.height)
+  chart.setWidth(chartsConfig.types.staffTopSince.width)
+  const randomName = Math.random().toString(36).substring(7)
+  if (!fs.existsSync(chartsConfig.chart_folder)) fs.mkdirSync(chartsConfig.chart_folder)
+  const chartPath = chartsConfig.chart_folder + '/' + randomName + '.png'
+  await chart.toFile(chartPath)
+  return chartPath
+}
+
+const createProgressChart = async (stats, nick) => {
+  const chart = new ChartJsImage()
+  chart.setConfig({
+    type: chartsConfig.types.staffProgress.type,
+    data: {
+      labels: stats.map(stat => stat.date),
+      datasets: [{
+        label: chartsConfig.types.staffProgress.label.replace('%nick%', nick),
+        fill: false,
+        data: stats.map(stat => stat.count),
+        backgroundColor: chartsConfig.barColor,
+        borderColor: chartsConfig.borderColor,
+        borderWidth: chartsConfig.borderWidth
       }]
     }
   })
-  chart.setBackgroundColor('#ffffff')
-  chart.setHeight(600)
-  chart.setWidth(800)
+  chart.setBackgroundColor(chartsConfig.backgroundColor)
+  chart.setHeight(chartsConfig.types.staffProgress.height)
+  chart.setWidth(chartsConfig.types.staffProgress.width)
   const randomName = Math.random().toString(36).substring(7)
-  if (!fs.existsSync(path)) fs.mkdirSync(path)
-  const chartPath = path + '/' + randomName + '.png'
+  if (!fs.existsSync(chartsConfig.chart_folder)) fs.mkdirSync(chartsConfig.chart_folder)
+  const chartPath = chartsConfig.chart_folder + '/' + randomName + '.png'
+  await chart.toFile(chartPath)
+  return chartPath
+}
+
+const createTopStaffsSinceChartUnbans = async (usernames, counts, since, until, unbans) => {
+  const label = (until)
+    ? chartsConfig.types.staffTopSince.label.replace('%date%', since + ' - ' + until)
+    : chartsConfig.types.staffTopSince.label.replace('%date%', since)
+  const chart = new ChartJsImage()
+  chart.setConfig({
+    type: chartsConfig.types.staffTopSince.type,
+    data: {
+      labels: usernames,
+      datasets: [{
+        label,
+        data: counts,
+        backgroundColor: chartsConfig.barColor,
+        borderColor: chartsConfig.borderColor,
+        borderWidth: chartsConfig.borderWidth
+      }, {
+        label: chartsConfig.types.staffTopSince.unbansLabel,
+        data: counts,
+        backgroundColor: chartsConfig.barColorUnbans,
+        borderColor: chartsConfig.borderColor,
+        borderWidth: chartsConfig.borderWidth
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          color: chartsConfig.datalabelsColor,
+          anchor: 'end',
+          align: 'top',
+          formatter: value => value
+        }
+      }
+    }
+  })
+  chart.setBackgroundColor(chartsConfig.backgroundColor)
+  chart.setHeight(chartsConfig.types.staffTopSince.height)
+  chart.setWidth(chartsConfig.types.staffTopSince.width)
+  const randomName = Math.random().toString(36).substring(7)
+  if (!fs.existsSync(chartsConfig.chart_folder)) fs.mkdirSync(chartsConfig.chart_folder)
+  const chartPath = chartsConfig.chart_folder + '/' + randomName + '.png'
   await chart.toFile(chartPath)
   return chartPath
 }
@@ -33,5 +128,7 @@ const deleteChart = (chartPath) => {
 
 module.exports = {
   createTopStaffsSinceChart,
+  createProgressChart,
+  createTopStaffsSinceChartUnbans,
   deleteChart
 }

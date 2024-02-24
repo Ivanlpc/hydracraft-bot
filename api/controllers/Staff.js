@@ -1,7 +1,7 @@
 const ConsoleLogger = require('../../util/ConsoleLogger')
-const { fetchAll } = require('../Database')
+const { fetchAll, fetchOne } = require('../Database')
 const QUERIES = require('../Queries')
-const ranks = require('../../config/config.json').ranks
+const ranks = require('../../config/config.json').charts.ranks
 
 const getStaffsUuidName = async () => {
   try {
@@ -14,17 +14,50 @@ const getStaffsUuidName = async () => {
   }
 }
 
-const getTopStaffsSince = async (staffs, date) => {
+const getStaffUuidByNick = async (nick) => {
   try {
-    const query = await fetchAll(QUERIES.getTopStaffsSince, [date, staffs, date, staffs, date, staffs, date, staffs])
+    const query = await fetchOne(QUERIES.getStaffUuidByNick, [nick])
+    return query.uuid
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to fetch getStaffUuidByNick ' + nick)
+  }
+}
+
+const getTopStaffsRange = async (staffs, since, until) => {
+  try {
+    const query = await fetchAll(QUERIES.getTopStaffsRange, [since, until, staffs, since, until, staffs, since, until, staffs, since, until, staffs])
     return query.map(staff => ({ uuid: staff.uuid, count: staff.total }))
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch getTopStaffsSince ' + date.toLocaleDateString())
+    throw new Error('There was an error while trying to fetch getTopStaffsSince ' + since)
+  }
+}
+
+const getStaffProgressByUuid = async (uuid) => {
+  try {
+    const query = await fetchAll(QUERIES.getStaffProgressByUuid, [uuid, uuid, uuid, uuid])
+    return query
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to fetch getStaffProgressByUuid ' + uuid)
+  }
+}
+
+const getStaffsUnbansRange = async (staffs, since, until) => {
+  try {
+    const query = await fetchAll(QUERIES.getStaffsUnbansRange, [since, until, staffs, since, until, staffs, since, until, staffs, since, until, staffs])
+    return query
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to fetch getStaffsUnbans ' + since + ' ' + until)
   }
 }
 
 module.exports = {
-  getTopStaffsSince,
-  getStaffsUuidName
+  getStaffsUuidName,
+  getTopStaffsRange,
+  getStaffUuidByNick,
+  getStaffProgressByUuid,
+  getStaffsUnbansRange
 }
