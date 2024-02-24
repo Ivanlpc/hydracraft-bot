@@ -5,13 +5,14 @@ const binaryLogsConfig = require('../../config/binarylogs.json')
 const passwordLength = require('../../config/config.json').commands.user.subcommands.changepassword.password_length
 const Server = require('./Server')
 const Guild = require('./Guild')
+const TebexAPI = require('../TebexAPI')
 
 const getNameByUUID = async (uuid) => {
   if (uuid === null) return ''
   try {
     if (uuid.includes('-')) uuid = uuid.replaceAll('-', '')
     const query = await fetchOne(QUERIES.getLastNickname, [uuid, uuid])
-    return query.lastNickname || 'ERROR'
+    return query.lastNickname || null
   } catch (err) {
     ConsoleLogger.error(err)
     return ''
@@ -171,6 +172,31 @@ const fixpremium = async (nickname) => {
   }
 }
 
+const mergepremium = async (newnick, oldnick) => {
+  try {
+    await Server.sendBungeecordCommand(`forcemergepremiumuserprofile ${newnick} ${oldnick}`)
+    return true
+  } catch (err) {
+    ConsoleLogger.error(err)
+    return false
+  }
+}
+
+const updatePaymentNickname = async (oldNickname, newNickname) => {
+  try {
+    const payments = await TebexAPI.getUserPaymentsFromNickname(process.env.TEBEX_TOKEN, oldNickname)
+    if (payments.payments.length <= 0) return true
+    for (const payment of payments.payments) {
+      const res = await TebexAPI.updatePaymentNickname(process.env.TEBEX_TOKEN, payment.txn_id, newNickname)
+      if (!res) return false
+    }
+  } catch (err) {
+    ConsoleLogger.error(err)
+    return false
+  }
+  return true
+}
+
 module.exports = {
   getNameByUUID,
   addPermission,
@@ -187,5 +213,7 @@ module.exports = {
   createPassword,
   updatePassword,
   isPremium,
-  fixpremium
+  fixpremium,
+  mergepremium,
+  updatePaymentNickname
 }

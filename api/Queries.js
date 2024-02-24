@@ -18,6 +18,7 @@ const QUERIES = {
   isStaff: `SELECT * FROM ${pins}.PinCodes WHERE uuid = ?`,
   getUserData: `SELECT * FROM ${jPremiumDatabase}.user_profiles WHERE lastNickname = ?`,
   getToken: `SELECT token FROM ${botName}.tokens`,
+  getStaffUuidByNick: `SELECT uuid FROM ${luckperms}.luckperms_players WHERE username = ?`,
   getStaffUuidName: `SELECT DISTINCT perm.uuid as uuid, pl.username as username FROM ${luckperms}.luckperms_user_permissions perm JOIN ${luckperms}.luckperms_players pl ON (perm.uuid = pl.uuid) WHERE perm.permission IN (?)`,
   getStatsOfNickname: `SELECT 'bans', COUNT(*) from ${bans}.litebans_bans WHERE banned_by_name = ?
   UNION ALL
@@ -40,18 +41,42 @@ const QUERIES = {
   SELECT banned_by_name, 'warns', COUNT(*) from ${bans}.litebans_kicks WHERE time > ? GROUP BY banned_by_name
   UNION ALL
   SELECT banned_by_name, 'mutes', COUNT(*) from ${bans}.litebans_warnings WHERE time > ? GROUP BY banned_by_name) as X ORDER BY banned_by_name`,
-  getMonthStatsUuid: `SELECT DATE_FORMAT(FROM_UNIXTIME(FLOOR(time / 1000)), '%m/%y') AS month, COUNT(*) AS banCount
-  FROM ${bans}.litebans_bans  
-  WHERE banned_by_uuid = ?
-  GROUP BY month
-  ORDER BY MIN(FROM_UNIXTIME(FLOOR(time / 1000))) DESC;`,
-  getTopStaffsSince: `SELECT banned_by_uuid as uuid, SUM(numero) as total FROM (SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_bans WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  getStaffProgressByUuid: `SELECT date, SUM(count) as count FROM (
+    SELECT DATE_FORMAT(FROM_UNIXTIME(FLOOR(time / 1000)), '%M-%y') AS date, COUNT(*) AS count
+    FROM ${bans}.litebans_bans  
+    WHERE banned_by_uuid = ?
+    GROUP BY date
+    UNION ALL
+    SELECT DATE_FORMAT(FROM_UNIXTIME(FLOOR(time / 1000)), '%M-%y') AS date, COUNT(*) AS count
+    FROM ${bans}.litebans_kicks  
+    WHERE banned_by_uuid = ?
+    GROUP BY date
+    UNION ALL
+    SELECT DATE_FORMAT(FROM_UNIXTIME(FLOOR(time / 1000)), '%M-%y') AS date, COUNT(*) AS count
+    FROM ${bans}.litebans_mutes  
+    WHERE banned_by_uuid = ?
+    GROUP BY date
+    UNION ALL
+    SELECT DATE_FORMAT(FROM_UNIXTIME(FLOOR(time / 1000)), '%M-%y') AS date, COUNT(*) AS count
+    FROM ${bans}.litebans_warnings  
+    WHERE banned_by_uuid = ?
+    GROUP BY date
+  ) as f
+  GROUP BY date
+  ORDER BY STR_TO_DATE(CONCAT('01/', date), '%d/%M-%y') ASC`,
+  getTopStaffsRange: `SELECT banned_by_uuid as uuid, SUM(numero) as total FROM (SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_bans WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
   UNION ALL
-  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_mutes WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_mutes WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
   UNION ALL
-  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_kicks WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_kicks WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
   UNION ALL
-  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE time > ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`,
+  getStaffsUnbansRange: `SELECT banned_by_uuid as uuid, SUM(numero) as total FROM (SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_bans WHERE removed_by_uuid IS NOT NULL AND banned_by_uuid != removed_by_uuid AND time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  UNION ALL
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_mutes WHERE removed_by_uuid IS NOT NULL AND banned_by_uuid != removed_by_uuid AND time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
+  UNION ALL
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE removed_by_uuid IS NOT NULL AND banned_by_uuid != removed_by_uuid AND time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`
+
 }
 
 module.exports = QUERIES
