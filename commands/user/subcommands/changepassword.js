@@ -55,8 +55,9 @@ module.exports = {
       embeds: [Embeds.password_embed(nick, password)],
       ephemeral: false
     })
-    return await webhook.send({
-      content: (await DiscordLogger.getImagesFromChannel(interaction.channel)).join('\n') || messages.no_images,
+    const images = await DiscordLogger.getImagesFromChannel(interaction.channel)
+    return await DiscordLogger.sendImagesToWebhook(webhook, {
+      images,
       embeds: [Embeds.log_password_embed(interaction.member, nick, password)]
     })
   }
