@@ -2,6 +2,17 @@ const { EmbedBuilder } = require('discord.js')
 const config = require('./config/config.json')
 
 const embeds = {
+  nickname_update_embed: (oldnick, newnick) => {
+    return new EmbedBuilder()
+      .setTitle('PAGOS MOVIDOS')
+      .setDescription('Se han cambiado los nicks de todas las compras debido a un cambio de nick en la cuenta PREMIUM')
+      .setColor('Blue')
+      .setThumbnail(config.TRANSACTION_AVATAR_URL + newnick)
+      .addFields(
+        { name: 'Antiguo nick', value: '```' + oldnick + '```' },
+        { name: 'Nuevo nick', value: '```' + newnick + '```' }
+      )
+  },
   unban_embed: (data, unban, name, schema) => {
     return new EmbedBuilder()
       .setTitle('NUEVO DESBANEO')
@@ -207,6 +218,23 @@ const embeds = {
       .setTitle('CONFIRMACIÓN')
       .setDescription('¡Cuidado! esta acción borrará todo el progreso de `' + nick + '`! \n¿Estás seguro?')
       .setColor('Blue')
+  },
+  mergepremium_confirmation_embed: (newnick, oldnick) => {
+    return new EmbedBuilder()
+      .setTitle('CONFIRMACIÓN')
+      .setDescription('¡Cuidado! esta acción hará lo siguiente: \n Borrará el progreso de ```' + newnick + '``` \nLo vinculará con el nick: ```' + oldnick + '```\n¿Estás seguro?')
+      .setColor('Blue')
+  },
+  log_mergepremium_embed: (author, newnick, oldnick) => {
+    return new EmbedBuilder()
+      .setTitle('Nuevo Merge Premium')
+      .setDescription('Realizado por: ' + author.user.tag + '\n TAG: ' + '<@!' + author.user.id + '>')
+      .setThumbnail(author.user.avatarURL())
+      .setColor('Blue')
+      .addFields(
+        { name: 'Nick antiguo:', value: '```' + oldnick + '```' },
+        { name: 'Nick nuevo:', value: '```' + newnick + '```' }
+      )
   },
   log_fixpremium_embed: (author, nick) => {
     return new EmbedBuilder()
