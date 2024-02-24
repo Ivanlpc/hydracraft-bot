@@ -19,10 +19,17 @@
     "hidden_transaction_id": "OCULTA",
     "user_not_found": "No se ha encontrado ningún usuario con ese nombre",
     "user_already_premium": "El usuario %nick% es premium, solo puedes ejecutar este comando en cuentas NO PREMIUM",
+    "user_not_premium": "El usuario %nick% no es premium, solo puedes ejecutar este comando en cuentas PREMIUM",
     "command_cancelled": "Comando cancelado",
     "command_timeout": "Ha pasado demasiado tiempo, el comando ha sido cancelado",
     "fixpremium_success": "Se ha actualizado el nick de la cuenta premium %nick%",
+    "mergepremium_success": "Se ha fusionado la cuenta premium `%newnick%` con la cuenta no premium `%oldnick%`",
+    "mergepremium_error": "Hubo un error al ejecutar el comando con `%oldnick%` y `%newnick%`",
     "fixpremium_error": "Hubo un error al ejecutar el comando con %nick%",
     "no_images": "No se han encontrado imágenes",
-    "invalid_date": "La fecha %date% no está en un formato válido. Ejemplo: 06/11/2020 (dd/mm/yyyy)"
+    "invalid_date": "La fecha no está en un formato válido. Ejemplo: 06/11/2020 (dd/mm/yyyy)",
+    "invalid_date_range": "La fecha de inicio no puede ser mayor que la fecha de fin",
+    "no_stats": "No se han encontrado estadísticas",
+    "updatedPayments": "Se han actualizado los pagos de `%oldnick%` con el nick `%newnick%`",
+    "updatedPayments_error": "Hubo un error al actualizar los pagos de `%oldnick%` con el nick `%newnick%`"
 }

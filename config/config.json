@@ -5,9 +5,7 @@
   "luckperms": "luckperms",
   "pins": "pins",
   "bans": "bans",
-  "chart_folder": "./charts",
   "max_messages": 100,
-  "ranks": ["creador", "admin", "developer", "manager", "srmod", "moderador", "helper"],
   "allowed_guilds": [
     "833078161112825916"
   ],
@@ -15,11 +13,36 @@
     "bypassRoles": [],
     "noMentionRoles": []
   },
+  "charts": {
+    "ranks": ["creador", "admin", "developer", "manager", "srmod", "moderador", "helper"],
+    "chart_folder": "./charts",
+    "backgroundColor": "#ffffff",
+    "datalabelsColor": "#000000",
+    "barColor": "#8BC1F7",
+    "barColorUnbans": "#8BC1F7",
+    "borderColor": "#519DE9",
+    "borderWidth": 2,
+    "types": {
+      "staffTopSince": {
+        "label": "Número de sanciones desde %date%",
+        "unbansLabel": "Número de desbans desde %date%",
+        "type": "bar",
+        "height": 600,
+        "width": 800
+      },
+      "staffProgress": {
+        "label": "Sanciones de %nick%",
+        "type": "line",
+        "height": 600,
+        "width": 800
+      }
+    }
+  },
   "commands": {
     "staff": {
       "enabled": true,
       "name": "staff",
-      "cooldown": 30,
+      "cooldown": 0,
       "requires_permission": true,
       "permission_name": "Ver estadísticas de staff (/staff)",
       "description": "Comandos de staff",
@@ -30,6 +53,24 @@
           "args": {
             "since": {
               "name": "since",
+              "description": "Inicio (dd/mm/yyyy)"
+            },
+            "until": {
+              "name": "until",
+              "description": "Final (dd/mm/yyyy)"
+            },
+            "unbans": {
+              "name": "unbans",
+              "description": "Incluye desbans"
+            }
+          }
+        },
+        "progress": {
+          "name": "progress",
+          "description": "Muestra el desempeño de un staff",
+          "args": {
+            "nick": {
+              "name": "nick",
               "description": "Inicio (dd/mm/yyyy)"
             }
           }
@@ -138,6 +179,20 @@
             "nick": {
               "name": "nick",
               "description": "Nuevo nick del usuario"
+            }
+          }
+        },
+        "mergepremium": {
+          "name": "mergepremium",
+          "description": "Mueve el progreso y rangos de un nick NO PREMIUM a un nick PREMIUM",
+          "args": {
+            "oldnick": {
+              "name": "no-premium",
+              "description": "Nick de la cuenta no premium"
+            },
+            "newnick": {
+              "name": "premium",
+              "description": "Nick de la cuenta premium"
             }
           }
         },
