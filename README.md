@@ -1,63 +1,56 @@
 # Discord Bot Project
 
-## Introducción
+## Introduction
 
-Este proyecto se trata de un bot de Discord implementado en JavaScript, diseñado para facilitar la gestión de un servidor de Discord y la interacción con una base de datos MySQL. Las principales características incluyen la gestión de permisos, enfriamiento de comandos, gestión de usuarios y de staff, además de un avanzado sistema de logs. Este bot es especialmente útil para automatizar tareas administrativas y mejorar la experiencia de sus miembros.
+This project involves a Discord bot implemented in JavaScript, designed to facilitate the management of a Discord server and interaction with a MySQL database. The main features include permission management, command cooldowns, user and staff management, as well as an advanced logging system. This bot is especially useful for automating administrative tasks and enhancing the experience for its members.
 
-## Características
+## Features
 
-### Gestión de Permisos
+### Permission Management
 
-- **/perm**: Permite a los administradores gestionar los permisos del bot directamente desde Discord, utilizando comandos slash. Los permisos se almacenan y se leen desde una base de datos MySQL, asegurando una gestión centralizada y segura.
+- **/perm**: Allows administrators to manage the bot's permissions directly from Discord, using slash commands. Permissions are stored and retrieved from a MySQL database, ensuring centralized and secure management.
 
-### Enfriamiento de Comandos
+### Command Cooldowns
 
-- **Cooldowns**: Evita el abuso de comandos estableciendo un período de enfriamiento después de cada uso, asegurando que los usuarios no sobrecarguen el bot con peticiones.
+- **Cooldowns**: Prevents command abuse by establishing a cooldown period after each use, ensuring users do not overload the bot with requests.
 
-### Gestión de Usuarios
+### User Management
 
-1. **Cambio de contraseña**: Permite a los usuarios cambiar su contraseña por una temporal, garantizando la seguridad de las cuentas.
-2. **Actualización de nombres de usuario**: Los usuarios pueden actualizar sus nombres de usuario directamente a través de comandos.
-3. **Fusión de cuentas**: Facilita la fusión de cuentas de diferentes usuarios y, opcionalmente, el cambio de nombre en sus compras de Tebex.
-4. **Información de la cuenta**: Muestra la información detallada de la cuenta de un usuario.
+1. **Password Change**: Allows users to change their password to a temporary one, ensuring account security.
+2. **Username Update**: Users can update their usernames directly through commands.
+3. **Account Merging**: Facilitates the merging of different users' accounts and, optionally, name changes in their Tebex purchases.
+4. **Account Information**: Displays detailed account information of a user.
 
-### Gestión de Staff
+### Staff Management
 
-1. **Gráficas de sanciones**: Crea gráficas que muestran las sanciones realizadas en un período de tiempo definido, así como la evolución de las sanciones dadas por un miembro del staff en particular. Esto permite un seguimiento visual y eficiente de las actividades del staff.
+1. **Sanction Charts**: Creates charts showing the sanctions made in a defined period, as well as the evolution of sanctions given by a particular staff member. This allows for efficient visual tracking of staff activities.
 
-### Sistema de Logs
+### Logging System
 
-1. **Logs de MySQL**: Escucha los logs binarios de MySQL para crear registros en Discord de ciertos cambios en el servidor, permitiendo un seguimiento en tiempo real de las modificaciones importantes.
-2. **Logs por consola**: Genera logs personalizados y ordenados por fecha en cada reinicio del bot, facilitando la depuración y el mantenimiento del sistema.
+1. **MySQL Logs**: Listens to MySQL binary logs to create records on Discord of certain changes in the server, allowing real-time tracking of significant modifications.
+2. **Console Logs**: Generates custom logs sorted by date on each bot restart, facilitating debugging and system maintenance.
 
-## Requisitos
+## Requirements
 
-- Node.js (v20 o superior)
-- MySQL (v5.7 o superior)
-- Un servidor de Discord y permisos de administrador para añadir bots
+- Node.js (v20 or higher)
+- MySQL (v5.7 or higher)
+- A Discord server and administrative permissions to add bots
 
-## Instalación
+## Installation
 
-1. Clone el repositorio:
+1. Clone the repository:
    ```bash
    git clone https://github.com/ivanlpc/hydracraft-bot.git
    ```
-2. Instale las dependencias:
+2. Install the dependencies:
    ```bash
    cd hydracraft-bot
    npm install
    ```
-3. Configure el archivo `.env` con sus credenciales de MySQL y el token de su bot de Discord.
-4. Ejecute el bot:
+3. Configure the !.env! file with your MySQL credentials and your bot's Discord token.
+4. Run the bot:
    ```bash
    node index.js
    ```
 
 
-
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Vea el archivo LICENSE para más detalles.
-
----
