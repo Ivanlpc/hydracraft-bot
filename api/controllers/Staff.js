@@ -54,10 +54,21 @@ const getStaffsUnbansRange = async (staffs, since, until) => {
   }
 }
 
+const getStaffsNameByRank = async (rank) => {
+  try {
+    const query = await fetchAll(QUERIES.getStaffNickByRank, [rank])
+    return query.map(staff => staff.username)
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to fetch getStaffsNameByRank ' + rank)
+  }
+}
+
 module.exports = {
   getStaffsUuidName,
   getTopStaffsRange,
   getStaffUuidByNick,
   getStaffProgressByUuid,
-  getStaffsUnbansRange
+  getStaffsUnbansRange,
+  getStaffsNameByRank
 }

@@ -74,6 +74,11 @@
               "description": "Inicio (dd/mm/yyyy)"
             }
           }
+        },
+        "vote": {
+          "name": "vote",
+          "description": "Vota por un staff",
+          "ranks": ["group.helper"]
         }
       }
     },

@@ -31,5 +31,13 @@
     "invalid_date_range": "La fecha de inicio no puede ser mayor que la fecha de fin",
     "no_stats": "No se han encontrado estadísticas",
     "updatedPayments": "Se han actualizado los pagos de `%oldnick%` con el nick `%newnick%`",
-    "updatedPayments_error": "Hubo un error al actualizar los pagos de `%oldnick%` con el nick `%newnick%`"
+    "updatedPayments_error": "Hubo un error al actualizar los pagos de `%oldnick%` con el nick `%newnick%`",
+    "write_reason": "Por favor, escribe una razón",
+    "reason": "Por qué quieres votar a %staff%",
+    "select_staff": "Selecciona un miembro del staff",
+    "end_votes": "FINALIZAR",
+    "already_voted": "Ya has votado en esta encuesta",
+    "not_allowed_close_votes": "No tienes permiso para cerrar votaciones",
+    "vote_success": "Voto registrado con éxito",
+    "no_reason": "Sin razón"
 }

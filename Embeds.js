@@ -259,6 +259,23 @@ const embeds = {
         { name: 'Última IP', value: '```' + (data.lastAddress !== null ? data.lastAddress : 'No disponible') + '```' },
         { name: 'Primera IP', value: '```' + (data.firstAddress !== null ? data.firstAddress : 'No disponible') + '```' }
       )
+  },
+  vote_embed: (staffs) => {
+    const embed = new EmbedBuilder()
+      .setTitle('VOTACIÓN')
+      .setColor('Blue')
+    let description = 'Vota por el staff que creas que ha hecho un buen trabajo' + '\n'
+    for (const staff of staffs) {
+      description += '`' + staff + '`' + ' ▶ 0\n'
+    }
+    embed.setDescription(description)
+    return embed
+  },
+  new_vote_embed: (author, staff, reason) => {
+    return new EmbedBuilder()
+      .setTitle('NUEVO VOTO')
+      .setDescription('Votado por: <@!' + author + '>\nStaff: `' + staff + '`\nRazón: ```' + reason + '```')
+      .setColor('Green')
   }
 }
 

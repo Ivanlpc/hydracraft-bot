@@ -19,6 +19,7 @@ const QUERIES = {
   getUserData: `SELECT * FROM ${jPremiumDatabase}.user_profiles WHERE lastNickname = ?`,
   getToken: `SELECT token FROM ${botName}.tokens`,
   getStaffUuidByNick: `SELECT uuid FROM ${luckperms}.luckperms_players WHERE username = ?`,
+  getStaffNickByRank: `SELECT DISTINCT pl.username as username FROM ${luckperms}.luckperms_user_permissions perm JOIN ${luckperms}.luckperms_players pl ON (perm.uuid = pl.uuid) WHERE perm.permission IN (?)`,
   getStaffUuidName: `SELECT DISTINCT perm.uuid as uuid, pl.username as username FROM ${luckperms}.luckperms_user_permissions perm JOIN ${luckperms}.luckperms_players pl ON (perm.uuid = pl.uuid) WHERE perm.permission IN (?)`,
   getStatsOfNickname: `SELECT 'bans', COUNT(*) from ${bans}.litebans_bans WHERE banned_by_name = ?
   UNION ALL

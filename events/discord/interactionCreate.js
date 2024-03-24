@@ -87,10 +87,21 @@ module.exports = {
         })
       }
     } else if (interaction.isStringSelectMenu()) {
-      const selectMenu = interaction.client.getSelectMenu(interaction.customId)
+      const selectMenu = interaction.client.selectMenus.get(interaction.customId)
       if (!selectMenu) return
       try {
         await selectMenu.execute(interaction.client, interaction)
+      } catch (e) {
+        interaction.reply({
+          content: messages.command_error,
+          ephemeral: true
+        })
+      }
+    } else if (interaction.isButton()) {
+      const button = interaction.client.buttons.get(interaction.customId.split(';')[0])
+      if (!button) return
+      try {
+        await button.execute(interaction.client, interaction)
       } catch (e) {
         interaction.reply({
           content: messages.command_error,

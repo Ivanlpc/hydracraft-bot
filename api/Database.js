@@ -47,11 +47,18 @@ const reconnect = () => {
 }
 
 const getConnection = () => {
-  return mysql.createConnection({
+  const connection = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD
   })
+  connection.connect((err) => {
+    if (err) {
+      ConsoleLogger.error(err)
+      reconnect()
+    }
+  })
+  return connection
 }
 
 const createTables = () => {

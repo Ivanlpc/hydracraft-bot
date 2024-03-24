@@ -8,11 +8,13 @@ const SQLEvents = require('./events/binary_logs/index')
 const commandFiles = fs.readdirSync('./commands')
 const eventsFiles = fs.readdirSync('./events/discord').filter(file => file.endsWith('.js'))
 const selectMenuFiles = fs.readdirSync('./select_menus')
+const buttonFiles = fs.readdirSync('./buttons')
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] })
 const binlogconfig = require('./config/binarylogs.json')
 
 client.commands = new Map()
 client.selectMenus = new Map()
+client.buttons = new Map()
 client.commands_json = []
 client.cooldowns = new Collection()
 
@@ -47,6 +49,13 @@ for (const file of selectMenuFiles) {
   if (!menu.enabled) continue
   client.selectMenus.set(menu.customId, menu)
   ConsoleLogger.info(`${COLOR.MAGENTA}[MENU]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}${menu.customId}`)
+}
+
+for (const file of buttonFiles) {
+  const button = require(`./buttons/${file}`)
+  if (!button.enabled) continue
+  client.buttons.set(button.customId, button)
+  ConsoleLogger.info(`${COLOR.YELLOW}[BUTTON]${COLOR.WHITE}[${COLOR.GREEN}✔${COLOR.WHITE}] Loaded ${COLOR.BLUE}${button.customId}`)
 }
 
 client.login(TOKEN)
