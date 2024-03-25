@@ -47,7 +47,7 @@ This project involves a Discord bot implemented in JavaScript, designed to facil
    cd hydracraft-bot
    npm install
    ```
-3. Configure the !.env! file with your MySQL credentials and your bot's Discord token.
+3. Configure the `.env` file with your MySQL credentials and your bot's Discord token.
 4. Run the bot:
    ```bash
    node index.js
