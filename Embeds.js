@@ -268,6 +268,7 @@ const embeds = {
     for (const staff of staffs) {
       description += '`' + staff + '`' + ' ' + config.commands.staff.subcommands.vote.arrow + ' 0\n'
     }
+    description += '\n\n **Nota**: Las votaciones son anónimas, solo el HEAD STAFF podrá ver los votos individuales. Vota con __imparcialidad__ y __honestidad__. \n¡Gracias por tu colaboración!'
     embed.setDescription(description)
     return embed
   },

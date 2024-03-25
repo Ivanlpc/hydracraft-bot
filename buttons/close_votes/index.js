@@ -1,3 +1,4 @@
+const { EmbedBuilder } = require('discord.js')
 const messages = require('../../config/messages.json')
 
 module.exports = {
@@ -9,7 +10,11 @@ module.exports = {
       return interaction.reply({ content: messages.not_allowed_close_votes, ephemeral: true })
     }
     interaction.deferUpdate()
-    interaction.client.votes = new Set()
-    await interaction.message.edit({ components: [] })
+    const description = interaction.message.embeds[0].description.split('\n')
+    description[0] = messages.votes_closed_desc
+    const tempEmbed = new EmbedBuilder(interaction.message.embeds[0])
+      .setTitle(messages.votes_closed)
+      .setDescription(description.join('\n'))
+    await interaction.message.edit({ embeds: [tempEmbed], components: [] })
   }
 }
