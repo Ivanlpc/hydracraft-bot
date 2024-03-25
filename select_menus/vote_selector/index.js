@@ -1,5 +1,6 @@
 const { ModalBuilder, TextInputStyle, ActionRowBuilder, TextInputBuilder, WebhookClient, EmbedBuilder } = require('discord.js')
 const messages = require('../../config/messages.json')
+const config = require('../../config/config.json').vote_config
 const embeds = require('../../Embeds')
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_VOTES })
@@ -33,14 +34,14 @@ module.exports = {
       filter: (i) => {
         return i.customId === 'voteModal'
       },
-      time: 10000
+      time: 60000
     }).then(async res => {
       interaction.client.votes.add(interaction.user.id)
       const embed = interaction.message.embeds[0]
       const lines = embed.description.split('\n')
       const description = lines.map(line => {
         if (line.includes(selectedOption)) {
-          const votes = line.split('▶')[1]
+          const votes = line.split(config.arrow)[1]
           return line.replace(votes, parseInt(votes) + 1)
         }
         return line
@@ -50,6 +51,13 @@ module.exports = {
       const reason = res.fields.getTextInputValue('reason') || messages.no_reason
       webhook.send({ embeds: [embeds.new_vote_embed(interaction.user.id, selectedOption, reason)] })
       await res.reply({ content: messages.vote_success, ephemeral: true })
+    }).catch(async () => {
+      const msg = await interaction.channel.send({ content: messages.vote_timeout.replace('%user%', interaction.user.id), ephemeral: true })
+      setTimeout(() => {
+        interaction.channel.messages.fetch(msg).then(msg => {
+          msg.delete()
+        })
+      }, 5000)
     })
   }
 }

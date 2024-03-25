@@ -71,13 +71,7 @@ const QUERIES = {
   UNION ALL
   SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_kicks WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
   UNION ALL
-  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`,
-  getStaffsUnbansRange: `SELECT banned_by_uuid as uuid, SUM(numero) as total FROM (SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_bans WHERE removed_by_uuid IS NOT NULL AND banned_by_uuid != removed_by_uuid AND time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
-  UNION ALL
-  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_mutes WHERE removed_by_uuid IS NOT NULL AND banned_by_uuid != removed_by_uuid AND time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
-  UNION ALL
-  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE removed_by_uuid IS NOT NULL AND banned_by_uuid != removed_by_uuid AND time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`
-
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`
 }
 
 module.exports = QUERIES

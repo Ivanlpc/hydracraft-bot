@@ -46,7 +46,7 @@ const getStaffProgressByUuid = async (uuid) => {
 
 const getStaffsUnbansRange = async (staffs, since, until) => {
   try {
-    const query = await fetchAll(QUERIES.getStaffsUnbansRange, [since, until, staffs, since, until, staffs, since, until, staffs, since, until, staffs])
+    const query = await fetchAll(QUERIES.getStaffsUnbansRange, [since, until, staffs, staffs, since, until, staffs, since, until, staffs, staffs, since, until, staffs, since, until, staffs, since, until, staffs, staffs, since, until, staffs])
     return query
   } catch (err) {
     ConsoleLogger.error(err)

@@ -264,9 +264,9 @@ const embeds = {
     const embed = new EmbedBuilder()
       .setTitle('VOTACIÓN')
       .setColor('Blue')
-    let description = 'Vota por el staff que creas que ha hecho un buen trabajo' + '\n'
+    let description = 'Vota por el staff que creas que ha hecho un buen trabajo' + '\n\n'
     for (const staff of staffs) {
-      description += '`' + staff + '`' + ' ▶ 0\n'
+      description += '`' + staff + '`' + ' ' + config.commands.staff.subcommands.vote.arrow + ' 0\n'
     }
     embed.setDescription(description)
     return embed
