@@ -73,7 +73,8 @@
           "name": "vote",
           "description": "Inicializa una votación",
           "ranks": ["group.helper"],
-          "arrow": "➡"
+          "arrow": "➡",
+          "max_time": 2
         }
       }
     },

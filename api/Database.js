@@ -94,6 +94,7 @@ const createTables = () => {
     staff_name varchar(255) NOT NULL,
     date datetime NOT NULL DEFAULT current_timestamp(),
     vote varchar(255) NOT NULL,
+    reason TINYTEXT NOT NULL,
     PRIMARY KEY(id),
     INDEX vote_indx (staff_id, panel_id),
     FOREIGN KEY (panel_id)

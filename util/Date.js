@@ -11,9 +11,7 @@ class DateUtil {
   }
 
   static convertDate (dateString) {
-    console.log(dateString)
     const aux = new Date(dateString)
-    console.log(aux)
     return `${aux.getDay()}/${aux.getMonth()}/${aux.getFullYear()}`
   }
 }

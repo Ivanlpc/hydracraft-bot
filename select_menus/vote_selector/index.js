@@ -10,13 +10,14 @@ const webhook = new WebhookClient({ url: process.env.WEBHOOK_VOTES })
 const createModal = (selectedStaff) => {
   const modal = new ModalBuilder()
     .setCustomId('voteModal')
-    .setTitle(messages.reason.replace('%staff%', selectedStaff))
+    .setTitle(messages.vote_title.replace('%time%', config.max_time))
 
   const reasonInput = new TextInputBuilder()
     .setCustomId('reason')
-    .setLabel(messages.write_reason)
+    .setLabel(messages.reason.replace('%staff%', selectedStaff))
     .setRequired(true)
     .setStyle(TextInputStyle.Paragraph)
+    .setMaxLength(255)
 
   modal.addComponents(new ActionRowBuilder().addComponents(reasonInput))
   return modal
@@ -37,7 +38,7 @@ module.exports = {
       filter: (i) => {
         return i.customId === 'voteModal'
       },
-      time: 60000
+      time: config.max_time * 60000
     }).then(async res => {
       const embed = interaction.message.embeds[0]
       const lines = embed.description.split('\n')
@@ -52,7 +53,7 @@ module.exports = {
       await interaction.message.edit({ embeds: [tempEmbed] })
       const reason = res.fields.getTextInputValue('reason') || messages.no_reason
       webhook.send({ embeds: [embeds.new_vote_embed(interaction.user.id, selectedOption, reason)] })
-      await saveVote(panelId, interaction.user.id, interaction.user.username, selectedOption)
+      await saveVote(panelId, interaction.user.id, interaction.user.username, selectedOption, reason)
       res.reply({ content: messages.vote_success, ephemeral: true })
     }).catch(async (err) => {
       Logger.error(err)

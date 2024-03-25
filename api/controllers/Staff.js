@@ -74,9 +74,12 @@ const createVotePanel = async (discord, channel, author, tag) => {
   }
 }
 
-const saveVote = async (panelId, staffId, staffName, vote) => {
+const saveVote = async (panelId, staffId, staffName, vote, reason) => {
   try {
-    await execute(QUERIES.saveVote, [panelId, staffId, staffName, vote])
+    if (reason.length > 255) {
+      reason = reason.substring(0, 255)
+    }
+    await execute(QUERIES.saveVote, [panelId, staffId, staffName, vote, reason])
   } catch (err) {
     ConsoleLogger.error(err)
     throw new Error('There was an error while trying to save the vote')
