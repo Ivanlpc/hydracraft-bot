@@ -15,7 +15,6 @@ const createPool = () => {
   })
 
   pool.on('connection', (connection) => {
-    ConsoleLogger.info('Database connection established')
     reconnectAttempts = 0
   })
 
@@ -66,7 +65,7 @@ const createTables = () => {
     id varchar(255) NOT NULL,
     joined_at datetime NOT NULL DEFAULT current_timestamp(),
     name varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-    PRIMARY KEY(id))`, [])
+    PRIMARY KEY(id))`)
   pool.query(`CREATE TABLE IF NOT EXISTS ${name}.permissions (
     guildId varchar(255) NOT NULL,
     id varchar(255) NOT NULL,
@@ -75,6 +74,30 @@ const createTables = () => {
     INDEX guilds_ind (guildId),
     FOREIGN KEY (guildId)
         REFERENCES guilds(id)
+        ON DELETE CASCADE)`)
+  pool.query(`CREATE TABLE IF NOT EXISTS ${name}.vote_panels (
+    id int NOT NULL AUTO_INCREMENT,
+    date datetime NOT NULL DEFAULT current_timestamp(),
+    discord_id varchar(255) NOT NULL,
+    channel_id varchar(255) NOT NULL,
+    author_id varchar(255) NOT NULL,
+    author_name varchar(255) NOT NULL,
+    PRIMARY KEY(id),
+    INDEX panel_indx (discord_id),
+    FOREIGN KEY (discord_id)
+        REFERENCES guilds(id)
+        ON DELETE CASCADE)`)
+  pool.query(`CREATE TABLE IF NOT EXISTS ${name}.votes (
+    id int NOT NULL AUTO_INCREMENT,
+    panel_id int NOT NULL,
+    staff_id varchar(255) NOT NULL,
+    staff_name varchar(255) NOT NULL,
+    date datetime NOT NULL DEFAULT current_timestamp(),
+    vote varchar(255) NOT NULL,
+    PRIMARY KEY(id),
+    INDEX vote_indx (staff_id, panel_id),
+    FOREIGN KEY (panel_id)
+        REFERENCES vote_panels(id)
         ON DELETE CASCADE)`)
 }
 /**
@@ -128,7 +151,7 @@ const execute = (query, params = []) => {
     return new Promise((resolve, reject) => {
       pool.query(query, params, (error, results) => {
         if (error) reject(error)
-        else resolve(results.affectedRows)
+        else resolve(results)
       })
     })
   } catch (error) {

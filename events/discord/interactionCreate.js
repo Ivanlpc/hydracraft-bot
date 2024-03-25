@@ -87,7 +87,7 @@ module.exports = {
         })
       }
     } else if (interaction.isStringSelectMenu()) {
-      const selectMenu = interaction.client.selectMenus.get(interaction.customId)
+      const selectMenu = interaction.client.selectMenus.get(interaction.customId.split(';')[0])
       if (!selectMenu) return
       try {
         await selectMenu.execute(interaction.client, interaction)

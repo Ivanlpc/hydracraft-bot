@@ -22,7 +22,7 @@ const getNameByUUID = async (uuid) => {
 const addPermission = async (id, permissionId, guildData) => {
   try {
     const query = await execute(QUERIES.addPermission, [guildData.id, id, permissionId])
-    return query > 0
+    return query.affectedRows > 0
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
@@ -33,7 +33,7 @@ const addPermission = async (id, permissionId, guildData) => {
 const removePermission = async (id, permissionId, guildData) => {
   try {
     const query = await execute(QUERIES.removePermission, [guildData.id, id, permissionId])
-    return query > 0
+    return query.affectedRows > 0
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
@@ -44,7 +44,7 @@ const removePermission = async (id, permissionId, guildData) => {
 const clearPermissions = async (id, guildData) => {
   try {
     const query = await execute(QUERIES.clearPermissions, [guildData.id, id])
-    return query > 0
+    return query.affectedRows > 0
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })

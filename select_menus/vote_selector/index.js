@@ -1,7 +1,9 @@
 const { ModalBuilder, TextInputStyle, ActionRowBuilder, TextInputBuilder, WebhookClient, EmbedBuilder } = require('discord.js')
 const messages = require('../../config/messages.json')
-const config = require('../../config/config.json').vote_config
+const config = require('../../config/config.json').commands.staff.subcommands.vote
 const embeds = require('../../Embeds')
+const Logger = require('../../util/ConsoleLogger')
+const { saveVote, hasVoted } = require('../../api/controllers/Staff')
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_VOTES })
 
@@ -24,7 +26,8 @@ module.exports = {
   enabled: true,
   customId: 'vote_selector',
   execute: async (client, interaction) => {
-    if (interaction.client.votes.has(interaction.user.id)) {
+    const panelId = await interaction.customId.split(';')[1]
+    if (await hasVoted(interaction.user.id, panelId)) {
       return interaction.reply({ content: messages.already_voted, ephemeral: true })
     }
     const selectedOption = interaction.values[0]
@@ -36,7 +39,6 @@ module.exports = {
       },
       time: 60000
     }).then(async res => {
-      interaction.client.votes.add(interaction.user.id)
       const embed = interaction.message.embeds[0]
       const lines = embed.description.split('\n')
       const description = lines.map(line => {
@@ -50,8 +52,10 @@ module.exports = {
       await interaction.message.edit({ embeds: [tempEmbed] })
       const reason = res.fields.getTextInputValue('reason') || messages.no_reason
       webhook.send({ embeds: [embeds.new_vote_embed(interaction.user.id, selectedOption, reason)] })
-      await res.reply({ content: messages.vote_success, ephemeral: true })
-    }).catch(async () => {
+      await saveVote(panelId, interaction.user.id, interaction.user.username, selectedOption)
+      res.reply({ content: messages.vote_success, ephemeral: true })
+    }).catch(async (err) => {
+      Logger.error(err)
       const msg = await interaction.channel.send({ content: messages.vote_timeout.replace('%user%', interaction.user.id), ephemeral: true })
       setTimeout(() => {
         interaction.channel.messages.fetch(msg).then(msg => {

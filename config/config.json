@@ -19,13 +19,11 @@
     "backgroundColor": "#ffffff",
     "datalabelsColor": "#000000",
     "barColor": "#8BC1F7",
-    "barColorUnbans": "#8BC1F7",
     "borderColor": "#519DE9",
     "borderWidth": 2,
     "types": {
       "staffTopSince": {
         "label": "Número de sanciones desde %date%",
-        "unbansLabel": "Número de desbans desde %date%",
         "type": "bar",
         "height": 600,
         "width": 800
@@ -44,7 +42,7 @@
       "name": "staff",
       "cooldown": 0,
       "requires_permission": true,
-      "permission_name": "Ver estadísticas de staff (/staff)",
+      "permission_name": "Comandos de staff (/staff)",
       "description": "Comandos de staff",
       "subcommands": {
         "stats": {
@@ -58,10 +56,6 @@
             "until": {
               "name": "until",
               "description": "Final (dd/mm/yyyy)"
-            },
-            "unbans": {
-              "name": "unbans",
-              "description": "Incluye desbans"
             }
           }
         },
@@ -77,7 +71,7 @@
         },
         "vote": {
           "name": "vote",
-          "description": "Vota por un staff",
+          "description": "Inicializa una votación",
           "ranks": ["group.helper"],
           "arrow": "➡"
         }

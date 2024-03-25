@@ -1,5 +1,5 @@
 const ConsoleLogger = require('../../util/ConsoleLogger')
-const { fetchAll, fetchOne } = require('../Database')
+const { fetchAll, fetchOne, execute } = require('../Database')
 const QUERIES = require('../Queries')
 const ranks = require('../../config/config.json').charts.ranks
 
@@ -64,11 +64,43 @@ const getStaffsNameByRank = async (rank) => {
   }
 }
 
+const createVotePanel = async (discord, channel, author, tag) => {
+  try {
+    const panel = await execute(QUERIES.createVotePanel, [discord, channel, author, tag])
+    return panel.insertId
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to create the vote panel')
+  }
+}
+
+const saveVote = async (panelId, staffId, staffName, vote) => {
+  try {
+    await execute(QUERIES.saveVote, [panelId, staffId, staffName, vote])
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to save the vote')
+  }
+}
+
+const hasVoted = async (userId, panelId) => {
+  try {
+    const voted = await fetchOne(QUERIES.hasVoted, [panelId, userId])
+    return voted !== null
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to check if the user has voted')
+  }
+}
+
 module.exports = {
   getStaffsUuidName,
   getTopStaffsRange,
   getStaffUuidByNick,
   getStaffProgressByUuid,
   getStaffsUnbansRange,
-  getStaffsNameByRank
+  getStaffsNameByRank,
+  createVotePanel,
+  saveVote,
+  hasVoted
 }

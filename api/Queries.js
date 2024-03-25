@@ -71,7 +71,10 @@ const QUERIES = {
   UNION ALL
   SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_kicks WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid
   UNION ALL
-  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`
+  SELECT banned_by_uuid, COUNT(*) as numero from ${bans}.litebans_warnings WHERE time > ? AND time < ? AND banned_by_uuid IN (?) GROUP BY banned_by_uuid) as X GROUP by banned_by_uuid ORDER BY total DESC`,
+  createVotePanel: `INSERT INTO ${botName}.vote_panels (discord_id, channel_id, author_id, author_name) VALUES (?, ?, ?, ?)`,
+  saveVote: `INSERT INTO ${botName}.votes (panel_id, staff_id, staff_name, vote) VALUES (?, ?, ?, ?)`,
+  hasVoted: `SELECT staff_id FROM ${botName}.votes WHERE panel_id = ? AND staff_id = ?`
 }
 
 module.exports = QUERIES

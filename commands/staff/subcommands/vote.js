@@ -2,14 +2,16 @@ const { SlashCommandSubcommandBuilder, StringSelectMenuBuilder, ActionRowBuilder
 const messages = require('../../../config/messages.json')
 const { getStaffsNameByRank } = require('../../../api/controllers/Staff')
 const Embeds = require('../../../Embeds')
+const { createVotePanel } = require('../../../api/controllers/Staff')
+const Logger = require('../../../util/ConsoleLogger')
 const command = require('../../../config/config.json').commands.staff.subcommands.vote
 
-const createSelector = (staffs) => {
+const createSelector = (staffs, panelId) => {
   const options = staffs.map(staff => ({ label: staff, value: staff }))
   const select = new ActionRowBuilder()
     .addComponents(
       new StringSelectMenuBuilder()
-        .setCustomId('vote_selector')
+        .setCustomId('vote_selector;' + panelId)
         .setPlaceholder(messages.select_staff)
         .addOptions(...options)
     )
@@ -37,9 +39,14 @@ module.exports = {
 
   async execute (interaction) {
     const currentStaffs = await getStaffsNameByRank(command.ranks)
-    const selector = createSelector(currentStaffs)
-    const button = createButton(interaction.user.id)
-    interaction.client.votes = new Set()
-    await interaction.reply({ embeds: [Embeds.vote_embed(currentStaffs)], components: [selector, button] })
+    try {
+      const panelId = await createVotePanel(interaction.guild.id, interaction.channel.id, interaction.user.id, interaction.user.username)
+      const selector = createSelector(currentStaffs, panelId)
+      const button = createButton(interaction.user.id)
+      await interaction.reply({ embeds: [Embeds.vote_embed(currentStaffs)], components: [selector, button] })
+    } catch (err) {
+      Logger.error(err)
+      await interaction.reply({ content: messages.error, ephemeral: true })
+    }
   }
 }
