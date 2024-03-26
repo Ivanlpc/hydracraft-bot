@@ -276,7 +276,7 @@ const embeds = {
     return new EmbedBuilder()
       .setTitle('NUEVO VOTO')
       .setDescription('Votado por: <@!' + author + '>\nStaff: `' + staff + '`\nRazón: ```' + reason + '```')
-      .setColor('Green')
+      .setColor('Yellow')
   }
 }
 
