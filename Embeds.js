@@ -266,7 +266,7 @@ const embeds = {
       .setColor('Blue')
     let description = 'Vota por el staff que creas que ha hecho un buen trabajo' + '\n\n'
     for (const staff of staffs) {
-      description += '`' + staff + '`' + ' ' + config.commands.staff.subcommands.vote.arrow + ' 0\n'
+      description += staff.emoji + '`0 votos (0%)`' + config.commands.staff.subcommands.vote.arrow + '`' + staff.name + '`' + ' \n'
     }
     description += '\n\n **Nota**: Las votaciones son anónimas, solo el HEAD STAFF podrá ver los votos individuales. Vota con __imparcialidad__ y __honestidad__. \n¡Gracias por tu colaboración!'
     embed.setDescription(description)

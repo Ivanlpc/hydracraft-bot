@@ -5,9 +5,10 @@ const Embeds = require('../../../Embeds')
 const { createVotePanel } = require('../../../api/controllers/Staff')
 const Logger = require('../../../util/ConsoleLogger')
 const command = require('../../../config/config.json').commands.staff.subcommands.vote
+const emojis = require('../../../util/LetterEmojis')
 
 const createSelector = (staffs, panelId) => {
-  const options = staffs.map(staff => ({ label: staff, value: staff }))
+  const options = staffs.map(staff => ({ label: staff.name, value: staff.name, emoji: { name: staff.emoji } }))
   const select = new ActionRowBuilder()
     .addComponents(
       new StringSelectMenuBuilder()
@@ -31,6 +32,12 @@ const createButton = (discordId) => {
   return button
 }
 
+const mapEmojis = (staffs) => {
+  return staffs.map((staff, index) => {
+    return { name: staff, emoji: emojis[Math.min(index, emojis.length - 1)] }
+  })
+}
+
 module.exports = {
   name: command.name,
   data: new SlashCommandSubcommandBuilder()
@@ -39,11 +46,12 @@ module.exports = {
 
   async execute (interaction) {
     const currentStaffs = await getStaffsNameByRank(command.ranks)
+    const staffs = mapEmojis(currentStaffs)
     try {
       const panelId = await createVotePanel(interaction.guild.id, interaction.channel.id, interaction.user.id, interaction.user.username)
-      const selector = createSelector(currentStaffs, panelId)
+      const selector = createSelector(staffs, panelId)
       const button = createButton(interaction.user.id)
-      await interaction.reply({ embeds: [Embeds.vote_embed(currentStaffs)], components: [selector, button] })
+      await interaction.reply({ embeds: [Embeds.vote_embed(staffs)], components: [selector, button] })
     } catch (err) {
       Logger.error(err)
       await interaction.reply({ content: messages.error, ephemeral: true })

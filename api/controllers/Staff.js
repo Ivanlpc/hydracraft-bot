@@ -96,6 +96,16 @@ const hasVoted = async (userId, panelId) => {
   }
 }
 
+const getVotes = async (panelId) => {
+  try {
+    const query = await fetchAll(QUERIES.getVotes, [panelId])
+    return query.map(vote => ({ vote: vote.vote, total: vote.total }))
+  } catch (err) {
+    ConsoleLogger.error(err)
+    throw new Error('There was an error while trying to fetch the total votes')
+  }
+}
+
 module.exports = {
   getStaffsUuidName,
   getTopStaffsRange,
@@ -105,5 +115,6 @@ module.exports = {
   getStaffsNameByRank,
   createVotePanel,
   saveVote,
-  hasVoted
+  hasVoted,
+  getVotes
 }
