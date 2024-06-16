@@ -27,7 +27,6 @@ const Server = {
       body: urlencoded,
       redirect: 'follow'
     }
-
     const response = await request(API_URL, data)
     if (!response.status) {
       ConsoleLogger.error(response)

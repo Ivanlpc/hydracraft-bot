@@ -15,6 +15,8 @@ const MySQLTrigger = {
   statement: STATEMENTS.UPDATE,
   onEvent: async (event) => {
     for (const row of event.affectedRows) {
+      if (!row.after.lastNickname || !row.before.lastNickname) return
+      if (row.after.lastNickname === null || row.before.lastNickname === null) return
       if (row.after.premiumId === null || row.before.premiumId === null) return
       if (row.after.premiumId !== row.before.premiumId) return
       if (row.after.lastNickname === row.before.lastNickname) return
