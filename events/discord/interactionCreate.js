@@ -8,7 +8,7 @@ module.exports = {
   name: Events.InteractionCreate,
   async execute (interaction) {
     if (interaction.channel.isDMBased()) return
-    if (interaction.isChatInputCommand()) {
+    if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
       const command = interaction.client.commands.get(interaction.commandName)
 
       if (!command) {

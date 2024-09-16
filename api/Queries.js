@@ -1,5 +1,6 @@
 const botName = require('../package.json').name
 const { jPremiumDatabase, pins, luckperms, bans } = require('../config/config.json')
+const { getUserPunishmentsId } = require('./controllers/Moderation')
 
 const QUERIES = {
   getLastNickname: `SELECT lastNickname FROM ${jPremiumDatabase}.user_profiles WHERE premiumId = ? OR uniqueId = ?`,
@@ -75,7 +76,10 @@ const QUERIES = {
   createVotePanel: `INSERT INTO ${botName}.vote_panels (discord_id, channel_id, author_id, author_name) VALUES (?, ?, ?, ?)`,
   saveVote: `INSERT INTO ${botName}.votes (panel_id, staff_id, staff_name, vote, reason) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE staff_id = staff_id`,
   hasVoted: `SELECT staff_id FROM ${botName}.votes WHERE panel_id = ? AND staff_id = ?`,
-  getVotes: `SELECT vote, count(*) as total FROM ${botName}.votes WHERE panel_id = ? GROUP BY vote`
+  getVotes: `SELECT vote, count(*) as total FROM ${botName}.votes WHERE panel_id = ? GROUP BY vote`,
+  getPunishmentsTypes: `SELECT id, name FROM ${botName}.punishments_type GROUP BY name`,
+  getUserPunishmentsId: `SELECT min(level, (SELECT COUNT(*) FROM ${botName}.punishments WHERE user_id = ? AND punishment_type = ?)) as level FROM ${botName}.punishments WHERE user_id = ? AND punishment_type = ? ORDER BY level DESC`,
+  getUserPunishments: `SELECT * FROM ${botName}.punishments WHERE user_id = ?`
 }
 
 module.exports = QUERIES

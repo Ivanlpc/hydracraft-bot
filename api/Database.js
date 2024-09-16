@@ -100,6 +100,25 @@ const createTables = () => {
     FOREIGN KEY (panel_id)
         REFERENCES vote_panels(id)
         ON DELETE CASCADE)`)
+  pool.query(`CREATE TABLE IF NOT EXISTS ${name}.punishments_type (
+    id int NOT NULL AUTO_INCREMENT,
+    name varchar(255) NOT NULL,
+    level int NOT NULL,
+    punishment varchar(255) NOT NULL,
+    duration varchar(255) NOT NULL,
+    PRIMARY KEY(id))`)
+  pool.query(`CREATE TABLE IF NOT EXISTS ${name}.punishments (
+    id int NOT NULL AUTO_INCREMENT,
+    type_id int NOT NULL,
+    staff_id varchar(255) NOT NULL,
+    staff_name varchar(255) NOT NULL,
+    date datetime NOT NULL DEFAULT current_timestamp(),
+    reason TINYTEXT NOT NULL,
+    PRIMARY KEY(id, date),
+    INDEX punishment_indx (staff_id, type_id),
+    FOREIGN KEY (type_id)
+        REFERENCES punishments_type(id)
+        ON DELETE CASCADE)`)
 }
 /**
  * @param {string} query

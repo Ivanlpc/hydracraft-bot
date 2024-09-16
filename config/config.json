@@ -14,7 +14,15 @@
     "noMentionRoles": []
   },
   "charts": {
-    "ranks": ["creador", "admin", "developer", "manager", "srmod", "moderador", "helper"],
+    "ranks": [
+      "creador",
+      "admin",
+      "developer",
+      "manager",
+      "srmod",
+      "moderador",
+      "helper"
+    ],
     "chart_folder": "./charts",
     "backgroundColor": "#ffffff",
     "datalabelsColor": "#000000",
@@ -72,7 +80,9 @@
         "vote": {
           "name": "vote",
           "description": "Inicializa una votación",
-          "ranks": ["group.helper"],
+          "ranks": [
+            "group.helper"
+          ],
           "arrow": "➡",
           "max_time": 2
         }
@@ -204,6 +214,35 @@
             "nick": {
               "name": "nick",
               "description": "Nick del usuario"
+            }
+          }
+        }
+      }
+    },
+    "punish": {
+      "enabled": true,
+      "name": "punish",
+      "cooldown": 30,
+      "description": "Sanciona a un usuario",
+      "requires_permission": true,
+      "permission_name": "Sancionar usuarios (/punish)",
+      "expire_time": 3600000,
+      "context": {
+        "enabled": true,
+        "name": "Sancionar usuario"
+      },
+      "subcommands": {
+        "user": {
+          "name": "user",
+          "description": "Sanciona a un usuario",
+          "args": {
+            "user": {
+              "name": "user",
+              "description": "Usuario de discord"
+            },
+            "reason": {
+              "name": "reason",
+              "description": "Razón de la sanción"
             }
           }
         }
