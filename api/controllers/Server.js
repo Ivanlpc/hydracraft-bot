@@ -1,37 +1,33 @@
-const QUERIES = require('../Queries')
 const request = require('../Requests')
-const { fetchOne } = require('../Database')
-const API_URL = require('../../config/pterodactyl.json').API_URl
+const API_URL = require('../../config/pterodactyl.json').PTERO_URL_CLIENT
+const servers = require('../../config/pterodactyl.json').servers
 const ConsoleLogger = require('../../util/ConsoleLogger')
-
-const getToken = async () => {
-  const query = await fetchOne(QUERIES.getToken, [])
-  if (query === null) throw new Error('Error while fetching token')
-  return query.token
-}
 
 const Server = {
   sendBungeecordCommand: async (command) => {
-    const token = await getToken()
+    const apiKey = process.env.PTERO_CLIENT_KEY
 
     const headers = new Headers()
-    headers.append('Content-Type', 'application/x-www-form-urlencoded')
-    headers.append('token', token)
+    headers.append('Content-Type', 'application/json')
+    headers.append('Accept', 'application/json')
+    headers.append('Authorization', 'Bearer ' + apiKey)
 
-    const urlencoded = new URLSearchParams()
-    urlencoded.append('command', command)
+    const body = {
+      command
+    }
 
     const data = {
       method: 'POST',
       headers,
-      body: urlencoded,
+      body: JSON.stringify(body),
       redirect: 'follow'
     }
-    const response = await request(API_URL, data)
-    if (!response.status) {
-      ConsoleLogger.error(response)
-      throw new Error('Error while sending Bungeecord command ' + response.message)
-    }
+    await request(API_URL + `/servers/${servers.Proxy}/command`, data).then(res => {
+      ConsoleLogger.info('Command sent')
+    }).catch(err => {
+      ConsoleLogger.error('Error sending command', err)
+      console.log(err)
+    })
   }
 }
 
