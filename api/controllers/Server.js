@@ -64,6 +64,15 @@ const Server = {
       ConsoleLogger.error(err)
       throw new Error('There was an error while trying to save the vote')
     }
+  },
+
+  removeRankPermission: async (schema, rank, permission) => {
+    try {
+      await execute(QUERIES.removeLPRankPermission.replace('%database%', schema), [rank, permission])
+    } catch (err) {
+      ConsoleLogger.error(err)
+      throw new Error('There was an error while trying to save the vote')
+    }
   }
 
 }

@@ -43,9 +43,9 @@ const MySQLTrigger = {
             const isWhitelisted = config.whitelist_nicks.some(nick => nick === nickname)
             if (!isWhitelisted) {
               const serverId = config.schemaServer[event.schema.toLowerCase()]
-              Server.removePermission(event.schema, row.after.uuid, row.after.permission)
-              Server.sendServerCommand('lp networksync', serverId)
-              Server.sendServerCommand('ipban nickname -s Por favor, reporta este bug en lugar de utilizarlo, no merece la pena grifear. Gracias', serverId)
+              Server.removePermission(event.schema, row.after.uuid, row.after.permission).then(
+                Server.sendServerCommand('lp networksync', serverId).then(
+                  Server.sendServerCommand('ipban nickname -s Por favor, reporta este bug en lugar de utilizarlo, no merece la pena grifear. Gracias', serverId)))
               webhookContent.content = `<@&${config.tagId}>`
             }
           }
