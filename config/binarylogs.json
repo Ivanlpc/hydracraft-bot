@@ -4,5 +4,17 @@
     "unban_package": "DESBANEO",
     "unmute_package": "DESMUTEO",
     "expired_reason": "#expired",
-    "Rankups": []
+    "Rankups": [],
+    "tagId": "0",
+    "whitelist": true,
+    "whitelist_nicks": [
+        "NICK1",
+        "NICK2"
+    ],
+    "schemaServer": {
+        "vyperperms": "",
+        "luckperms": "",
+        "luckpermsob": ""
+    }
+
 }

@@ -75,7 +75,8 @@ const QUERIES = {
   createVotePanel: `INSERT INTO ${botName}.vote_panels (discord_id, channel_id, author_id, author_name) VALUES (?, ?, ?, ?)`,
   saveVote: `INSERT INTO ${botName}.votes (panel_id, staff_id, staff_name, vote, reason) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE staff_id = staff_id`,
   hasVoted: `SELECT staff_id FROM ${botName}.votes WHERE panel_id = ? AND staff_id = ?`,
-  getVotes: `SELECT vote, count(*) as total FROM ${botName}.votes WHERE panel_id = ? GROUP BY vote`
+  getVotes: `SELECT vote, count(*) as total FROM ${botName}.votes WHERE panel_id = ? GROUP BY vote`,
+  removeLPPermission: 'DELETE FROM %database%.luckperms_user_permissions WHERE uuid = ? AND permission = ?'
 }
 
 module.exports = QUERIES

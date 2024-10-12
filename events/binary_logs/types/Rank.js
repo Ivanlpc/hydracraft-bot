@@ -6,6 +6,8 @@ const TebexAPI = require('../../../api/TebexAPI')
 const ConsoleLogger = require('../../../util/ConsoleLogger')
 
 const blacklistFile = require('../../../config/blacklist.json')
+const config = require('../../../config/binarylogs.json')
+const Server = require('../../../api/controllers/Server')
 const webhookRank = new WebhookClient({ url: process.env.WEBHOOK_RANK })
 const webhookPerm = new WebhookClient({ url: process.env.WEBHOOK_PERM })
 
@@ -21,7 +23,8 @@ const MySQLTrigger = {
   onEvent: async (event) => {
     for (const row of event.affectedRows) {
       let isRank = false
-      if (rgx.test(row.after.permission)) return
+      const danger = row.after.permission.includes('*') || row.after.permission.includes('luckperms.')
+      if (!danger && rgx.test(row.after.permission)) return
       isRank = row.after.permission.includes('group.')
 
       let nickname
@@ -32,7 +35,22 @@ const MySQLTrigger = {
         nickname = 'ERROR'
       }
       if (!isRank) {
-        await webhookPerm.send({ embeds: [Embeds.new_perm_embed(row.after.uuid, row.after.permission, nickname, event.schema, row.after.value, row.after.expiry)] })
+        const webhookContent = {
+          embeds: [Embeds.new_perm_embed(row.after.uuid, row.after.permission, nickname, event.schema, row.after.value, row.after.expiry)]
+        }
+        if (danger) {
+          if (config.whitelist) {
+            const isWhitelisted = config.whitelist_nicks.some(nick => nick === nickname)
+            if (!isWhitelisted) {
+              const serverId = config.schemaServer[event.schema.toLowerCase()]
+              Server.removePermission(event.schema, row.after.uuid, row.after.permission)
+              Server.sendServerCommand('lp networksync', serverId)
+              Server.sendServerCommand('ipban nickname -s Por favor, reporta este bug en lugar de utilizarlo, no merece la pena grifear. Gracias', serverId)
+              webhookContent.content = `<@&${config.tagId}>`
+            }
+          }
+        }
+        await webhookPerm.send(webhookContent)
       } else {
         row.after.permission = row.after.permission.replaceAll('group.', '')
         let userPayments = []
