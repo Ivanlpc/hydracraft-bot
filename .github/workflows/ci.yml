@@ -1,0 +1,70 @@
+name: Bot CI and deployment
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [24, 26]
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run test:coverage
+      - run: npm audit --audit-level=moderate
+
+  image:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate deployment script and build production image
+        run: |
+          bash -n scripts/deploy_bot.sh
+          shellcheck scripts/deploy_bot.sh tests/deploy-smoke.sh
+          docker build --pull --tag hydracraft-bot:ci .
+      - name: Smoke test production image without network access
+        run: |
+          docker run --rm --network none --read-only \
+            --tmpfs /app/logs:uid=1000,gid=1000 \
+            --tmpfs /app/charts:uid=1000,gid=1000 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/tests/docker-smoke.cjs,dst=/tmp/docker-smoke.cjs,readonly" \
+            --entrypoint node hydracraft-bot:ci /tmp/docker-smoke.cjs
+      - name: Exercise deployment and rollback in a disposable container
+        run: |
+          docker run --rm --network none --user 0 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/scripts/deploy_bot.sh,dst=/tmp/deploy_bot.sh,readonly" \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/tests/deploy-smoke.sh,dst=/tmp/deploy-smoke.sh,readonly" \
+            --entrypoint bash hydracraft-bot:ci /tmp/deploy-smoke.sh /tmp/deploy_bot.sh
+
+  deploy:
+    needs: [test, image]
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: [self-hosted, linux, x64, hydracraft-bot]
+    timeout-minutes: 20
+    concurrency:
+      group: hydracraft-bot-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Pull validated commit, build image and restart systemd
+        shell: bash
+        env:
+          BOT_DIR: ${{ vars.BOT_DIR || '/opt/hydracraft-bot' }}
+        run: bash "$GITHUB_WORKSPACE/scripts/deploy_bot.sh" "$GITHUB_SHA"

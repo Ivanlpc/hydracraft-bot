@@ -27,7 +27,7 @@ const Requests = (input, init) => {
     })
   } catch (error) {
     ConsoleLogger.error('[request][Error]: ', error)
-    throw new Error('failed to request API')
+    throw new Error('failed to request API', { cause: error })
   }
 }
 

@@ -17,14 +17,15 @@ const MySQLTrigger = {
   onEvent: async (event) => {
     for (const row of event.affectedRows) {
       const danger = row.after.permission.includes('*') || row.after.permission.includes('luckperms.')
-      if (!danger && rgx.test(row.after.permission)) return
+      if (!danger && rgx.test(row.after.permission)) continue
 
       const webhookContent = {
         embeds: [Embeds.new_perm_embed('NULL', row.after.permission, row.after.name, event.schema, row.after.value, row.after.expiry)]
       }
       if (danger) {
         const serverId = config.schemaServer[event.schema.toLowerCase()]
-        Server.removeRankPermission(event.schema, row.after.name, row.after.permission).then(Server.sendServerCommand('lp networksync', serverId))
+        await Server.removeRankPermission(event.schema, row.after.name, row.after.permission)
+        await Server.sendServerCommand('lp networksync', serverId)
         webhookContent.content = `<@&${config.tagId}>`
       }
       await webhookPerm.send(webhookContent)

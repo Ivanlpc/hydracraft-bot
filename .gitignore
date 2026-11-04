@@ -1,7 +1,7 @@
 node_modules
-package-lock.json
 /logs
 pnpm-lock.yaml
 .env
 Websender
 charts
+coverage

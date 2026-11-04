@@ -1,0 +1,6 @@
+{
+  "bungeecord_target": "Proxy",
+  "targets": {
+    "Proxy": { "env_prefix": "AGENT_PROXY" }
+  }
+}

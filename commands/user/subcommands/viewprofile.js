@@ -34,7 +34,7 @@ module.exports = {
       userData.firstSeen = DateUtil.convertDate(userData.firstSeen)
     }
     if (userData.lastSeen !== null) {
-      userData.lastSeen = DateUtil.convertDate(userData.firstSeen)
+      userData.lastSeen = DateUtil.convertDate(userData.lastSeen)
     }
     return await interaction.reply({
       embeds: [Embeds.userProfile(userData)],

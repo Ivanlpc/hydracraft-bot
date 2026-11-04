@@ -22,7 +22,7 @@ module.exports = {
     const date = interaction.options.getString(command.args.since.name, true)
     const until = interaction.options.getString(command.args.until.name, false)
     const timestamp = DateUtil.parseDate(date)
-    const timestampUntil = DateUtil.parseDate(until) || new Date().valueOf()
+    const timestampUntil = until ? DateUtil.parseDate(until) : Date.now()
 
     if (!timestamp || (until && (!timestampUntil || timestampUntil < timestamp))) {
       return interaction.reply({
@@ -36,7 +36,6 @@ module.exports = {
     const stats = await getTopStaffsRange(staffUuids, timestamp, timestampUntil)
     const usernames = []
     const counts = []
-    let chartPath = ''
 
     for (const staff of stats) {
       const username = currentStaffs.find(x => x.uuid === staff.uuid).username
@@ -44,7 +43,7 @@ module.exports = {
       counts.push(staff.count)
     }
 
-    chartPath = await createTopStaffsSinceChart(usernames, counts, date, until)
+    const chartPath = await createTopStaffsSinceChart(usernames, counts, date, until)
     await interaction.reply({
       files: [chartPath]
     })

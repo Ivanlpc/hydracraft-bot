@@ -27,6 +27,7 @@ module.exports = {
     } catch (err) {
       ConsoleLogger.error(`Error executing /${command.name} ${interaction.options.getSubcommand()}`)
       ConsoleLogger.error(err)
+      throw err
     }
   }
 }

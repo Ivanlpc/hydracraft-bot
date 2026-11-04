@@ -1,5 +1,7 @@
 const { fetchOne, fetchAll, execute } = require('../Database')
 const QUERIES = require('../Queries')
+const { randomInt } = require('node:crypto')
+const { validateNickname } = require('../../util/Minecraft')
 const ConsoleLogger = require('../../util/ConsoleLogger')
 const binaryLogsConfig = require('../../config/binarylogs.json')
 const passwordLength = require('../../config/config.json').commands.user.subcommands.changepassword.password_length
@@ -26,7 +28,7 @@ const addPermission = async (id, permissionId, guildData) => {
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
-    throw new Error('There was an error while trying to add the permission')
+    throw new Error('There was an error while trying to add the permission', { cause: err })
   }
 }
 
@@ -37,7 +39,7 @@ const removePermission = async (id, permissionId, guildData) => {
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
-    throw new Error('There was an error while trying to remove the permission')
+    throw new Error('There was an error while trying to remove the permission', { cause: err })
   }
 }
 
@@ -48,52 +50,57 @@ const clearPermissions = async (id, guildData) => {
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
-    throw new Error('There was an error while trying to clear permissions')
+    throw new Error('There was an error while trying to clear permissions', { cause: err })
   }
 }
 
 const getAllowedIds = async (guildId, permissionId) => {
-  let ids = []
+  let ids
   try {
     ids = await fetchAll(QUERIES.getAllowedIds, [guildId, permissionId])
     return ids.map(elem => elem.id)
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch the IDs ' + guildId + ' ' + permissionId)
+    throw new Error('There was an error while trying to fetch the IDs ' + guildId + ' ' + permissionId, { cause: err })
   }
 }
 
 const getIDPermissions = async (id, guildData) => {
-  let permissions = []
+  let permissions
   try {
     permissions = await fetchAll(QUERIES.getPermissionsOfId, [guildData.id, id])
     return permissions.map(elem => elem.permission_node)
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
-    throw new Error('There was an error while trying to fetch the IDs ' + guildData.id + ' ' + id)
+    throw new Error('There was an error while trying to fetch the IDs ' + guildData.id + ' ' + id, { cause: err })
   }
 }
 
 const getNodeIds = async (permissionNode, guildData) => {
-  let ids = []
+  let ids
   try {
     ids = await fetchAll(QUERIES.getPermissionsNode, [guildData.id, permissionNode])
     return ids
   } catch (err) {
     ConsoleLogger.error(err)
     Guild.newGuild({ id: guildData.id, name: guildData.name })
-    throw new Error('There was an error while trying to fetch the IDs ' + guildData.id + ' ' + permissionNode)
+    throw new Error('There was an error while trying to fetch the IDs ' + guildData.id + ' ' + permissionNode, { cause: err })
   }
 }
 
 const isStaff = async (nickname) => {
   try {
-    const query = await fetchOne(QUERIES.isStaff, [nickname])
-    if (query !== null) return true
-    else return false
+    const profile = await fetchOne(QUERIES.getUserData, [nickname])
+    if (profile === null) return false
+    const uuids = [profile.uniqueId, profile.premiumId]
+      .filter(uuid => typeof uuid === 'string' && uuid.length > 0)
+      .map(uuid => uuid.replaceAll('-', ''))
+    if (uuids.length === 0) throw new Error('Account has no UUID to verify staff status')
+    return await fetchOne(QUERIES.isStaff, [uuids]) !== null
   } catch (err) {
     ConsoleLogger.error(err)
+    throw new Error('Unable to verify staff status', { cause: err })
   }
 }
 
@@ -110,7 +117,7 @@ const validatePayments = (payments, stringValidation) => {
 }
 
 const filterPayments = (payments) => {
-  if (payments === null) return []
+  if (!Array.isArray(payments)) return []
   else {
     const today = Date.now()
     return payments.filter(payment => today - (payment.time * 1000) < binaryLogsConfig.max_payment_time)
@@ -121,7 +128,7 @@ const generatePassword = (length) => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let password = ''
   for (let i = 0; i < length; ++i) {
-    password += charset.charAt(Math.floor(Math.random() * charset.length))
+    password += charset.charAt(randomInt(charset.length))
   }
   return password
 }
@@ -139,7 +146,7 @@ const hasPassword = (userData) => {
 const createPassword = async (nickname) => {
   const password = generatePassword(passwordLength)
   try {
-    await Server.sendBungeecordCommand(`forcecreatepassword ${nickname} ${password}`)
+    await Server.sendBungeecordCommand(`forcecreatepassword ${validateNickname(nickname)} ${password}`)
     return password
   } catch (err) {
     ConsoleLogger.error(err)
@@ -150,7 +157,7 @@ const createPassword = async (nickname) => {
 const updatePassword = async (nickname) => {
   const password = generatePassword(passwordLength)
   try {
-    await Server.sendBungeecordCommand(`forcechangepassword ${nickname} ${password}`)
+    await Server.sendBungeecordCommand(`forcechangepassword ${validateNickname(nickname)} ${password}`)
     return password
   } catch (err) {
     ConsoleLogger.error(err)
@@ -164,7 +171,7 @@ const isPremium = (userData) => {
 
 const fixpremium = async (nickname) => {
   try {
-    await Server.sendBungeecordCommand(`forcePurgeUserProfile ${nickname}`)
+    await Server.sendBungeecordCommand(`forcePurgeUserProfile ${validateNickname(nickname)}`)
     return true
   } catch (err) {
     ConsoleLogger.error(err)
@@ -174,7 +181,7 @@ const fixpremium = async (nickname) => {
 
 const mergepremium = async (newnick, oldnick) => {
   try {
-    await Server.sendBungeecordCommand(`forcemergepremiumuserprofile ${newnick} ${oldnick}`)
+    await Server.sendBungeecordCommand(`forcemergepremiumuserprofile ${validateNickname(newnick)} ${validateNickname(oldnick)}`)
     return true
   } catch (err) {
     ConsoleLogger.error(err)

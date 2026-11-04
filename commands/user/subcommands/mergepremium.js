@@ -1,4 +1,5 @@
 const { SlashCommandSubcommandBuilder, ActionRowBuilder, ButtonBuilder, WebhookClient } = require('discord.js')
+const confirm = require('../../../util/Confirmation')
 const DiscordLogger = require('../../../util/DiscordLogger')
 const { isStaff, getUserData, isPremium, mergepremium, updatePaymentNickname } = require('../../../api/controllers/User')
 const Embeds = require('../../../Embeds')
@@ -59,73 +60,61 @@ module.exports = {
         ephemeral: true
       })
     }
-    const filter = (buttonInteraction) => {
-      if (buttonInteraction.user.id === interaction.user.id) return true
-      return buttonInteraction.reply({ content: 'No puedes reaccionar a este mensaje', ephemeral: true })
-    }
-    const Collector = interaction.channel.createMessageComponentCollector({
-      filter,
-      max: 1,
-      time: 10000
-    })
-    await interaction.reply({
+    const result = await confirm(interaction, {
       embeds: [Embeds.mergepremium_confirmation_embed(newnick, oldnick)],
       components: [new ActionRowBuilder().addComponents([button, cancel])]
     })
-    Collector.on('end', async (collected) => {
-      if (collected.size === 0) {
+    if (!result) {
+      await interaction.editReply({
+        content: messages.command_cancelled,
+        components: [],
+        embeds: [],
+        ephemeral: true
+      })
+      return interaction.followUp({
+        content: messages.command_timeout,
+        ephemeral: true
+      })
+    }
+    if (result.customId === 'yes') {
+      const success = await mergepremium(newnick, oldnick)
+      if (success) {
         await interaction.editReply({
-          content: messages.command_cancelled,
+          content: messages.mergepremium_success.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
           components: [],
-          embeds: [],
-          ephemeral: true
+          embeds: []
         })
-        return interaction.followUp({
-          content: messages.command_timeout,
-          ephemeral: true
-        })
-      }
-      const result = collected.first()
-      if (result.customId === 'yes') {
-        const success = await mergepremium(newnick, oldnick)
-        if (success) {
-          await interaction.editReply({
-            content: messages.mergepremium_success.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
-            components: [],
-            embeds: []
-          })
-          const update = await updatePaymentNickname(oldnick, newnick)
-          if (update) {
-            await interaction.followUp({
-              content: messages.updatedPayments.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
-              ephemeral: false
-            })
-          } else {
-            await interaction.followUp({
-              content: messages.updatedPayments_error.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
-              ephemeral: false
-            })
-          }
-          const images = await DiscordLogger.getImagesFromChannel(interaction.channel)
-          return await DiscordLogger.sendImagesToWebhook(webhook, {
-            images,
-            embeds: [Embeds.log_mergepremium_embed(interaction.member, newnick, oldnick)]
+        const update = await updatePaymentNickname(oldnick, newnick)
+        if (update) {
+          await interaction.followUp({
+            content: messages.updatedPayments.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
+            ephemeral: false
           })
         } else {
-          return interaction.editReply({
-            content: messages.mergepremium_error.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
-            components: [],
-            embeds: []
+          await interaction.followUp({
+            content: messages.updatedPayments_error.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
+            ephemeral: false
           })
         }
+        const images = await DiscordLogger.getImagesFromChannel(interaction.channel)
+        return await DiscordLogger.sendImagesToWebhook(webhook, {
+          images,
+          embeds: [Embeds.log_mergepremium_embed(interaction.member, newnick, oldnick)]
+        })
       } else {
         return interaction.editReply({
-          content: messages.command_cancelled,
+          content: messages.mergepremium_error.replaceAll('%oldnick%', oldnick).replaceAll('%newnick%', newnick),
           components: [],
-          embeds: [],
-          ephemeral: true
+          embeds: []
         })
       }
-    })
+    } else {
+      return interaction.editReply({
+        content: messages.command_cancelled,
+        components: [],
+        embeds: [],
+        ephemeral: true
+      })
+    }
   }
 }

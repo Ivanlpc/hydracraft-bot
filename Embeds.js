@@ -252,8 +252,8 @@ const embeds = {
       .setThumbnail(config.TRANSACTION_AVATAR_URL + data.lastNickname)
       .setColor(data.premiumId !== null ? 'Green' : 'Yellow')
       .addFields(
-        { name: 'Fecha de registro', value: '```' + data.firstSeen !== null ? new Date(data.firstSeen).toLocaleDateString() : 'No disponible' + '```', inline: true },
-        { name: 'Última vez que se conectó', value: '```' + data.lastSeen !== null ? new Date(data.lastSeen).toLocaleDateString() : 'No disponible' + '```', inline: true },
+        { name: 'Fecha de registro', value: '```' + (data.firstSeen ?? 'No disponible') + '```', inline: true },
+        { name: 'Última vez que se conectó', value: '```' + (data.lastSeen ?? 'No disponible') + '```', inline: true },
         { name: 'Nick', value: '```' + data.lastNickname + '```' },
         { name: 'Premium', value: data.premiumId !== null ? '```SI```' : '```NO```' },
         { name: 'Última IP', value: '```' + (data.lastAddress !== null ? data.lastAddress : 'No disponible') + '```' },

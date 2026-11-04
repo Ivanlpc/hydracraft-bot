@@ -4,11 +4,10 @@ class DiscordLogger {
   static async getImagesFromChannel (channel) {
     const channelMessages = await channel.messages.fetch({ limit: maxMessages })
 
-    const imageMessages = channelMessages.filter(message => message.attachments.size > 0 && message.attachments.some(attachment => attachment.contentType.includes('image')))
     const urls = []
-    for (const message of imageMessages.values()) {
+    for (const message of channelMessages.values()) {
       for (const image of message.attachments.values()) {
-        urls.push(image)
+        if (image.contentType?.startsWith('image/')) urls.push(image)
       }
     }
     return urls

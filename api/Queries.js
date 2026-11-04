@@ -15,7 +15,7 @@ const QUERIES = {
   unLinkAccount: `UPDATE ${jPremiumDatabase}.user_profiles SET discord = NULL where discord = ? AND uniqueId = ?`,
   getAccounts: `SELECT uniqueId, lastNickname FROM ${jPremiumDatabase}.user_profiles WHERE discord = ?`,
   getAccountInformation: `SELECT uniqueId, lastNickname, lastAddress, lastServer, firstAddress, firstSeen, premiumId FROM ${jPremiumDatabase}.user_profiles WHERE discord = ? AND uniqueId = ?`,
-  isStaff: `SELECT * FROM ${pins}.PinCodes WHERE uuid = ?`,
+  isStaff: `SELECT * FROM ${pins}.PinCodes WHERE REPLACE(uuid, '-', '') IN (?)`,
   getUserData: `SELECT * FROM ${jPremiumDatabase}.user_profiles WHERE lastNickname = ?`,
   getToken: `SELECT token FROM ${botName}.tokens`,
   getStaffUuidByNick: `SELECT uuid FROM ${luckperms}.luckperms_players WHERE username = ?`,

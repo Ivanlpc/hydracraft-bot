@@ -2,7 +2,6 @@ const path = require('path')
 const { SlashCommandBuilder } = require('discord.js')
 const ConsoleLogger = require('../../util/ConsoleLogger')
 const CommandManager = require('../../CommandManager')
-const messages = require('../../config/messages.json')
 const allCommands = require('../../config/config.json').commands
 const command = require('../../config/config.json').commands.perm
 
@@ -48,6 +47,7 @@ module.exports = {
     } catch (err) {
       ConsoleLogger.error(`Error executing /${command.name} ${interaction.options.getSubcommand()}`)
       ConsoleLogger.error(err)
+      throw err
     }
   }
 }

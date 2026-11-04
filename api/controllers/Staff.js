@@ -10,7 +10,7 @@ const getStaffsUuidName = async () => {
     return query.map(staff => ({ uuid: staff.uuid, username: staff.username }))
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch the staffs uuids')
+    throw new Error('There was an error while trying to fetch the staffs uuids', { cause: err })
   }
 }
 
@@ -20,7 +20,7 @@ const getStaffUuidByNick = async (nick) => {
     return query.uuid
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch getStaffUuidByNick ' + nick)
+    throw new Error('There was an error while trying to fetch getStaffUuidByNick ' + nick, { cause: err })
   }
 }
 
@@ -30,7 +30,7 @@ const getTopStaffsRange = async (staffs, since, until) => {
     return query.map(staff => ({ uuid: staff.uuid, count: staff.total }))
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch getTopStaffsSince ' + since)
+    throw new Error('There was an error while trying to fetch getTopStaffsSince ' + since, { cause: err })
   }
 }
 
@@ -40,7 +40,7 @@ const getStaffProgressByUuid = async (uuid) => {
     return query
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch getStaffProgressByUuid ' + uuid)
+    throw new Error('There was an error while trying to fetch getStaffProgressByUuid ' + uuid, { cause: err })
   }
 }
 
@@ -50,7 +50,7 @@ const getStaffsUnbansRange = async (staffs, since, until) => {
     return query
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch getStaffsUnbans ' + since + ' ' + until)
+    throw new Error('There was an error while trying to fetch getStaffsUnbans ' + since + ' ' + until, { cause: err })
   }
 }
 
@@ -60,7 +60,7 @@ const getStaffsNameByRank = async (rank) => {
     return query.map(staff => staff.username)
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch getStaffsNameByRank ' + rank)
+    throw new Error('There was an error while trying to fetch getStaffsNameByRank ' + rank, { cause: err })
   }
 }
 
@@ -70,7 +70,7 @@ const createVotePanel = async (discord, channel, author, tag) => {
     return panel.insertId
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to create the vote panel')
+    throw new Error('There was an error while trying to create the vote panel', { cause: err })
   }
 }
 
@@ -82,7 +82,7 @@ const saveVote = async (panelId, staffId, staffName, vote, reason) => {
     await execute(QUERIES.saveVote, [panelId, staffId, staffName, vote, reason])
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to save the vote')
+    throw new Error('There was an error while trying to save the vote', { cause: err })
   }
 }
 
@@ -92,7 +92,7 @@ const hasVoted = async (userId, panelId) => {
     return voted !== null
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to check if the user has voted')
+    throw new Error('There was an error while trying to check if the user has voted', { cause: err })
   }
 }
 
@@ -102,7 +102,7 @@ const getVotes = async (panelId) => {
     return query.map(vote => ({ vote: vote.vote, total: vote.total }))
   } catch (err) {
     ConsoleLogger.error(err)
-    throw new Error('There was an error while trying to fetch the total votes')
+    throw new Error('There was an error while trying to fetch the total votes', { cause: err })
   }
 }
 

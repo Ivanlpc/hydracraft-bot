@@ -127,8 +127,7 @@ const TebexAPI = {
     }
     const res = await request(url, requestOptions)
     if ('error_code' in res) return res
-    const giftcard = res.data.filter(elem => elem.note.split(':')[1] === user)
-    giftcard.filter(elem => !elem.void)
+    const giftcard = res.data.filter(elem => elem.note?.split(':')[1] === user && !elem.void)
     if (giftcard.length > 0) return giftcard
     else {
       return {
@@ -138,7 +137,7 @@ const TebexAPI = {
     }
   },
   getLastPaymentFromUser: async (token, user) => {
-    const payments = await TebexAPI.getPaymentsFromUser(token, user)
+    const payments = await TebexAPI.getUserPaymentsFromNickname(token, user)
     if ('error_code' in payments) return null
     if (payments.payments.length <= 0) return null
     const payment = await TebexAPI.getPaymentFromId(token, payments.payments[0].txn_id)

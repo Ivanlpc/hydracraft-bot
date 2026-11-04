@@ -8,6 +8,7 @@ const ConsoleLogger = require('../../../util/ConsoleLogger')
 const blacklistFile = require('../../../config/blacklist.json')
 const config = require('../../../config/binarylogs.json')
 const Server = require('../../../api/controllers/Server')
+const { validateNickname } = require('../../../util/Minecraft')
 const webhookRank = new WebhookClient({ url: process.env.WEBHOOK_RANK })
 const webhookPerm = new WebhookClient({ url: process.env.WEBHOOK_PERM })
 
@@ -22,10 +23,10 @@ const MySQLTrigger = {
   statement: STATEMENTS.INSERT,
   onEvent: async (event) => {
     for (const row of event.affectedRows) {
-      let isRank = false
+
       const danger = row.after.permission.includes('*') || row.after.permission.includes('luckperms.')
-      if (!danger && rgx.test(row.after.permission)) return
-      isRank = row.after.permission.includes('group.')
+      if (!danger && rgx.test(row.after.permission)) continue
+      const isRank = row.after.permission.includes('group.')
 
       let nickname
       try {
@@ -43,9 +44,9 @@ const MySQLTrigger = {
             const isWhitelisted = config.whitelist_nicks.some(nick => nick === nickname)
             if (!isWhitelisted) {
               const serverId = config.schemaServer[event.schema.toLowerCase()]
-              Server.removePermission(event.schema, row.after.uuid, row.after.permission).then(
-                Server.sendServerCommand('lp networksync', serverId).then(
-                  Server.sendServerCommand('ipban nickname -s Por favor, reporta este bug en lugar de utilizarlo, no merece la pena grifear. Gracias', serverId)))
+              await Server.removePermission(event.schema, row.after.uuid, row.after.permission)
+              await Server.sendServerCommand('lp networksync', serverId)
+              await Server.sendServerCommand(`ipban ${validateNickname(nickname)} -s Por favor, reporta este bug en lugar de utilizarlo, no merece la pena grifear. Gracias`, serverId)
               webhookContent.content = `<@&${config.tagId}>`
             }
           }
@@ -53,15 +54,14 @@ const MySQLTrigger = {
         await webhookPerm.send(webhookContent)
       } else {
         row.after.permission = row.after.permission.replaceAll('group.', '')
-        let userPayments = []
+
         try {
           let valid
           if (nickname !== 'ERROR') {
-            userPayments = await TebexAPI.getUserPaymentsFromNickname(process.env.TEBEX_TOKEN, nickname)
+            const userPayments = await TebexAPI.getUserPaymentsFromNickname(process.env.TEBEX_TOKEN, nickname)
             const todayPaymentsID = filterPayments(userPayments.payments)
-            const promises = todayPaymentsID.map(id => TebexAPI.getPaymentFromId(process.env.TEBEX_TOKEN, id))
-            let todayPaymentsData = []
-            todayPaymentsData = await Promise.all([promises])
+            const promises = todayPaymentsID.map(payment => TebexAPI.getPaymentFromId(process.env.TEBEX_TOKEN, payment.txn_id))
+            const todayPaymentsData = await Promise.all(promises)
             valid = validatePayments(todayPaymentsData, row.after.permission)
           } else {
             valid = null

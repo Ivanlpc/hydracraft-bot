@@ -18,23 +18,26 @@ class CommandManager {
           { body: commands })
         ConsoleLogger.info(`${COLOR.WHITE}Registered ${COLOR.GREEN}${data.length} ${COLOR.WHITE}commands in guild ${guildId}`)
       }
+      return true
     } catch (error) {
       ConsoleLogger.error(error)
+      return false
     }
   }
 
   static async reloadCommand (client, fileName, commandName) {
     ConsoleLogger.info(`Reloading ${commandName} command`)
-    delete require.cache[require.resolve(`./commands/${fileName}`)]
     try {
-      client.commands.delete(fileName)
       const index = client.commands_json.findIndex(elem => elem.name === commandName)
-      if (!index) throw new Error('Unable to find the index of ' + commandName)
-      client.commands_json.splice(index, 1)
-      const newCommand = await require(`./commands/${fileName}`)
-      client.commands_json.push(newCommand.data.toJSON())
+      if (index === -1) throw new Error('Unable to find the index of ' + commandName)
+      delete require.cache[require.resolve(`./commands/${fileName}`)]
+      const newCommand = require(`./commands/${fileName}`)
+      const commands = client.commands_json.slice()
+      commands[index] = newCommand.data.toJSON()
+      if (!await this.registerCommands(commands)) return false
+      client.commands_json = commands
+      client.commands.delete(commandName)
       client.commands.set(newCommand.data.name, newCommand)
-      this.registerCommands(client.commands_json)
       return true
     } catch (error) {
       ConsoleLogger.error(error)

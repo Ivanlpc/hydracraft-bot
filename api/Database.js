@@ -14,7 +14,7 @@ const createPool = () => {
     password: process.env.DATABASE_PASSWORD
   })
 
-  pool.on('connection', (connection) => {
+  pool.on('connection', () => {
     reconnectAttempts = 0
   })
 
