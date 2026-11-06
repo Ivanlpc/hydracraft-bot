@@ -1,8 +1,8 @@
 # Despliegue automático con Docker
 
-Cada push a `main` ejecuta CI y, si pasa, construye una imagen por SHA y sustituye
+Cada push a `master` ejecuta CI y, si pasa, construye una imagen por SHA y sustituye
 el contenedor `hydracraft-bot`. Un commit local necesita un push para activar
-Actions. También admite ejecución manual del workflow sobre `main`.
+Actions. También admite ejecución manual del workflow sobre `master`.
 
 El bot utiliza únicamente Docker, con `--restart unless-stopped` para recuperarse
 tras caídas y reinicios del host. No necesita una unidad systemd ni sudo durante
@@ -50,7 +50,7 @@ sudo systemctl disable --now hydracraft-bot.service
 ```
 
 La unidad y sus permisos sudo dejan de utilizarse. Ejecuta el workflow manualmente
-en `main` o haz push a `main` para realizar el primer despliegue.
+en `master` o haz push a `master` para realizar el primer despliegue.
 Para cargar cambios posteriores del `.env`, vuelve a ejecutar el workflow:
 reiniciar el contenedor existente no recarga las variables.
 
@@ -60,7 +60,7 @@ El script construye antes de detener el contenedor anterior. Después lo detiene
 lo elimina y crea otro con la nueva imagen y los mismos montajes. Hay una breve
 interrupción durante la sustitución. Los despliegues se serializan, usan un
 bloqueo en `${TMPDIR:-/tmp}/hydracraft-bot-deploy.lock`, fuera del checkout.
-El job descarga `main` y omite el despliegue si su SHA ya no coincide con el commit
+El job descarga `master` y omite el despliegue si su SHA ya no coincide con el commit
 que pasó CI. Acepta el checkout con HEAD separado que utiliza Actions.
 
 Comprueba durante al menos diez segundos que el contenedor sigue funcionando con

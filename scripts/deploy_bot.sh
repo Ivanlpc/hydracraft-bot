@@ -82,7 +82,7 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 
 if [[ "$(git rev-parse HEAD)" != "$expected_sha" ]]; then
-  echo 'Skipping a superseded workflow: main no longer matches its validated commit'
+  echo 'Skipping a superseded workflow: master no longer matches its validated commit'
   exit 0
 fi
 [[ -z "$(git status --porcelain --untracked-files=all)" ]] || { echo 'The Actions checkout has local changes; refusing to build it' >&2; exit 1; }

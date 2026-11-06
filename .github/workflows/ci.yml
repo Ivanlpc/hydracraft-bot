@@ -53,7 +53,7 @@ jobs:
 
   deploy:
     needs: [test, image]
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: [self-hosted, linux, x64, hydracraft-bot]
     timeout-minutes: 20
     concurrency:
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-          ref: main
+          ref: master
       - name: Build validated Actions checkout and replace Docker container
         shell: bash
         run: bash "$GITHUB_WORKSPACE/scripts/deploy_bot.sh" "$GITHUB_SHA"
