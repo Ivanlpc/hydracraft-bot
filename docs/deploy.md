@@ -11,7 +11,7 @@ el despliegue.
 ## Preparación
 
 Requiere Linux, Docker Engine, Git, Bash y flock. Instala un runner de este
-repositorio con las etiquetas `self-hosted`, `linux`, `x64`, `hydracraft-bot`.
+repositorio con las etiquetas `self-hosted`, `linux`, `x64`.
 Su usuario necesita acceso a Docker. Actions descarga el repositorio privado en
 `GITHUB_WORKSPACE` usando su token automático con permiso `contents: read`.
 No necesitas un clon en `/opt/hydracraft-bot`, una variable `BOT_DIR`, una deploy

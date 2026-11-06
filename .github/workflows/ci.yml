@@ -54,7 +54,7 @@ jobs:
   deploy:
     needs: [test, image]
     if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    runs-on: [self-hosted, linux, x64, hydracraft-bot]
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 20
     concurrency:
       group: hydracraft-bot-production
