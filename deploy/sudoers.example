@@ -1,2 +1,0 @@
-# Replace github-runner with the user running the dedicated Actions runner.
-github-runner ALL=(root) NOPASSWD: /usr/bin/systemctl restart hydracraft-bot.service, /usr/bin/systemctl reset-failed hydracraft-bot.service

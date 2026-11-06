@@ -63,8 +63,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - name: Pull validated commit, build image and restart systemd
+          ref: main
+      - name: Build validated Actions checkout and replace Docker container
         shell: bash
-        env:
-          BOT_DIR: ${{ vars.BOT_DIR || '/opt/hydracraft-bot' }}
         run: bash "$GITHUB_WORKSPACE/scripts/deploy_bot.sh" "$GITHUB_SHA"

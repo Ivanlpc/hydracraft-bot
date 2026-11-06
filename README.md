@@ -39,7 +39,8 @@ This project involves a Discord bot implemented in JavaScript, designed to facil
 ## Installation
 
 For automatic production deployment using a self-hosted GitHub Actions runner,
-Docker and systemd, follow [the deployment guide](docs/deploy.md).
+Docker, follow [the deployment guide](docs/deploy.md). Each validated push to main
+builds a new image and replaces the running container.
 
 1. Clone the repository:
    ```bash
