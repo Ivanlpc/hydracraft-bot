@@ -59,14 +59,45 @@ jobs:
       - name: Build image
         run: docker build --pull --tag hydracraft-bot:latest .
       - name: Create runtime environment
+        shell: bash
         env:
-          BOT_ENV: ${{ secrets.BOT_ENV }}
+          TOKEN: ${{ secrets.TOKEN }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          GUILD_ID: ${{ secrets.GUILD_ID }}
+          TEBEX_TOKEN: ${{ secrets.TEBEX_TOKEN }}
+          AGENT_PROXY_URL: ${{ secrets.AGENT_PROXY_URL }}
+          AGENT_PROXY_ID: ${{ secrets.AGENT_PROXY_ID }}
+          AGENT_PROXY_PROCESS_ID: ${{ secrets.AGENT_PROXY_PROCESS_ID }}
+          AGENT_PROXY_JWT_SECRET: ${{ secrets.AGENT_PROXY_JWT_SECRET }}
+          AGENT_PROXY_ORIGIN: ${{ secrets.AGENT_PROXY_ORIGIN }}
+          AGENT_JWT_ISSUER: ${{ secrets.AGENT_JWT_ISSUER }}
+          AGENT_JWT_AUDIENCE: ${{ secrets.AGENT_JWT_AUDIENCE || 'java-node-agent' }}
+          AGENT_JWT_SUBJECT: ${{ secrets.AGENT_JWT_SUBJECT || 'hydracraft-bot' }}
+          AGENT_TIMEOUT_MS: ${{ secrets.AGENT_TIMEOUT_MS || '10000' }}
+          WEBHOOK_ACTION: ${{ secrets.WEBHOOK_ACTION }}
+          WEBHOOK_UNBAN: ${{ secrets.WEBHOOK_UNBAN }}
+          WEBHOOK_UNBAN2: ${{ secrets.WEBHOOK_UNBAN2 }}
+          WEBHOOK_RANK: ${{ secrets.WEBHOOK_RANK }}
+          WEBHOOK_UNMUTE: ${{ secrets.WEBHOOK_UNMUTE }}
+          WEBHOOK_UNMUTE2: ${{ secrets.WEBHOOK_UNMUTE2 }}
+          WEBHOOK_PERM: ${{ secrets.WEBHOOK_PERM }}
+          WEBHOOK_HISTORY: ${{ secrets.WEBHOOK_HISTORY }}
+          WEBHOOK_CHANGEPASSWORD: ${{ secrets.WEBHOOK_CHANGEPASSWORD }}
+          WEBHOOK_FIXPREMIUM: ${{ secrets.WEBHOOK_FIXPREMIUM }}
+          WEBHOOK_MERGEPREMIUM: ${{ secrets.WEBHOOK_MERGEPREMIUM }}
+          WEBHOOK_NICKNAME_UPDATE: ${{ secrets.WEBHOOK_NICKNAME_UPDATE }}
+          WEBHOOK_VOTES: ${{ secrets.WEBHOOK_VOTES }}
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: |
-          test -n "$BOT_ENV" || { echo 'Configure the BOT_ENV secret in GitHub Actions'; exit 1; }
+          test -n "$TOKEN" || { echo 'Configure the TOKEN secret in GitHub Actions'; exit 1; }
           umask 077
           touch "$BOT_HOME/.env"
           chmod 600 "$BOT_HOME/.env"
-          printf '%s\n' "$BOT_ENV" > "$BOT_HOME/.env"
+          for key in TOKEN CLIENT_ID GUILD_ID TEBEX_TOKEN AGENT_PROXY_URL AGENT_PROXY_ID AGENT_PROXY_PROCESS_ID AGENT_PROXY_JWT_SECRET AGENT_PROXY_ORIGIN AGENT_JWT_ISSUER AGENT_JWT_AUDIENCE AGENT_JWT_SUBJECT AGENT_TIMEOUT_MS WEBHOOK_ACTION WEBHOOK_UNBAN WEBHOOK_UNBAN2 WEBHOOK_RANK WEBHOOK_UNMUTE WEBHOOK_UNMUTE2 WEBHOOK_PERM WEBHOOK_HISTORY WEBHOOK_CHANGEPASSWORD WEBHOOK_FIXPREMIUM WEBHOOK_MERGEPREMIUM WEBHOOK_NICKNAME_UPDATE WEBHOOK_VOTES DATABASE_HOST DATABASE_USER DATABASE_PASSWORD; do
+            printf '%s=%s\n' "$key" "${!key}"
+          done > "$BOT_HOME/.env"
       - name: Replace container
         run: |
           if docker container inspect hydracraft-bot > /dev/null 2>&1; then
