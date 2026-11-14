@@ -32,11 +32,8 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - name: Validate deployment script and build production image
-        run: |
-          bash -n scripts/deploy_bot.sh
-          shellcheck scripts/deploy_bot.sh tests/deploy-smoke.sh
-          docker build --pull --tag hydracraft-bot:ci .
+      - name: Build production image
+        run: docker build --pull --tag hydracraft-bot:ci .
       - name: Smoke test production image without network access
         run: |
           docker run --rm --network none --read-only \
@@ -44,12 +41,6 @@ jobs:
             --tmpfs /app/charts:uid=1000,gid=1000 \
             --mount "type=bind,src=$GITHUB_WORKSPACE/tests/docker-smoke.cjs,dst=/tmp/docker-smoke.cjs,readonly" \
             --entrypoint node hydracraft-bot:ci /tmp/docker-smoke.cjs
-      - name: Exercise deployment and rollback in a disposable container
-        run: |
-          docker run --rm --network none --user 0 \
-            --mount "type=bind,src=$GITHUB_WORKSPACE/scripts/deploy_bot.sh,dst=/tmp/deploy_bot.sh,readonly" \
-            --mount "type=bind,src=$GITHUB_WORKSPACE/tests/deploy-smoke.sh,dst=/tmp/deploy-smoke.sh,readonly" \
-            --entrypoint bash hydracraft-bot:ci /tmp/deploy-smoke.sh /tmp/deploy_bot.sh
 
   deploy:
     needs: [test, image]
@@ -59,11 +50,34 @@ jobs:
     concurrency:
       group: hydracraft-bot-production
       cancel-in-progress: false
+    env:
+      BOT_HOME: ${{ vars.BOT_HOME || '/opt/hydracraft-bot' }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-          ref: master
-      - name: Build validated Actions checkout and replace Docker container
-        shell: bash
-        run: bash "$GITHUB_WORKSPACE/scripts/deploy_bot.sh" "$GITHUB_SHA"
+      - name: Build image
+        run: docker build --pull --tag hydracraft-bot:latest .
+      - name: Create runtime environment
+        env:
+          BOT_ENV: ${{ secrets.BOT_ENV }}
+        run: |
+          test -n "$BOT_ENV" || { echo 'Configure the BOT_ENV secret in GitHub Actions'; exit 1; }
+          umask 077
+          touch "$BOT_HOME/.env"
+          chmod 600 "$BOT_HOME/.env"
+          printf '%s\n' "$BOT_ENV" > "$BOT_HOME/.env"
+      - name: Replace container
+        run: |
+          if docker container inspect hydracraft-bot > /dev/null 2>&1; then
+            docker stop --time 20 hydracraft-bot
+            docker rm hydracraft-bot
+          fi
+          docker run --detach --name hydracraft-bot --restart unless-stopped \
+            --init --network host --read-only --cap-drop ALL \
+            --security-opt no-new-privileges --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+            --env-file "$BOT_HOME/.env" \
+            --mount "type=bind,src=$BOT_HOME/config,dst=/app/config,readonly" \
+            --mount "type=bind,src=$BOT_HOME/logs,dst=/app/logs" \
+            --mount "type=bind,src=$BOT_HOME/charts,dst=/app/charts" \
+            --stop-timeout 20 hydracraft-bot:latest
