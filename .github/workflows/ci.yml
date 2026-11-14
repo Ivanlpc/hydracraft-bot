@@ -58,6 +58,19 @@ jobs:
           persist-credentials: false
       - name: Build image
         run: docker build --pull --tag hydracraft-bot:latest .
+      - name: Prepare container folders
+        run: |
+          mkdir -p "$BOT_HOME/config" "$BOT_HOME/logs" "$BOT_HOME/charts"
+          chmod 755 "$BOT_HOME" "$BOT_HOME/config"
+          for file in config/*.json; do
+            if [ ! -e "$BOT_HOME/$file" ]; then
+              install -m 644 "$file" "$BOT_HOME/$file"
+            fi
+          done
+          docker run --rm --network none --user 0 \
+            --mount "type=bind,src=$BOT_HOME/logs,dst=/data/logs" \
+            --mount "type=bind,src=$BOT_HOME/charts,dst=/data/charts" \
+            --entrypoint chown hydracraft-bot:latest 1000:1000 /data/logs /data/charts
       - name: Create runtime environment
         shell: bash
         env:

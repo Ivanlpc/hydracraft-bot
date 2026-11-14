@@ -9,18 +9,20 @@ está directamente en `.github/workflows/ci.yml`.
 Configura un runner Linux x64 con las etiquetas `self-hosted`, `linux`, `x64`
 y acceso a Docker. Actions descarga el código privado automáticamente.
 
-Prepara tú las carpetas, los JSON de configuración y la base de datos:
+Prepara la base de datos y permite que el usuario del runner escriba en la carpeta
+principal. El workflow crea las subcarpetas que falten y copia los JSON iniciales
+desde el repositorio sin sobrescribir los existentes:
 
 ```text
 /opt/hydracraft-bot/
 ├── .env       # lo genera Actions
-├── config/    # copia aquí los JSON de config/ del repositorio
+├── config/    # JSON iniciales copiados automáticamente
 ├── logs/
 └── charts/
 ```
 
-El usuario del runner debe poder escribir el `.env`. El contenedor usa UID/GID
-`1000:1000`: necesita leer `config/` y escribir en `logs/` y `charts/`.
+El usuario del runner debe poder escribir el `.env`. El workflow asigna `logs/`
+y `charts/` al UID/GID `1000:1000` del contenedor.
 Puedes elegir otra carpeta con la variable de repositorio `BOT_HOME`.
 El código y las dependencias están en la imagen.
 
