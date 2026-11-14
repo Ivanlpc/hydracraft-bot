@@ -78,7 +78,7 @@ authentication errors, response IDs, disconnects, deadlines and no retry after
 dispatch. Other external boundaries use test doubles;
 tests do not need tokens, a live database or a Discord connection.
 
-GitHub Actions runs lint, tests, coverage and dependency auditing on Node 24 and 26.
+GitHub Actions runs lint, tests, coverage and dependency auditing on Node 24.22.2, matching the Docker image.
 The workflow runs after the changes are pushed; local validation uses Node 24.
 Coverage is diagnostic and only includes loaded modules; it does not measure
 untested startup paths or prove live-service compatibility.
